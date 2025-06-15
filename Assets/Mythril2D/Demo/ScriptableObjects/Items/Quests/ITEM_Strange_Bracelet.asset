@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e41f5591da97773419300add01abba72, type: 3}
+  m_Name: ITEM_Strange_Bracelet
+  m_EditorClassIdentifier: 
+  m_icon: {fileID: -1732446864, guid: 8ace1fb331206454aa908061100d1519, type: 3}
+  m_displayName: Strange Bracelet
+  m_description: 'A strange glow emanated from this bracelet... '
+  m_price: 0
+  m_dialogueLine: A strange glow emanated from this bracelet... You hear a voice,
+    it sounds like Yosbar is trying to tell you something...
+  m_questToStart: {fileID: 11400000, guid: 7d23e504c8e2cd24eb6911b6cb8de28c, type: 2}
+  m_destroyAfterUse: 0
+  m_useAudio: {fileID: 0}
