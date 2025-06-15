@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
@@ -18,6 +19,16 @@ public class MainMenuController : MonoBehaviour
     {
         // Initialize the main menu buttons
         InitializeButtons();
+
+        // Play Music
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayMusic("Main Menu");
+        }
+        else
+        {
+            Debug.LogWarning("AudioManager instance is not available.");
+        }
     }
 
     private void InitializeButtons()
@@ -68,20 +79,25 @@ public class MainMenuController : MonoBehaviour
     {
         // Start a new adventure
         Debug.Log("Starting a new adventure...");
+
         // Add your logic to start a new game here
+        
     }
 
     public void OnOptionsButtonClicked()
     {
         // Open the options menu
         Debug.Log("Opening options menu...");
+
         // Add your logic to open options here
+        SceneLoader.Instance.LoadScene("Settings");
     }
 
     public void OnAchievementButtonClicked()
     {
         // Open the achievements menu
         Debug.Log("Opening achievements menu...");
+
         // Add your logic to open achievements here
     }
 
@@ -89,6 +105,7 @@ public class MainMenuController : MonoBehaviour
     {
         // Quit the game
         Debug.Log("Quitting the game...");
-        Application.Quit();
+
+        SceneLoader.Instance.QuitGame();
     }
 }
