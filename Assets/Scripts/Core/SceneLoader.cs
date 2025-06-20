@@ -69,7 +69,7 @@ public class SceneLoader : MonoBehaviour
         yield return StartCoroutine(LoadSceneAsync(sceneName));
     }
 
-    IEnumerator LoadSceneAsync(string sceneName)
+    IEnumerator LoadSceneAsync(string sceneName, bool showLoadingScreen = false)
     {
         isLoading = true;
 
@@ -78,7 +78,7 @@ public class SceneLoader : MonoBehaviour
         {
             loadingScreen.SetActive(true);
         }
-
+    
         // Start loading the scene
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
         operation.allowSceneActivation = false;
@@ -101,8 +101,8 @@ public class SceneLoader : MonoBehaviour
             // Scene is ready, activate it
             if (operation.progress >= 0.9f)
             {
-                // Optional: Add minimum loading time here
-                yield return new WaitForSeconds(0.5f);
+                // Optional: Add minimum loading time here if desired
+                // yield return new WaitForSeconds(0.5f);
                 operation.allowSceneActivation = true;
             }
 
