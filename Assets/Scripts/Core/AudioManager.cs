@@ -182,6 +182,20 @@ public class AudioManager : MonoBehaviour
     UpdateAudioSources();
   }
 
+  public float GetMasterVolume()
+  {
+    return masterVolume * 100f;
+  }
+  
+  public float GetMusicVolume()
+  {
+    return musicVolume * 100f;
+  }
+  public float GetSFXVolume()
+  {
+    return sfxVolume * 100f;
+  }
+
   void UpdateAudioSources()
   {
     if (musicSource != null)

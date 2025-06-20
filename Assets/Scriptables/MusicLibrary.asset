@@ -17,3 +17,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 8b26c2552d57fbd4b948e0c97b713725, type: 3}
     volume: 100
     looped: 1
+  - name: Settings
+    clip: {fileID: 8300000, guid: d24e3bd2b5a6cf04293a19d1339688ed, type: 3}
+    volume: 100
+    looped: 1

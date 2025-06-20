@@ -60,6 +60,8 @@ public class MainMenuController : MonoBehaviour
         quitButton.gameObject.SetActive(true);
     }
 
+    #region Button Click Handlers
+
     public void OnContinueButtonClicked()
     {
         // Load the saved game
@@ -81,7 +83,7 @@ public class MainMenuController : MonoBehaviour
         Debug.Log("Starting a new adventure...");
 
         // Add your logic to start a new game here
-        
+
     }
 
     public void OnOptionsButtonClicked()
@@ -108,4 +110,6 @@ public class MainMenuController : MonoBehaviour
 
         SceneLoader.Instance.QuitGame();
     }
+    
+    #endregion
 }
