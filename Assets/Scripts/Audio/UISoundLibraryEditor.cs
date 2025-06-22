@@ -5,26 +5,29 @@ using System.Collections.Generic;
 
 namespace Michsky.UI.Reach
 {
-    [CustomEditor(typeof(SFXLibrary))]
-    public class SFXLibraryEditor : Editor
+    [CustomEditor(typeof(UILibrary))]
+    public class UISoundLibraryEditor : Editor
     {
-        private SFXLibrary sfxLibrary;
+        private UILibrary uiLibrary;
         private GUISkin customSkin;
         private int currentTab = 0;
         private Vector2 scrollPosition;
         private string searchFilter = "";
-        private SFXLibrary.SFXCategory filterCategory = SFXLibrary.SFXCategory.Custom;
-        private HashSet<int> expandedSFX = new HashSet<int>();
+        private UILibrary.UISoundCategory filterCategory = UILibrary.UISoundCategory.Custom;
+        private HashSet<int> expandedSounds = new HashSet<int>();
 
         private void OnEnable()
         {
-            sfxLibrary = (SFXLibrary)target;
+            uiLibrary = (UILibrary)target;
             if (EditorGUIUtility.isProSkin == true) { customSkin = ReachUIEditorHandler.GetDarkEditor(customSkin); }
             else { customSkin = ReachUIEditorHandler.GetLightEditor(customSkin); }
         }
 
         public override void OnInspectorGUI()
         {
+            // Use default header (no custom texture)
+            EditorGUILayout.LabelField("UI Sound Library", EditorStyles.boldLabel);
+
             GUIContent[] toolbarTabs = new GUIContent[4];
             toolbarTabs[0] = new GUIContent("Content");
             toolbarTabs[1] = new GUIContent("Library");
@@ -46,9 +49,14 @@ namespace Michsky.UI.Reach
 
             var libraryName = serializedObject.FindProperty("libraryName");
             var description = serializedObject.FindProperty("description");
-            var sfxClips = serializedObject.FindProperty("sfxClips");
-            var defaultSFX = serializedObject.FindProperty("defaultSFX");
+            var uiSounds = serializedObject.FindProperty("uiSounds");
+            var defaultHoverSound = serializedObject.FindProperty("defaultHoverSound");
+            var defaultClickSound = serializedObject.FindProperty("defaultClickSound");
+            var defaultNotificationSound = serializedObject.FindProperty("defaultNotificationSound");
+            var defaultErrorSound = serializedObject.FindProperty("defaultErrorSound");
+            var defaultSuccessSound = serializedObject.FindProperty("defaultSuccessSound");
             var enableRandomization = serializedObject.FindProperty("enableRandomization");
+            var enableCooldowns = serializedObject.FindProperty("enableCooldowns");
 
             switch (currentTab)
             {
@@ -59,16 +67,16 @@ namespace Michsky.UI.Reach
                     ReachUIEditorHandler.DrawHeader(customSkin, "Header_Support", 10);
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     GUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField(new GUIContent("Total SFX:"), customSkin.FindStyle("Text"), GUILayout.Width(120));
-                    EditorGUILayout.LabelField(new GUIContent(sfxLibrary.GetSFXCount().ToString()), customSkin.FindStyle("Text"));
+                    EditorGUILayout.LabelField(new GUIContent("Total Sounds:"), customSkin.FindStyle("Text"), GUILayout.Width(120));
+                    EditorGUILayout.LabelField(new GUIContent(uiLibrary.GetSoundCount().ToString()), customSkin.FindStyle("Text"));
                     GUILayout.EndHorizontal();
                     GUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField(new GUIContent("Total Duration:"), customSkin.FindStyle("Text"), GUILayout.Width(120));
-                    EditorGUILayout.LabelField(new GUIContent(FormatDuration(sfxLibrary.GetTotalDuration())), customSkin.FindStyle("Text"));
+                    EditorGUILayout.LabelField(new GUIContent(FormatDuration(uiLibrary.GetTotalDuration())), customSkin.FindStyle("Text"));
                     GUILayout.EndHorizontal();
                     GUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField(new GUIContent("Categories:"), customSkin.FindStyle("Text"), GUILayout.Width(120));
-                    EditorGUILayout.LabelField(new GUIContent(sfxLibrary.GetAllCategories().Count.ToString()), customSkin.FindStyle("Text"));
+                    EditorGUILayout.LabelField(new GUIContent(uiLibrary.GetAllCategories().Count.ToString()), customSkin.FindStyle("Text"));
                     GUILayout.EndHorizontal();
                     GUILayout.EndVertical();
                     ReachUIEditorHandler.DrawHeader(customSkin, "Header_Events", 10);
@@ -76,10 +84,10 @@ namespace Michsky.UI.Reach
                     if (GUILayout.Button("Validate Library", customSkin.button)) ValidateLibrary();
                     if (GUILayout.Button("Clear Library", customSkin.button))
                     {
-                        if (EditorUtility.DisplayDialog("Clear Library", "Are you sure you want to clear all SFX?", "Yes", "No"))
+                        if (EditorUtility.DisplayDialog("Clear Library", "Are you sure you want to clear all sounds?", "Yes", "No"))
                         {
-                            sfxLibrary.ClearLibrary();
-                            EditorUtility.SetDirty(sfxLibrary);
+                            uiLibrary.ClearLibrary();
+                            EditorUtility.SetDirty(uiLibrary);
                         }
                     }
                     GUILayout.EndHorizontal();
@@ -92,43 +100,49 @@ namespace Michsky.UI.Reach
                     GUILayout.EndHorizontal();
                     GUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField(new GUIContent("Category:"), customSkin.FindStyle("Text"), GUILayout.Width(60));
-                    filterCategory = (SFXLibrary.SFXCategory)EditorGUILayout.EnumPopup(filterCategory);
+                    filterCategory = (UILibrary.UISoundCategory)EditorGUILayout.EnumPopup(filterCategory);
                     if (GUILayout.Button("Clear", GUILayout.Width(50)))
                     {
                         searchFilter = "";
-                        filterCategory = SFXLibrary.SFXCategory.Custom;
+                        filterCategory = UILibrary.UISoundCategory.Custom;
                     }
                     GUILayout.EndHorizontal();
                     GUILayout.EndVertical();
 
                     ReachUIEditorHandler.DrawHeader(customSkin, "Header_Content", 10);
                     GUILayout.BeginHorizontal();
-                    if (GUILayout.Button("Add New SFX", customSkin.button)) AddNewSFX();
-                    if (GUILayout.Button("Sort by Name", customSkin.button)) SortSFXByName();
+                    if (GUILayout.Button("Add New Sound", customSkin.button)) AddNewSound();
+                    if (GUILayout.Button("Sort by Name", customSkin.button)) SortSoundsByName();
                     GUILayout.EndHorizontal();
                     scrollPosition = GUILayout.BeginScrollView(scrollPosition);
-                    var filteredSFX = GetFilteredSFX();
-                    if (filteredSFX.Count == 0)
-                        EditorGUILayout.HelpBox("No SFX found matching the current filter.", MessageType.Info);
+                    var filteredSounds = GetFilteredSounds();
+                    if (filteredSounds.Count == 0)
+                        EditorGUILayout.HelpBox("No sounds found matching the current filter.", MessageType.Info);
                     else
-                        for (int i = 0; i < filteredSFX.Count; i++)
-                            DrawSFXItem(filteredSFX[i], i);
+                        for (int i = 0; i < filteredSounds.Count; i++)
+                            DrawSoundItem(filteredSounds[i], i);
                     GUILayout.EndScrollView();
                     break;
                 case 2:
                     ReachUIEditorHandler.DrawHeader(customSkin, "Header_Settings", 6);
                     enableRandomization.boolValue = ReachUIEditorHandler.DrawToggle(enableRandomization.boolValue, customSkin, "Enable Randomization");
-                    ReachUIEditorHandler.DrawProperty(defaultSFX, customSkin, "Default SFX");
+                    enableCooldowns.boolValue = ReachUIEditorHandler.DrawToggle(enableCooldowns.boolValue, customSkin, "Enable Cooldowns");
+                    ReachUIEditorHandler.DrawHeader(customSkin, "Header_Resources", 10);
+                    ReachUIEditorHandler.DrawProperty(defaultHoverSound, customSkin, "Default Hover Sound");
+                    ReachUIEditorHandler.DrawProperty(defaultClickSound, customSkin, "Default Click Sound");
+                    ReachUIEditorHandler.DrawProperty(defaultNotificationSound, customSkin, "Default Notification Sound");
+                    ReachUIEditorHandler.DrawProperty(defaultErrorSound, customSkin, "Default Error Sound");
+                    ReachUIEditorHandler.DrawProperty(defaultSuccessSound, customSkin, "Default Success Sound");
                     break;
                 case 3:
                     ReachUIEditorHandler.DrawHeader(customSkin, "Header_Support", 6);
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     EditorGUILayout.LabelField(new GUIContent("Library Information"), customSkin.FindStyle("Text"));
                     GUILayout.Space(5);
-                    EditorGUILayout.LabelField($"Library Name: {sfxLibrary.libraryName}");
-                    EditorGUILayout.LabelField($"SFX Count: {sfxLibrary.GetSFXCount()}");
-                    EditorGUILayout.LabelField($"Total Duration: {FormatDuration(sfxLibrary.GetTotalDuration())}");
-                    EditorGUILayout.LabelField($"Categories: {string.Join(", ", sfxLibrary.GetAllCategories())}");
+                    EditorGUILayout.LabelField($"Library Name: {uiLibrary.libraryName}");
+                    EditorGUILayout.LabelField($"Sound Count: {uiLibrary.GetSoundCount()}");
+                    EditorGUILayout.LabelField($"Total Duration: {FormatDuration(uiLibrary.GetTotalDuration())}");
+                    EditorGUILayout.LabelField($"Categories: {string.Join(", ", uiLibrary.GetAllCategories())}");
                     GUILayout.EndVertical();
                     var issues = ValidateLibraryInternal();
                     if (issues.Count == 0)
@@ -143,56 +157,53 @@ namespace Michsky.UI.Reach
             }
             serializedObject.ApplyModifiedProperties();
         }
-        private void DrawSFXItem(SFXLibrary.SFXClip sfx, int index)
+        private void DrawSoundItem(UILibrary.UISound sound, int index)
         {
             GUILayout.BeginVertical(EditorStyles.helpBox);
-
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button(expandedSFX.Contains(index) ? "Close" : "Edit", GUILayout.Width(70)))
+            if (GUILayout.Button(expandedSounds.Contains(index) ? "Close" : "Edit", GUILayout.Width(70)))
             {
-                if (expandedSFX.Contains(index)) expandedSFX.Remove(index);
-                else expandedSFX.Add(index);
+                if (expandedSounds.Contains(index)) expandedSounds.Remove(index);
+                else expandedSounds.Add(index);
             }
 
             if (GUILayout.Button("Delete", GUILayout.Width(70)))
             {
-                if (EditorUtility.DisplayDialog("Delete Track", $"Are you sure you want to delete '{sfx.sfxName}'?", "Delete", "Cancel"))
+                if (EditorUtility.DisplayDialog("Delete Track", $"Are you sure you want to delete '{sound.soundName}'?", "Delete", "Cancel"))
                 {
-                    var sfxProp = serializedObject.FindProperty("sfxClips");
-                    sfxProp.DeleteArrayElementAtIndex(index);
+                    var uiSounds = serializedObject.FindProperty("uiSounds");
+                    uiSounds.DeleteArrayElementAtIndex(index);
                     serializedObject.ApplyModifiedProperties();
-                    expandedSFX.Remove(index);
+                    expandedSounds.Remove(index);
                     return; // Don't draw further for this item
                 }
             }
 
-
-            EditorGUILayout.LabelField(new GUIContent($"SFX {index + 1}"), customSkin.FindStyle("Text"), GUILayout.Width(60));
-            EditorGUILayout.LabelField(new GUIContent(sfx.sfxName), customSkin.FindStyle("Text"), GUILayout.ExpandWidth(true));
+            EditorGUILayout.LabelField(new GUIContent($"Sound {index + 1}"), customSkin.FindStyle("Text"), GUILayout.Width(60));
+            EditorGUILayout.LabelField(new GUIContent(sound.soundName), customSkin.FindStyle("Text"), GUILayout.ExpandWidth(true));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-
-            if (expandedSFX.Contains(index))
+            if (expandedSounds.Contains(index))
             {
-                var sfxClips = serializedObject.FindProperty("sfxClips");
-                if (index < sfxClips.arraySize)
+                var uiSounds = serializedObject.FindProperty("uiSounds");
+                if (index < uiSounds.arraySize)
                 {
-                    var sfxProp = sfxClips.GetArrayElementAtIndex(index);
-                    sfxProp.isExpanded = true;
+                    var soundProp = uiSounds.GetArrayElementAtIndex(index);
+                    soundProp.isExpanded = true;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.PropertyField(sfxProp, true);
+                    EditorGUILayout.PropertyField(soundProp, true);
                     EditorGUI.indentLevel--;
                 }
             }
             else
             {
-                if (sfx.audioClip != null)
+                if (sound.audioClip != null)
                 {
                     GUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField(new GUIContent("Duration:"), customSkin.FindStyle("Text"), GUILayout.Width(60));
-                    EditorGUILayout.LabelField(new GUIContent(FormatDuration(sfx.audioClip.length)), customSkin.FindStyle("Text"));
+                    EditorGUILayout.LabelField(new GUIContent(FormatDuration(sound.audioClip.length)), customSkin.FindStyle("Text"));
                     EditorGUILayout.LabelField(new GUIContent("Category:"), customSkin.FindStyle("Text"), GUILayout.Width(60));
-                    EditorGUILayout.LabelField(new GUIContent(sfx.category.ToString()), customSkin.FindStyle("Text"));
+                    EditorGUILayout.LabelField(new GUIContent(sound.category.ToString()), customSkin.FindStyle("Text"));
                     GUILayout.EndHorizontal();
                 }
                 else
@@ -202,28 +213,28 @@ namespace Michsky.UI.Reach
             }
             GUILayout.EndVertical();
         }
-        private List<SFXLibrary.SFXClip> GetFilteredSFX()
+        private List<UILibrary.UISound> GetFilteredSounds()
         {
-            var sfxList = new List<SFXLibrary.SFXClip>();
-            foreach (var sfx in sfxLibrary.sfxClips)
+            var soundList = new List<UILibrary.UISound>();
+            foreach (var sound in uiLibrary.uiSounds)
             {
-                if (sfx == null) continue;
-                bool matchesSearch = string.IsNullOrEmpty(searchFilter) || sfx.sfxName.ToLower().Contains(searchFilter.ToLower()) || sfx.displayName.ToLower().Contains(searchFilter.ToLower());
-                bool matchesCategory = filterCategory == SFXLibrary.SFXCategory.Custom || sfx.category == filterCategory;
-                if (matchesSearch && matchesCategory) sfxList.Add(sfx);
+                if (sound == null) continue;
+                bool matchesSearch = string.IsNullOrEmpty(searchFilter) || sound.soundName.ToLower().Contains(searchFilter.ToLower()) || sound.displayName.ToLower().Contains(searchFilter.ToLower());
+                bool matchesCategory = filterCategory == UILibrary.UISoundCategory.Custom || sound.category == filterCategory;
+                if (matchesSearch && matchesCategory) soundList.Add(sound);
             }
-            return sfxList;
+            return soundList;
         }
-        private void AddNewSFX()
+        private void AddNewSound()
         {
-            var newSFX = new SFXLibrary.SFXClip { sfxName = "New SFX", displayName = "New SFX", category = SFXLibrary.SFXCategory.Custom };
-            sfxLibrary.AddSFX(newSFX);
-            EditorUtility.SetDirty(sfxLibrary);
+            var newSound = new UILibrary.UISound { soundName = "New Sound", displayName = "New Sound", category = UILibrary.UISoundCategory.Custom };
+            uiLibrary.AddSound(newSound);
+            EditorUtility.SetDirty(uiLibrary);
         }
-        private void SortSFXByName()
+        private void SortSoundsByName()
         {
-            sfxLibrary.sfxClips.Sort((a, b) => a.sfxName.CompareTo(b.sfxName));
-            EditorUtility.SetDirty(sfxLibrary);
+            uiLibrary.uiSounds.Sort((a, b) => a.soundName.CompareTo(b.soundName));
+            EditorUtility.SetDirty(uiLibrary);
         }
         private void ValidateLibrary()
         {
@@ -236,16 +247,16 @@ namespace Michsky.UI.Reach
         private List<string> ValidateLibraryInternal()
         {
             var issues = new List<string>();
-            var sfxNames = new HashSet<string>();
-            for (int i = 0; i < sfxLibrary.sfxClips.Count; i++)
+            var soundNames = new HashSet<string>();
+            for (int i = 0; i < uiLibrary.uiSounds.Count; i++)
             {
-                var sfx = sfxLibrary.sfxClips[i];
-                if (sfx == null) { issues.Add($"SFX at index {i} is null"); continue; }
-                if (string.IsNullOrEmpty(sfx.sfxName)) { issues.Add($"SFX at index {i} has no name"); continue; }
-                if (sfxNames.Contains(sfx.sfxName)) { issues.Add($"Duplicate SFX name: {sfx.sfxName}"); }
-                else { sfxNames.Add(sfx.sfxName); }
-                if (sfx.audioClip == null) { issues.Add($"SFX '{sfx.sfxName}' has no audio clip"); }
-                if (sfx.category == SFXLibrary.SFXCategory.Custom && string.IsNullOrEmpty(sfx.customCategory)) { issues.Add($"SFX '{sfx.sfxName}' is set to Custom category but has no custom category name"); }
+                var sound = uiLibrary.uiSounds[i];
+                if (sound == null) { issues.Add($"Sound at index {i} is null"); continue; }
+                if (string.IsNullOrEmpty(sound.soundName)) { issues.Add($"Sound at index {i} has no name"); continue; }
+                if (soundNames.Contains(sound.soundName)) { issues.Add($"Duplicate sound name: {sound.soundName}"); }
+                else { soundNames.Add(sound.soundName); }
+                if (sound.audioClip == null) { issues.Add($"Sound '{sound.soundName}' has no audio clip"); }
+                if (sound.category == UILibrary.UISoundCategory.Custom && string.IsNullOrEmpty(sound.customCategory)) { issues.Add($"Sound '{sound.soundName}' is set to Custom category but has no custom category name"); }
             }
             return issues;
         }

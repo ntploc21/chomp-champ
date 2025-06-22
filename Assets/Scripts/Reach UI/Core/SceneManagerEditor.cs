@@ -49,7 +49,6 @@ namespace Michsky.UI.Reach
             var transitionSpeed = serializedObject.FindProperty("transitionSpeed");
             
             var initializeButtons = serializedObject.FindProperty("initializeButtons");
-            var useCooldownForHotkeys = serializedObject.FindProperty("useCooldownForHotkeys");
             var bypassLoadingOnEnable = serializedObject.FindProperty("bypassLoadingOnEnable");
             var updateMode = serializedObject.FindProperty("updateMode");
             var sceneMode = serializedObject.FindProperty("sceneMode");
@@ -122,7 +121,6 @@ namespace Michsky.UI.Reach
                     GUILayout.Space(10);
                     
                     initializeButtons.boolValue = ReachUIEditorHandler.DrawToggle(initializeButtons.boolValue, customSkin, "Initialize Buttons", "Initialize buttons on scene change.");
-                    useCooldownForHotkeys.boolValue = ReachUIEditorHandler.DrawToggle(useCooldownForHotkeys.boolValue, customSkin, "Use Cooldown For Hotkeys", "Prevents input issues when switching scenes via hotkeys.");
                     bypassLoadingOnEnable.boolValue = ReachUIEditorHandler.DrawToggle(bypassLoadingOnEnable.boolValue, customSkin, "Bypass Loading On Enable", "Skips loading screen when the scene is enabled.");
 
                     break;

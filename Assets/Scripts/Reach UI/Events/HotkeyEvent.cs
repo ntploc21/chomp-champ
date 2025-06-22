@@ -41,6 +41,8 @@ namespace Michsky.UI.Reach
         bool isInitialized = false;
         public bool useCooldown = false;
         public static bool isInCooldown = false;
+        public static float inputCooldownUntil = 0f;
+        public static float inputCooldownDuration = 0.2f; // 200ms, adjust as needed
 
         // Reference to SceneManager to check transition state
         private SceneManager sceneManager;
@@ -70,6 +72,9 @@ namespace Michsky.UI.Reach
 
         void Update()
         {
+            if (Application.isPlaying && Time.unscaledTime < inputCooldownUntil)
+                return; // Ignore input during cooldown
+
             if (Application.isPlaying && hotkey.triggered && !useCooldown) { onHotkeyPress.Invoke(); }
             else if (Application.isPlaying && hotkey.triggered && useCooldown && !isInCooldown)
             {

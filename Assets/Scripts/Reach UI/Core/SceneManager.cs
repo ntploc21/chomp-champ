@@ -16,7 +16,6 @@ namespace Michsky.UI.Reach
         private int newSceneIndex;
         public bool useLoadingScreen = true;
         [SerializeField] private bool initializeButtons = true;
-        [SerializeField] private bool useCooldownForHotkeys = false;
         [SerializeField] private bool bypassLoadingOnEnable = false;
         [SerializeField] private UpdateMode updateMode = UpdateMode.UnscaledTime;
         [SerializeField] private SceneMode sceneMode = SceneMode.Single;
@@ -298,6 +297,8 @@ namespace Michsky.UI.Reach
 
             onSceneChanged.Invoke(currentSceneIndex);
             onSceneLoadComplete.Invoke();
+
+            HotkeyEvent.inputCooldownUntil = Time.unscaledTime + HotkeyEvent.inputCooldownDuration; // Reset input cooldown
             isTransitioning = false;
         }
 
@@ -367,6 +368,8 @@ namespace Michsky.UI.Reach
             }
 
             onSceneLoadComplete.Invoke();
+
+            HotkeyEvent.inputCooldownUntil = Time.unscaledTime + HotkeyEvent.inputCooldownDuration; // Reset input cooldown
             isTransitioning = false;
         }
 

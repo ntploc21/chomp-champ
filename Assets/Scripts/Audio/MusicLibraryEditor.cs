@@ -72,10 +72,6 @@ namespace Michsky.UI.Reach
                     GUILayout.EndVertical();
                     ReachUIEditorHandler.DrawHeader(customSkin, "Header_Events", 10);
                     GUILayout.BeginHorizontal();
-                    if (GUILayout.Button("Add New Track", customSkin.button)) AddNewTrack();
-                    if (GUILayout.Button("Sort by Name", customSkin.button)) SortTracksByName();
-                    GUILayout.EndHorizontal();
-                    GUILayout.BeginHorizontal();
                     if (GUILayout.Button("Validate Library", customSkin.button)) ValidateLibrary();
                     if (GUILayout.Button("Clear Library", customSkin.button))
                     {
@@ -103,7 +99,12 @@ namespace Michsky.UI.Reach
                     }
                     GUILayout.EndHorizontal();
                     GUILayout.EndVertical();
+
                     ReachUIEditorHandler.DrawHeader(customSkin, "Header_Content", 10);
+                    GUILayout.BeginHorizontal();
+                    if (GUILayout.Button("Add New Track", customSkin.button)) AddNewTrack();
+                    if (GUILayout.Button("Sort by Name", customSkin.button)) SortTracksByName();
+                    GUILayout.EndHorizontal();
                     scrollPosition = GUILayout.BeginScrollView(scrollPosition);
                     var filteredTracks = GetFilteredTracks();
                     if (filteredTracks.Count == 0)
@@ -159,11 +160,24 @@ namespace Michsky.UI.Reach
             GUILayout.BeginVertical(EditorStyles.helpBox);
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button(expandedTracks.Contains(index) ? "Close" : "Edit", GUILayout.Width(50)))
+            if (GUILayout.Button(expandedTracks.Contains(index) ? "Close" : "Edit", GUILayout.Width(70)))
             {
                 if (expandedTracks.Contains(index)) expandedTracks.Remove(index);
                 else expandedTracks.Add(index);
             }
+
+            if (GUILayout.Button("Delete", GUILayout.Width(70)))
+            {
+                if (EditorUtility.DisplayDialog("Delete Track", $"Are you sure you want to delete '{track.trackName}'?", "Delete", "Cancel"))
+                {
+                    var musicTracks = serializedObject.FindProperty("musicTracks");
+                    musicTracks.DeleteArrayElementAtIndex(index);
+                    serializedObject.ApplyModifiedProperties();
+                    expandedTracks.Remove(index);
+                    return; // Don't draw further for this item
+                }
+            }
+
             EditorGUILayout.LabelField(new GUIContent($"Track {index + 1}"), customSkin.FindStyle("Text"), GUILayout.Width(60), GUILayout.ExpandWidth(false));
             EditorGUILayout.LabelField(new GUIContent(track.trackName), customSkin.FindStyle("Text"), GUILayout.Width(120), GUILayout.ExpandWidth(false));
             GUILayout.FlexibleSpace();
@@ -176,6 +190,7 @@ namespace Michsky.UI.Reach
                 if (index < musicTracks.arraySize)
                 {
                     var trackProp = musicTracks.GetArrayElementAtIndex(index);
+                    trackProp.isExpanded = true; // Force expand all attributes
                     EditorGUI.indentLevel++;
                     EditorGUILayout.PropertyField(trackProp, true);
                     EditorGUI.indentLevel--;
