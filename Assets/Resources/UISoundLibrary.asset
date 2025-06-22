@@ -1,0 +1,134 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddda96fa2f0ef31468b979b7ed499c4d, type: 3}
+  m_Name: UISoundLibrary
+  m_EditorClassIdentifier: 
+  libraryName: UI Library
+  description: 
+  uiSounds: []
+  defaultHoverSound:
+    soundName: 
+    displayName: 
+    audioClip: {fileID: 8300000, guid: f0cb06f9461ea8b4bba64f3f7064a702, type: 3}
+    defaultVolume: 1
+    defaultPitch: 1
+    loopByDefault: 0
+    category: 0
+    customCategory: 
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    playOnHover: 0
+    playOnClick: 0
+    playOnSelect: 0
+    playOnDeselect: 0
+    useCooldown: 0
+    cooldownTime: 0.1
+    tags: []
+    notes: 
+  defaultClickSound:
+    soundName: 
+    displayName: 
+    audioClip: {fileID: 8300000, guid: 4656469a7b79f5c4a84f2ecd79f129d1, type: 3}
+    defaultVolume: 1
+    defaultPitch: 1
+    loopByDefault: 0
+    category: 0
+    customCategory: 
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    playOnHover: 0
+    playOnClick: 0
+    playOnSelect: 0
+    playOnDeselect: 0
+    useCooldown: 0
+    cooldownTime: 0.1
+    tags: []
+    notes: 
+  defaultNotificationSound:
+    soundName: 
+    displayName: 
+    audioClip: {fileID: 8300000, guid: 35a7b929e025d674898e2f6a2d87c68a, type: 3}
+    defaultVolume: 1
+    defaultPitch: 1
+    loopByDefault: 0
+    category: 0
+    customCategory: 
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    playOnHover: 0
+    playOnClick: 0
+    playOnSelect: 0
+    playOnDeselect: 0
+    useCooldown: 0
+    cooldownTime: 0.1
+    tags: []
+    notes: 
+  defaultErrorSound:
+    soundName: 
+    displayName: 
+    audioClip: {fileID: 0}
+    defaultVolume: 1
+    defaultPitch: 1
+    loopByDefault: 0
+    category: 0
+    customCategory: 
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    playOnHover: 0
+    playOnClick: 0
+    playOnSelect: 0
+    playOnDeselect: 0
+    useCooldown: 0
+    cooldownTime: 0.1
+    tags: []
+    notes: 
+  defaultSuccessSound:
+    soundName: 
+    displayName: 
+    audioClip: {fileID: 0}
+    defaultVolume: 1
+    defaultPitch: 1
+    loopByDefault: 0
+    category: 0
+    customCategory: 
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    playOnHover: 0
+    playOnClick: 0
+    playOnSelect: 0
+    playOnDeselect: 0
+    useCooldown: 0
+    cooldownTime: 0.1
+    tags: []
+    notes: 
+  enableRandomization: 1
+  enableCooldowns: 1
