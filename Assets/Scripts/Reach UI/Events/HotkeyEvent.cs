@@ -42,7 +42,7 @@ namespace Michsky.UI.Reach
         public bool useCooldown = false;
         public static bool isInCooldown = false;
         public static float inputCooldownUntil = 0f;
-        public static float inputCooldownDuration = 0.2f; // 200ms, adjust as needed
+        public static float inputCooldownDuration = 0.5f; // 500ms, adjust as needed
 
         // Reference to SceneManager to check transition state
         private SceneManager sceneManager;

@@ -56,7 +56,7 @@ namespace Michsky.UI.Reach
                 enableSplashAfter = true;
             }
 
-            if (UIManagerAsset.enableSplashScreen)
+            if (UIManagerAsset.enableSplashScreen && splashScreen != null && UIManagerAsset.showSplashScreenOnce)
             {
                 if (splashScreen == null)
                 {
@@ -119,7 +119,15 @@ namespace Michsky.UI.Reach
            
             if (UIManagerAsset != null && UIManagerAsset.enableSplashScreen) 
             {
-                splashScreen.gameObject.SetActive(false); 
+                // If splash screen is enabled, we will disable it after the animation
+                if (splashScreen == null || splashScreen.gameObject == null)
+                {
+
+                }
+                else
+                {
+                    splashScreen.gameObject.SetActive(false);
+                }
             }
 
             mainContent.gameObject.SetActive(true);

@@ -23,8 +23,8 @@ namespace Michsky.UI.Reach
 
         // Loading Screen
         [SerializeField] private GameObject loadingScreenPrefab;
-        [SerializeField] private string loadingAnimationIn = "LoadingScreen_In";
-        [SerializeField] private string loadingAnimationOut = "LoadingScreen_Out";
+        [SerializeField] private string loadingAnimationIn = "Panel In";
+        [SerializeField] private string loadingAnimationOut = "Panel Out";
         private GameObject currentLoadingScreen;
 
         // Events
@@ -79,7 +79,7 @@ namespace Michsky.UI.Reach
 
             if (loadingScreenPrefab != null)
             {
-                cachedStateLength = ReachUIInternalTools.GetAnimatorClipLength(loadingScreenPrefab.GetComponent<Animator>(), loadingAnimationIn);
+                cachedStateLength = ReachUIInternalTools.GetAnimatorClipLength(loadingScreenPrefab.GetComponent<Animator>(), "MainPanel_In");
             }
 
             if (ControllerManager.instance != null)
@@ -233,23 +233,24 @@ namespace Michsky.UI.Reach
                 {
                     currentLoadingScreen = Instantiate(loadingScreenToUse);
                     Animator loadingAnimator = currentLoadingScreen.GetComponent<Animator>();
-                    
+                    currentLoadingScreen.SetActive(true);
+
                     if (loadingAnimator != null)
                     {
                         loadingAnimator.SetFloat(animSpeedKey, transitionSpeed);
                         loadingAnimator.Play(loadingAnimationIn);
-                        
-                        float transitionDuration = scenes[sceneIndex].sceneData != null && 
-                            scenes[sceneIndex].sceneData.customTransitionDuration > 0 ? 
+
+                        float transitionDuration = scenes[sceneIndex].sceneData != null &&
+                            scenes[sceneIndex].sceneData.customTransitionDuration > 0 ?
                             scenes[sceneIndex].sceneData.customTransitionDuration : cachedStateLength * transitionSpeed;
 
-                        if (updateMode == UpdateMode.UnscaledTime) 
-                        { 
-                            yield return new WaitForSecondsRealtime(transitionDuration); 
+                        if (updateMode == UpdateMode.UnscaledTime)
+                        {
+                            yield return new WaitForSecondsRealtime(transitionDuration);
                         }
-                        else 
-                        { 
-                            yield return new WaitForSeconds(transitionDuration); 
+                        else
+                        {
+                            yield return new WaitForSeconds(transitionDuration);
                         }
                     }
                 }
