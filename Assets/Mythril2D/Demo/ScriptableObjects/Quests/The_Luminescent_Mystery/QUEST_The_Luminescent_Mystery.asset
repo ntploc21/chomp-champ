@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edfe15e0f88eb4a43a3565753407a5b3, type: 3}
+  m_Name: QUEST_The_Luminescent_Mystery
+  m_EditorClassIdentifier: 
+  m_title: The Luminescent Mystery
+  m_description: In the realm of enchantments and mysteries, a peculiar artifact
+    has emerged. After touching it, you heard Yosbar's voice. He might have something
+    to do with it...
+  m_recommendedLevel: 1
+  m_repeatable: 0
+  m_tasks: []
+  m_toExecuteOnQuestCompletion:
+  - action: {fileID: 11400000, guid: 21362312c8aef044aa2fb0a30b4feefe, type: 2}
+    args:
+    - type: 1
+      int_value: 200
+      bool_value: 0
+      float_value: 0
+      string_value: 
+      object_value: {fileID: 0}
+  - action: {fileID: 11400000, guid: f043928268919544e82c2f8df00d2af7, type: 2}
+    args:
+    - type: 1
+      int_value: 500
+      bool_value: 0
+      float_value: 0
+      string_value: 
+      object_value: {fileID: 0}
+  - action: {fileID: 11400000, guid: 92f2f9afce6906e47adfc4f986602d15, type: 2}
+    args:
+    - type: 5
+      int_value: 500
+      bool_value: 0
+      float_value: 0
+      string_value: 
+      object_value: {fileID: 11400000, guid: ff421493cb5fab3419e8fde5fd6e6f98, type: 2}
+    - type: 1
+      int_value: -1
+      bool_value: 0
+      float_value: 0
+      string_value: 
+      object_value: {fileID: 11400000, guid: ff421493cb5fab3419e8fde5fd6e6f98, type: 2}
+  m_offeredBy: {fileID: 0}
+  m_reportTo: {fileID: 11400000, guid: 93785c5c0fcf740f29b367704fa55ec4, type: 2}
+  m_questOfferDialogue: {fileID: 0}
+  m_questHintDialogue: {fileID: 0}
+  m_questCompletedDialogue: {fileID: 11400000, guid: d6146992b9e8983478519771ce0e67e6, type: 2}

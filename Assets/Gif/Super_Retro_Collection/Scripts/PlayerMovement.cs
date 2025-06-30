@@ -33,8 +33,6 @@ public class PlayerMovement : MonoBehaviour
         instance = this;
     }
 
-    // -----------------------------------------------------------------------------------------
-    // Update is called once per frame
     void Update()
     {
         // update members
@@ -42,19 +40,9 @@ public class PlayerMovement : MonoBehaviour
         movement.y = Input.GetAxisRaw("Vertical");
         movement.Normalize();
     }
-    // -----------------------------------------------------------------------------------------
-    // fixed update methode
-    // void FixedUpdate()
-    // {
-    //     rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
-    // }
 
     public void FixedUpdate()
     {
-
-        // rb.MovePosition(rb.position + (moveInput * moveSpeed * Time.fixedDeltaTime));
-
-
         // Try to move player in input direction, followed by left right and up down input if failed
         bool success = MovePlayer(movement);
 
@@ -70,10 +58,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
-
-    // Tries to move the player in a direction by casting in that direction by the amount
-    // moved plus an offset. If no collisions are found, it moves the players
-    // Returns true or false depending on if a move was executed
+    
     public bool MovePlayer(Vector2 direction)
     {
         int numRetry = 5;
@@ -103,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
         // Print collisions
         foreach (RaycastHit2D hit in castCollisions)
         {
-            print(hit.ToString());
+            // print(hit.ToString());
         }
 
         return false;
