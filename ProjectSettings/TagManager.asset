@@ -41,3 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 519101433
+    locked: 0
+  - name: Ground
+    uniqueID: 1274193037
+    locked: 0
+  - name: LowProps
+    uniqueID: 4252372445
+    locked: 0
+  - name: Character
+    uniqueID: 3760682697
+    locked: 0
+  - name: HighProps
+    uniqueID: 299940209
+    locked: 0
