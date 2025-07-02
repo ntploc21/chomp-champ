@@ -1,10 +1,22 @@
+using Michsky.UI.Reach;
 using UnityEngine;
+using UnityEngine.UIElements;
+
+public enum EnemyAIState
+{
+    Wandering,
+    Chasing,
+    Fleeing,
+    Idle
+}
 
 public class EnemyBehaviour : MonoBehaviour
 {
+    #region Editor Data
     private EnemyCore enemyCore;
     private EnemyData enemyData;
     private Transform player;
+    private Transform visualTransform;
     private Rigidbody2D rb;
 
     [Header("AI State")]
@@ -18,12 +30,21 @@ public class EnemyBehaviour : MonoBehaviour
     [Header("Detection")]
     private float playerDistance;
     private bool playerDetected = false;
+    #endregion
 
     public EnemyAIState CurrentState => currentState;
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        // Find visual transform if it exists
+        if (visualTransform == null)
+        {
+            visualTransform = transform.Find("Visuals");
+            if (visualTransform == null)
+            {
+                Debug.LogWarning("Visual Transform not found! Please assign it in the inspector.");
+            }
+        }   
     }
 
     private void Start()
@@ -49,13 +70,15 @@ public class EnemyBehaviour : MonoBehaviour
     {
         enemyCore = core;
         enemyData = core.Data;
+
+        rb = enemyCore.Rigidbody;
     }
 
     private void UpdateAI()
     {
         if (player != null)
         {
-            playerDistance = Vector2.Distance(transform.position, player.position);
+            playerDistance = Vector2.Distance(visualTransform.position, player.position);
             playerDetected = playerDistance <= enemyData.detectionRange;
         }
 
@@ -128,7 +151,7 @@ public class EnemyBehaviour : MonoBehaviour
             case EnemyAIState.Chasing:
                 if (player != null)
                 {
-                    targetDirection = (player.position - transform.position).normalized;
+                    targetDirection = (player.position - visualTransform.position).normalized;
                     moveSpeed *= enemyData.chaseSpeedMultiplier;
                 }
                 break;
@@ -136,7 +159,7 @@ public class EnemyBehaviour : MonoBehaviour
             case EnemyAIState.Fleeing:
                 if (player != null)
                 {
-                    targetDirection = (transform.position - player.position).normalized;
+                    targetDirection = (visualTransform.position - player.position).normalized;
                     moveSpeed *= enemyData.fleeSpeedMultiplier;
                 }
                 break;
@@ -145,11 +168,12 @@ public class EnemyBehaviour : MonoBehaviour
         // Apply movement
         if (targetDirection != Vector2.zero && rb != null)
         {
+            Debug.Log($"Moving in direction: {targetDirection} with speed: {moveSpeed}");
             rb.velocity = targetDirection * moveSpeed;
 
             // Rotate to face movement direction (optional)
             float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            visualTransform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
     }
 
@@ -158,21 +182,23 @@ public class EnemyBehaviour : MonoBehaviour
         wanderTimer -= Time.deltaTime;
 
         // Check if we reached the wander target or timer expired
-        if (wanderTimer <= 0f || Vector2.Distance(transform.position, wanderTarget) < 0.5f)
+        if (wanderTimer <= 0f || Vector2.Distance(visualTransform.position, wanderTarget) < 0.5f)
         {
             SetNewWanderTarget();
         }
 
-        return (wanderTarget - (Vector2)transform.position).normalized;
+        return (wanderTarget - (Vector2)visualTransform.position).normalized;
     }
 
     private void SetNewWanderTarget()
     {
         // Set a random target within wander radius
         Vector2 randomDirection = Random.insideUnitCircle.normalized;
-        wanderTarget = (Vector2)transform.position + randomDirection * enemyData.wanderRadius;
+        wanderTarget = (Vector2)visualTransform.position + randomDirection * enemyData.wanderRadius;
 
         wanderTimer = wanderCooldown;
+
+        Debug.Log($"New wander target set: {wanderTarget}");
     }
 
     private void OnDrawGizmosSelected()
@@ -181,23 +207,15 @@ public class EnemyBehaviour : MonoBehaviour
         {
             // Draw detection range
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, enemyData.detectionRange);
+            Gizmos.DrawWireSphere(visualTransform.position, enemyData.detectionRange);
 
             // Draw wander radius
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, enemyData.wanderRadius);
+            Gizmos.DrawWireSphere(visualTransform.position, enemyData.wanderRadius);
 
             // Draw current wander target
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(wanderTarget, 0.2f);
         }
     }
-}
-
-public enum EnemyAIState
-{
-    Wandering,
-    Chasing,
-    Fleeing,
-    Idle
 }

@@ -91,7 +91,6 @@ public class PlayerMovement : MonoBehaviour
 
   private void HandleMoveInput(Vector2 moveInput)
   {
-    Debug.Log($"Move input received: {moveInput}");
     inputVector = moveInput;
   }
 

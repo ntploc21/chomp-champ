@@ -42,9 +42,9 @@ public class EnemyData : ScriptableObject
     public LayerMask collisionLayers = -1;
 
     [Header("Audio & Effects")]
-    public AudioClip spawnSound;               // Sound played when enemy spawns
-    public AudioClip deathSound;               // Sound played when enemy dies
-    public AudioClip eatSound;                 // Sound played when enemy eats
+    // public AudioClip spawnSound;               // Sound played when enemy spawns
+    // public AudioClip deathSound;               // Sound played when enemy dies
+    // public AudioClip eatSound;                 // Sound played when enemy eats
     public GameObject deathEffectPrefab;      // Visual effect played on enemy death
     public GameObject spawnEffectPrefab;      // Visual effect played on enemy spawn
 

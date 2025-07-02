@@ -6,28 +6,29 @@ public class EnemyCore : MonoBehaviour
     [Header("Components")]
     [SerializeField] private EnemyData enemyData;
     [SerializeField] private EnemyBehaviour enemyBehaviour;
-    // [SerializeField] private EnemyEffects enemyEffects;
+    [SerializeField] private EnemyEffect enemyEffect;
 
     [Header("Runtime Properties")]
-    public float currentSize = 1f;
-    public bool isActive = true;
-    #endregion
+    [SerializeField] public float currentSize = 1f;
+    [SerializeField] public bool isActive = true;
 
-    #region Internal Data
-    private Rigidbody2D _rigidbody;
-    private Collider2D _collider;
+    [Header("Dependencies")]
+    [SerializeField] private Rigidbody2D _rigidbody;
+    [SerializeField] private Collider2D _collider;
     #endregion
 
     public EnemyData Data => enemyData;
     public EnemyBehaviour Behaviour => enemyBehaviour;
-    // public EnemyEffects Effects => enemyEffects;
+    public EnemyEffect Effects => enemyEffect;
     public Rigidbody2D Rigidbody => _rigidbody;
     public Collider2D Collider => _collider;
 
     private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody2D>();
-        _collider = GetComponent<Collider2D>();
+        if (_rigidbody == null)
+            _rigidbody = GetComponent<Rigidbody2D>();
+        if (_collider == null)
+            _collider = GetComponent<Collider2D>();
 
         InitializeComponents();
     }
@@ -45,8 +46,8 @@ public class EnemyCore : MonoBehaviour
         if (enemyBehaviour == null)
             enemyBehaviour = GetComponent<EnemyBehaviour>();
 
-        // if (enemyEffects == null)
-        //     enemyEffects = GetComponent<EnemyEffects>();
+        if (enemyEffect == null)
+            enemyEffect = GetComponent<EnemyEffect>();
     }
 
     public void InitializeFromData()
@@ -64,10 +65,10 @@ public class EnemyCore : MonoBehaviour
         }
 
         // Initialize effects
-        // if (enemyEffects != null)
-        // {
-        //     enemyEffects.Initialize(this);
-        // }
+        if (enemyEffect != null)
+        {
+            enemyEffect.Initialize(this);
+        }
 
         // Set physics properties
         if (_rigidbody != null)
@@ -102,10 +103,10 @@ public class EnemyCore : MonoBehaviour
         isActive = false;
 
         // Play death effects
-        // if (enemyEffects != null)
-        // {
-        //     enemyEffects.PlayDeathEffect();
-        // }
+        if (enemyEffect != null)
+        {
+            enemyEffect.PlayDeathEffect();
+        }
 
         // Disable or return to pool
         ReturnToPool();
