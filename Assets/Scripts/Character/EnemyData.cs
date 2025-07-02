@@ -18,6 +18,8 @@ public class EnemyData : ScriptableObject
     [Header("Size & Growth")]
     [Range(1, 10)]
     public int sizeLevel = 1;               // Enemy level (which affects eating conditions)
+    [Range(0.1f, 2f)]
+    public float growthRate = 1.0f;         // Growth rate multiplier for enemy size
 
     [Header("Movement")]
     [Range(0.5f, 20f)]
