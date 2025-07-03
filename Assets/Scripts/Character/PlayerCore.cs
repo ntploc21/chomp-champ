@@ -15,12 +15,10 @@ public class PlayerCore : MonoBehaviour
   [SerializeField] private int startLives = 3;
   [SerializeField] private int maxLives = 5;
   [SerializeField] private float invincibilityDuration = 2f;
-  
+
   [Header("Gameplay Settings")]
-  [SerializeField] private float sizeReductionOnDeath = 0.2f; // 20% size reduction
-  [SerializeField] private bool resetSizeOnDeath = false;
   [SerializeField] private float respawnDelay = 1f;
-  
+
   [Header("Audio")]
   [SerializeField] private AudioClip eatSFX;
   [SerializeField] private AudioClip growthSFX;
@@ -39,18 +37,18 @@ public class PlayerCore : MonoBehaviour
   public float score = 0f;
   public bool isAlive = true;
   public bool isInvincible = false;
-  
+
   [Space(5)]
   public int enemiesEaten = 0;
-  public float totalGrowth = 0f;
   public float playTime = 0f;
   #endregion  // Events
-  
-  public static UnityAction<PlayerCore> OnPlayerDeath;
-  public static UnityAction<PlayerCore, float> OnPlayerGrowth;
-  public static UnityAction<PlayerCore, EnemyCore> OnPlayerEatEnemy;
 
-  // Properties for better encapsulation
+  [Header("Events")]
+  public UnityAction<PlayerCore> OnPlayerDeath;
+  public UnityAction<PlayerCore, float> OnPlayerGrowth;
+  public UnityAction<PlayerCore, EnemyCore> OnPlayerEatEnemy;
+
+  #region Properties
   public PlayerMovement Movement => playerMovement;
   public PlayerGrowth Growth => playerGrowth;
   public PlayerEffect Effect => playerEffect;
@@ -59,14 +57,16 @@ public class PlayerCore : MonoBehaviour
   public float CurrentSize => currentSize;
   public int Lives => lives;
   public float Score => score;
-  
+  #endregion
+
   // Cached Components
   private AudioSource audioSource;
   private Camera playerCamera;
-  
+
   // Performance optimization
   private float lastUpdateTime;
   private const float UPDATE_INTERVAL = 0.1f;
+
   private void Awake()
   {
     InitializeComponents();
@@ -77,7 +77,7 @@ public class PlayerCore : MonoBehaviour
   {
     InitializePlayer();
   }
-  
+
   private void Update()
   {
     // Update play time
@@ -85,7 +85,7 @@ public class PlayerCore : MonoBehaviour
     {
       playTime += Time.deltaTime;
     }
-    
+
     // Periodic updates for performance
     if (Time.time - lastUpdateTime >= UPDATE_INTERVAL)
     {
@@ -101,20 +101,20 @@ public class PlayerCore : MonoBehaviour
     {
       audioSource = gameObject.AddComponent<AudioSource>();
     }
-    
+
     playerCamera = Camera.main;
     if (playerCamera == null)
     {
       playerCamera = FindObjectOfType<Camera>();
     }
   }
-  
+
   private void PeriodicUpdate()
   {
     // Any periodic checks that don't need to run every frame
     ValidateComponents();
   }
-  
+
   private void ValidateComponents()
   {
     if (enableDebugLogs)
@@ -148,16 +148,16 @@ public class PlayerCore : MonoBehaviour
     currentSize = startSize;
     score = 0f;
     enemiesEaten = 0;
-    totalGrowth = 0f;
     playTime = 0f;
-    
+
     isAlive = true;
     isInvincible = false;
 
     // Set initial size
     if (playerGrowth != null)
     {
-      playerGrowth.SetSize(currentSize);
+      playerGrowth.ResetGrowth();
+      playerGrowth.SetSize(currentSize, true);
     }
 
     // Initialize effects
@@ -165,27 +165,21 @@ public class PlayerCore : MonoBehaviour
     {
       playerEffect.PlaySpawnEffect();
     }
-    
+
     if (enableDebugLogs)
     {
       Debug.Log($"Player initialized - Size: {currentSize}, Lives: {lives}");
     }
   }
-  
-  private void PlaySFX(AudioClip clip)
-  {
-    if (clip != null && audioSource != null)
-    {
-      audioSource.PlayOneShot(clip);
-    }
-  }
+
   public void EatEnemy(EnemyCore enemy)
   {
     if (!isAlive || enemy == null) return;
 
     // Calculate score bonus
     float scoreGain = enemy.Data.sizeLevel * 10f;
-      // Size-based bonus scoring
+
+    // Size-based bonus scoring
     float sizeDifference = currentSize - enemy.Data.sizeLevel;
     if (sizeDifference > 1f) // Bonus for eating much smaller enemies
     {
@@ -201,18 +195,13 @@ public class PlayerCore : MonoBehaviour
     enemiesEaten++;
 
     // Play audio
-    PlaySFX(eatSFX);
+    // Use UIManagerAudio
 
     // Trigger growth
     if (playerGrowth != null)
     {
-      float oldSize = currentSize;
-      float growthAmount = enemy.Data.growthRate;
-      playerGrowth.Grow(growthAmount);
-      totalGrowth += growthAmount;
-      
-      // Fire growth event with old and new size info
-      OnPlayerGrowth?.Invoke(this, currentSize);
+      float xpGain = enemy.Data.sizeLevel * 5f; // Example XP gain
+      playerGrowth.AddXP(xpGain);
     }
 
     // Play eat effect
@@ -235,7 +224,7 @@ public class PlayerCore : MonoBehaviour
 
     // Player loses a life
     lives--;
-    
+
     if (enableDebugLogs)
     {
       Debug.Log($"Player was eaten! Lives remaining: {lives}");
@@ -243,6 +232,7 @@ public class PlayerCore : MonoBehaviour
 
     if (lives <= 0)
     {
+      // Player has no lives left, trigger death
       Die();
     }
     else
@@ -256,7 +246,7 @@ public class PlayerCore : MonoBehaviour
     isAlive = false;
 
     // Play death audio
-    PlaySFX(deathSFX);
+    // Use UIManagerAudio
 
     // Play death effect
     if (playerEffect != null)
@@ -286,31 +276,16 @@ public class PlayerCore : MonoBehaviour
     {
       playerMovement.SetCanMove(false);
     }
-    
+
     // Wait for respawn delay
     yield return new WaitForSeconds(respawnDelay);
-    
+
     Respawn();
   }
 
   private void Respawn()
   {
-    // Handle size reduction
-    if (resetSizeOnDeath)
-    {
-      currentSize = startSize;
-    }
-    else
-    {
-      float newSize = Mathf.Max(startSize, currentSize * (1f - sizeReductionOnDeath));
-      currentSize = newSize;
-    }
-    
-    // Apply new size
-    if (playerGrowth != null)
-    {
-      playerGrowth.SetSize(currentSize);
-    }
+    if (isAlive || lives <= 0) return;
 
     // Make player temporarily invincible
     StartCoroutine(InvincibilityCoroutine());
@@ -322,7 +297,7 @@ public class PlayerCore : MonoBehaviour
     }
 
     // Play respawn audio
-    PlaySFX(respawnSFX);
+    // Use UIManagerAudio
 
     // Play respawn effect
     if (playerEffect != null)
@@ -338,7 +313,7 @@ public class PlayerCore : MonoBehaviour
   private System.Collections.IEnumerator InvincibilityCoroutine(float duration = -1f)
   {
     isInvincible = true;
-    
+
     // Use provided duration or default
     float invincibilityTime = duration > 0 ? duration : invincibilityDuration;
 
@@ -362,7 +337,7 @@ public class PlayerCore : MonoBehaviour
     {
       playerEffect.SetFlicker(false);
     }
-    
+
     if (enableDebugLogs)
     {
       Debug.Log("Invincibility ended");
@@ -373,8 +348,8 @@ public class PlayerCore : MonoBehaviour
     if (lives < maxLives)
     {
       lives++;
-      PlaySFX(respawnSFX); // Reuse respawn sound for life gain
-      
+      // Use UIManagerAudio
+
       if (enableDebugLogs)
       {
         Debug.Log($"Life added! Current lives: {lives}");
@@ -388,51 +363,17 @@ public class PlayerCore : MonoBehaviour
 
     StartCoroutine(InvincibilityCoroutine(duration));
   }
-  
+
   public void AddScore(float points)
   {
     score += points;
-    
+
     if (enableDebugLogs)
     {
       Debug.Log($"Score added: {points:F1}, Total: {score:F1}");
     }
   }
-  
-  public void ForceSize(float newSize)
-  {
-    float oldSize = currentSize;
-    currentSize = Mathf.Max(0.1f, newSize); // Minimum size protection
-    
-    if (playerGrowth != null)
-    {
-      playerGrowth.SetSize(currentSize);
-    }
-    
-    OnPlayerGrowth?.Invoke(this, currentSize);
-    
-    if (enableDebugLogs)
-    {
-      Debug.Log($"Size forced from {oldSize:F2} to {currentSize:F2}");
-    }
-  }
-  
-  public bool CanEat(float enemySize)
-  {
-    return isAlive && !isInvincible && playerGrowth != null && playerGrowth.CanEat(enemySize);
-  }
-  
-  public bool CanBeEatenBy(float enemySize)
-  {
-    return isAlive && !isInvincible && playerGrowth != null && playerGrowth.CanBeEatenBy(enemySize);
-  }
 
-  public void UpdateSize(float newSize)
-  {
-    currentSize = newSize;
-    OnPlayerGrowth?.Invoke(this, currentSize);
-  }
-  
   // Method to reset player to initial state (useful for game restart)
   public void ResetPlayer()
   {
@@ -440,41 +381,33 @@ public class PlayerCore : MonoBehaviour
     currentSize = startSize;
     score = 0f;
     enemiesEaten = 0;
-    totalGrowth = 0f;
     playTime = 0f;
     isAlive = true;
     isInvincible = false;
-    
+
     // Stop any running coroutines
     StopAllCoroutines();
-    
+
     // Reset components
     if (playerGrowth != null)
     {
-      playerGrowth.SetSize(currentSize);
+      playerGrowth.ResetGrowth();
+      playerGrowth.SetSize(currentSize, true);
     }
-    
+
     if (playerMovement != null)
     {
       playerMovement.SetCanMove(true);
     }
-    
+
     if (playerEffect != null)
     {
       playerEffect.SetFlicker(false);
     }
-    
+
     if (enableDebugLogs)
     {
       Debug.Log("Player reset to initial state");
     }
-  }
-
-  private void OnDestroy()
-  {
-    // Clean up events
-    OnPlayerDeath = null;
-    OnPlayerGrowth = null;
-    OnPlayerEatEnemy = null;
   }
 }

@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
   [SerializeField] private bool enableDebugLogs = false;
   [SerializeField] private bool showMovementGizmos = false;
   #endregion
+
   #region Internal Data
   private Vector2 inputVector;
   private Vector2 currentVelocity;
@@ -52,7 +53,7 @@ public class PlayerMovement : MonoBehaviour
   private const float SIZE_CHECK_INTERVAL = 0.2f;
   #endregion
 
-  // Properties
+  #region Properties
   public bool IsMoving => currentVelocity.magnitude > 0.1f;
   public bool IsDashing => isDashing;
   public bool IsDashInvulnerable => isDashInvulnerable;
@@ -61,6 +62,7 @@ public class PlayerMovement : MonoBehaviour
   public Vector2 MovementDirection => lastMovementDirection;
   public float CurrentSpeed => currentVelocity.magnitude;
   public float MaxSpeed => CalculateCurrentMaxSpeed();
+  #endregion
 
   private float CalculateCurrentMaxSpeed()
   {
@@ -79,7 +81,6 @@ public class PlayerMovement : MonoBehaviour
   public void Initialize(PlayerCore core)
   {
     _playerCore = core;
-
 
     // Set up physics
     if (_rigidbody != null)

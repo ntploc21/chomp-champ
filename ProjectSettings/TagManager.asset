@@ -11,9 +11,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - PlayerLayer
+  - EnemyLayer
+  - PickupLayer
   - 
   - 
   - 
@@ -46,6 +46,9 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 1274193037
+    locked: 0
+  - name: Decors
+    uniqueID: 2250798959
     locked: 0
   - name: LowProps
     uniqueID: 4252372445
