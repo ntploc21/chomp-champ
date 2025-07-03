@@ -14,14 +14,21 @@ public class EnemyEffect : MonoBehaviour
   [Header("Particle Effects")]
   private ParticleSystem deathParticles;
   private ParticleSystem spawnParticles;
-  #endregion
 
+  // Cached references and values for performance
+  private Color originalColor;
+  private Vector3 originalScale;
+  private static readonly WaitForSeconds flashWait = new WaitForSeconds(0.1f);
+  private UIManagerAudio audioManager;
+  #endregion
   private void Awake()
   {
     spriteRenderer = GetComponent<SpriteRenderer>();
     animator = GetComponent<Animator>();
-  }
 
+    // Cache audio manager reference to avoid repeated singleton calls
+    audioManager = UIManagerAudio.instance;
+  }
   public void Initialize(EnemyCore core)
   {
     enemyCore = core;
@@ -33,6 +40,8 @@ public class EnemyEffect : MonoBehaviour
       if (spriteRenderer != null && enemyData.enemySprite != null)
       {
         spriteRenderer.sprite = enemyData.enemySprite;
+        // Cache original color to avoid repeated access
+        originalColor = spriteRenderer.color;
       }
 
       // Set animator
@@ -41,8 +50,14 @@ public class EnemyEffect : MonoBehaviour
         animator.runtimeAnimatorController = enemyData.animatorController;
       }
 
-      // Initialize particle effects
-      InitializeParticleEffects();
+      // Cache original scale
+      originalScale = transform.localScale;
+
+      // Initialize particle effects only if they don't exist
+      if (deathParticles == null || spawnParticles == null)
+      {
+        InitializeParticleEffects();
+      }
     }
 
     // Play spawn effect
@@ -75,13 +90,12 @@ public class EnemyEffect : MonoBehaviour
       }
     }
   }
-
   public void PlaySpawnEffect()
   {
-    // Play spawn sound
-    if (UIManagerAudio.instance != null)
+    // Play spawn sound with cached reference
+    if (audioManager != null)
     {
-      UIManagerAudio.instance.PlaySFX("SpawnSound");
+      audioManager.PlaySFX("SpawnSound");
     }
 
     // Play spawn particles
@@ -96,10 +110,10 @@ public class EnemyEffect : MonoBehaviour
 
   public void PlayDeathEffect()
   {
-    // Play death sound
-    if (UIManagerAudio.instance != null)
+    // Play death sound with cached reference
+    if (audioManager != null)
     {
-      UIManagerAudio.instance.PlaySFX("DeathSound");
+      audioManager.PlaySFX("DeathSound");
     }
 
     // Play death particles
@@ -111,29 +125,21 @@ public class EnemyEffect : MonoBehaviour
     // Death animation
     StartCoroutine(DeathAnimation());
   }
-
-  public void PlayGrowthEffect()
-  {
-    // Simple scale animation for growth
-    StartCoroutine(GrowthAnimation());
-  }
-
   public void PlayEatEffect()
   {
-    // Play eat sound
-    if (UIManagerAudio.instance != null)
+    // Play eat sound with cached reference
+    if (audioManager != null)
     {
-      UIManagerAudio.instance.PlaySFX("EatSound");
+      audioManager.PlaySFX("EatSound");
     }
   }
-
   private System.Collections.IEnumerator SpawnAnimation()
   {
     if (spriteRenderer == null) yield break;
 
-    // Start invisible
-    Color originalColor = spriteRenderer.color;
-    spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
+    // Use cached original color instead of accessing it repeatedly
+    Color startColor = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
+    spriteRenderer.color = startColor;
 
     // Fade in over 0.5 seconds
     float duration = 0.5f;
@@ -149,20 +155,17 @@ public class EnemyEffect : MonoBehaviour
 
     spriteRenderer.color = originalColor;
   }
-
   private System.Collections.IEnumerator DeathAnimation()
   {
     if (spriteRenderer == null) yield break;
 
-    Color originalColor = spriteRenderer.color;
-
-    // Flash effect
+    // Flash effect - use cached wait time and color
     for (int i = 0; i < 3; i++)
     {
       spriteRenderer.color = Color.white;
-      yield return new WaitForSeconds(0.1f);
+      yield return flashWait;
       spriteRenderer.color = originalColor;
-      yield return new WaitForSeconds(0.1f);
+      yield return flashWait;
     }
 
     // Fade out
@@ -176,33 +179,5 @@ public class EnemyEffect : MonoBehaviour
       spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
       yield return null;
     }
-  }
-
-  private System.Collections.IEnumerator GrowthAnimation()
-  {
-    Vector3 originalScale = transform.localScale;
-    Vector3 targetScale = originalScale * 1.2f; // Slightly bigger for effect
-
-    // Scale up
-    float duration = 0.2f;
-    float elapsed = 0f;
-
-    while (elapsed < duration)
-    {
-      elapsed += Time.deltaTime;
-      transform.localScale = Vector3.Lerp(originalScale, targetScale, elapsed / duration);
-      yield return null;
-    }
-
-    // Scale back down
-    elapsed = 0f;
-    while (elapsed < duration)
-    {
-      elapsed += Time.deltaTime;
-      transform.localScale = Vector3.Lerp(targetScale, originalScale, elapsed / duration);
-      yield return null;
-    }
-
-    transform.localScale = originalScale;
   }
 }

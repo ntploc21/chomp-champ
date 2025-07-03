@@ -17,11 +17,13 @@ public class EnemyCore : MonoBehaviour
     [SerializeField] private Collider2D _collider;
     #endregion
 
+    #region Properties
     public EnemyData Data => enemyData;
     public EnemyBehaviour Behaviour => enemyBehaviour;
     public EnemyEffect Effects => enemyEffect;
     public Rigidbody2D Rigidbody => _rigidbody;
     public Collider2D Collider => _collider;
+    #endregion
 
     private void Awake()
     {
@@ -43,20 +45,19 @@ public class EnemyCore : MonoBehaviour
 
     private void InitializeComponents()
     {
+        // Cache components only once to avoid repeated GetComponent calls
         if (enemyBehaviour == null)
             enemyBehaviour = GetComponent<EnemyBehaviour>();
 
         if (enemyEffect == null)
             enemyEffect = GetComponent<EnemyEffect>();
     }
-
     public void InitializeFromData()
     {
         if (enemyData == null) return;
 
-        // Set initial size and scale
+        // Set fixed size from size level (no growth)
         currentSize = enemyData.sizeLevel;
-        transform.localScale = Vector3.one * currentSize;
 
         // Initialize behavior
         if (enemyBehaviour != null)
@@ -70,22 +71,24 @@ public class EnemyCore : MonoBehaviour
             enemyEffect.Initialize(this);
         }
 
-        // Set physics properties
+        // Set physics properties once
         if (_rigidbody != null)
         {
             _rigidbody.gravityScale = 0f; // Top-down game
         }
 
-        // Set collider size based on enemy data
+        // Optimize collider setup - avoid repeated type checking
         if (_collider != null && enemyData.hitboxRadius > 0)
         {
-            if (_collider is CircleCollider2D circleCol)
+            // Use pattern matching for better performance
+            switch (_collider)
             {
-                circleCol.radius = enemyData.hitboxRadius;
-            }
-            else if (_collider is BoxCollider2D boxCol)
-            {
-                boxCol.size = Vector2.one * (enemyData.hitboxRadius * 2f);
+                case CircleCollider2D circleCol:
+                    circleCol.radius = enemyData.hitboxRadius;
+                    break;
+                case BoxCollider2D boxCol:
+                    boxCol.size = Vector2.one * (enemyData.hitboxRadius * 2f);
+                    break;
             }
         }
 

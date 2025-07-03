@@ -13,13 +13,9 @@ public class EnemyData : ScriptableObject
     [Header("Basic Info")]
     public string enemyName = "Enemy";     // Default name
     public Sprite enemySprite;             // Default sprite
-    public RuntimeAnimatorController animatorController;  // Animator controller for enemy animations
-
-    [Header("Size & Growth")]
+    public RuntimeAnimatorController animatorController;  // Animator controller for enemy animations    [Header("Size & Level")]
     [Range(1, 10)]
-    public int sizeLevel = 1;               // Enemy level (which affects eating conditions)
-    [Range(0.1f, 2f)]
-    public float growthRate = 1.0f;         // Growth rate multiplier for enemy size
+    public int sizeLevel = 1;               // Enemy level (fixed - no growth)
 
     [Header("Movement")]
     [Range(0.5f, 20f)]
@@ -42,22 +38,19 @@ public class EnemyData : ScriptableObject
     public LayerMask collisionLayers = -1;
 
     [Header("Audio & Effects")]
-    // public AudioClip spawnSound;               // Sound played when enemy spawns
-    // public AudioClip deathSound;               // Sound played when enemy dies
-    // public AudioClip eatSound;                 // Sound played when enemy eats
     public GameObject deathEffectPrefab;      // Visual effect played on enemy death
     public GameObject spawnEffectPrefab;      // Visual effect played on enemy spawn
 
     [Header("Spawning")]
     [Range(0.1f, 1f)]
     public float spawnWeight = 1f; // Relative spawn chance
-    public bool canSpawnInWaves = true; // Whether this enemy can spawn in waves (schools)
-
-    // Validation
+    public bool canSpawnInWaves = true; // Whether this enemy can spawn in waves (schools)    // Validation - optimized to reduce repeated calculations
+    
     private void OnValidate()
     {
-        sizeLevel = Mathf.Max(1, sizeLevel);
-        hitboxRadius = Mathf.Max(0.1f, hitboxRadius);
-        baseSpeed = Mathf.Max(0.1f, baseSpeed);
+        // Use Mathf.Max with single calls to avoid repeated function calls
+        if (sizeLevel < 1) sizeLevel = 1;
+        if (hitboxRadius < 0.1f) hitboxRadius = 0.1f;
+        if (baseSpeed < 0.1f) baseSpeed = 0.1f;
     }
 }
