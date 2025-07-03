@@ -22462,6 +22462,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1597032688}
+  - component: {fileID: 1597032694}
+  - component: {fileID: 1597032693}
   - component: {fileID: 1597032692}
   - component: {fileID: 1597032689}
   - component: {fileID: 1597032691}
@@ -22503,12 +22505,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseSpeed: 5
   sprintMultiplier: 1.5
-  dashForce: 10
+  acceleration: 20
+  deceleration: 15
+  rotationSpeed: 10
+  dashForce: 15
   dashDuration: 0.2
   dashCooldown: 1
+  dashInvulnerabilityTime: 0.1
+  minSizeSpeedMultiplier: 1.5
+  maxSizeSpeedMultiplier: 0.7
+  sizeReferenceMin: 0.5
+  sizeReferenceMax: 5
   _playerCore: {fileID: 1597032692}
   _inputReader: {fileID: 11400000, guid: a8c60f8295d26414b9fdb30e9e45906e, type: 2}
-  _rigidbody: {fileID: 1935168100}
+  _rigidbody: {fileID: 1597032694}
+  enableDebugLogs: 0
+  showMovementGizmos: 0
 --- !u!114 &1597032690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22528,11 +22540,28 @@ MonoBehaviour:
   deathParticles: {fileID: 0}
   dashParticles: {fileID: 0}
   evolutionParticles: {fileID: 0}
+  spawnParticles: {fileID: 0}
   enableScreenShake: 1
   eatShakeDuration: 0.1
   eatShakeIntensity: 0.1
   dashShakeDuration: 0.2
   dashShakeIntensity: 0.15
+  deathShakeDuration: 0.3
+  deathShakeIntensity: 0.2
+  eatFlashColor: {r: 0, g: 1, b: 0, a: 1}
+  growthFlashColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  evolutionFlashColor: {r: 0, g: 1, b: 1, a: 1}
+  deathFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  dashFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  spawnDuration: 0.5
+  growthPulseDuration: 0.3
+  evolutionDuration: 0.8
+  deathFadeDuration: 1
+  flickerRate: 0.1
+  enableParticlePooling: 1
+  enableAdvancedEffects: 1
+  maxConcurrentEffects: 3
+  enableDebugLogs: 0
 --- !u!114 &1597032691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22548,6 +22577,30 @@ MonoBehaviour:
   minSize: 0.5
   maxSize: 10
   baseGrowthRate: 0.1
+  growthRateBySize:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: -0.5
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.5
+      inSlope: -0.5
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   growthThresholds: []
   scaleSprite: 1
   scaleCollider: 1
@@ -22575,6 +22628,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  animationSpeed: 3
+  enableSmoothGrowth: 1
+  growthBuffer: 0.1
+  maxGrowthUpdatesPerFrame: 3
+  enableDebugLogs: 0
+  showGrowthGizmos: 0
 --- !u!114 &1597032692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22590,13 +22649,98 @@ MonoBehaviour:
   playerMovement: {fileID: 1597032689}
   playerGrowth: {fileID: 1597032691}
   playerEffect: {fileID: 1597032690}
+  startSize: 1
+  startLives: 3
+  maxLives: 5
+  invincibilityDuration: 2
+  sizeReductionOnDeath: 0.2
+  resetSizeOnDeath: 0
+  respawnDelay: 1
+  eatSFX: {fileID: 0}
+  growthSFX: {fileID: 0}
+  deathSFX: {fileID: 0}
+  respawnSFX: {fileID: 0}
+  enableDebugLogs: 0
   currentSize: 1
   lives: 3
-  maxLives: 5
   score: 0
   isAlive: 1
   isInvincible: 0
-  invincibilityDuration: 2
+  enemiesEaten: 0
+  totalGrowth: 0
+  playTime: 0
+--- !u!61 &1597032693
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597032687}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.31575087}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.36849827}
+  m_EdgeRadius: 0
+--- !u!50 &1597032694
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597032687}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &1622796260
 GameObject:
   m_ObjectHideFlags: 0
@@ -31509,8 +31653,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1935168099}
   - component: {fileID: 1935168101}
-  - component: {fileID: 1935168100}
-  - component: {fileID: 1935168102}
   m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
@@ -31533,33 +31675,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1597032688}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &1935168100
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1935168098}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!212 &1935168101
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -31612,51 +31727,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &1935168102
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1935168098}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.31575087}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.36849827}
-  m_EdgeRadius: 0
 --- !u!1 &1943340835
 GameObject:
   m_ObjectHideFlags: 0

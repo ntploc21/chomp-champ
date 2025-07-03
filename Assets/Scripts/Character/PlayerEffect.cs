@@ -15,6 +15,7 @@ public class PlayerEffect : MonoBehaviour
   [SerializeField] private ParticleSystem deathParticles;
   [SerializeField] private ParticleSystem dashParticles;
   [SerializeField] private ParticleSystem evolutionParticles;
+  [SerializeField] private ParticleSystem spawnParticles;
 
   [Header("Screen Effects")]
   [SerializeField] private bool enableScreenShake = true;
@@ -22,8 +23,31 @@ public class PlayerEffect : MonoBehaviour
   [SerializeField] private float eatShakeIntensity = 0.1f;
   [SerializeField] private float dashShakeDuration = 0.2f;
   [SerializeField] private float dashShakeIntensity = 0.15f;
-  #endregion
+  [SerializeField] private float deathShakeDuration = 0.3f;
+  [SerializeField] private float deathShakeIntensity = 0.2f;
 
+  [Header("Flash Effects")]
+  [SerializeField] private Color eatFlashColor = Color.green;
+  [SerializeField] private Color growthFlashColor = Color.yellow;
+  [SerializeField] private Color evolutionFlashColor = Color.cyan;
+  [SerializeField] private Color deathFlashColor = Color.red;
+  [SerializeField] private Color dashFlashColor = Color.white;
+
+  [Header("Animation Settings")]
+  [SerializeField] private float spawnDuration = 0.5f;
+  [SerializeField] private float growthPulseDuration = 0.3f;
+  [SerializeField] private float evolutionDuration = 0.8f;
+  [SerializeField] private float deathFadeDuration = 1f;
+  [SerializeField] private float flickerRate = 0.1f;
+
+  [Header("Performance")]
+  [SerializeField] private bool enableParticlePooling = true;
+  [SerializeField] private bool enableAdvancedEffects = true;
+  [SerializeField] private int maxConcurrentEffects = 3;
+
+  [Header("Debug")]
+  [SerializeField] private bool enableDebugLogs = false;
+  #endregion
   #region Internal Data
   private PlayerCore playerCore;
   private Camera playerCamera;
@@ -32,8 +56,15 @@ public class PlayerEffect : MonoBehaviour
   // Flicker effect variables
   private bool isFlickering = false;
   private Coroutine flickerCoroutine;
+  
+  // Performance tracking
+  private int currentEffectCount = 0;
+  private bool effectsEnabled = true;
+  
+  // Caching
+  private WaitForSeconds flickerWait;
+  private WaitForSeconds flashWait;
   #endregion
-
   private void Awake()
   {
     if (spriteRenderer == null)
@@ -54,6 +85,10 @@ public class PlayerEffect : MonoBehaviour
     {
       playerCamera = FindObjectOfType<Camera>();
     }
+    
+    // Cache wait times for performance
+    flickerWait = new WaitForSeconds(flickerRate);
+    flashWait = new WaitForSeconds(0.1f);
   }
 
   public void Initialize(PlayerCore core)
@@ -72,9 +107,17 @@ public class PlayerEffect : MonoBehaviour
     // Spawn visual effect
     StartCoroutine(SpawnAnimation());
   }
-
   public void PlayEatEffect()
   {
+    if (!effectsEnabled || currentEffectCount >= maxConcurrentEffects) return;
+    
+    StartCoroutine(PlayEatEffectCoroutine());
+  }
+
+  private IEnumerator PlayEatEffectCoroutine()
+  {
+    currentEffectCount++;
+    
     // Play eat sound
     if (UIManagerAudio.instance != null)
     {
@@ -94,13 +137,21 @@ public class PlayerEffect : MonoBehaviour
     }
 
     // Flash effect
-    StartCoroutine(FlashEffect(Color.green, 0.1f));
+    StartCoroutine(FlashEffect(eatFlashColor, 0.1f));
 
     // Animation trigger
     if (animator != null)
     {
       animator.SetTrigger("Eat");
     }
+    
+    if (enableDebugLogs)
+    {
+      Debug.Log("Eat effect played");
+    }
+    
+    yield return new WaitForSeconds(0.5f); // Effect duration
+    currentEffectCount--;
   }
 
   public void PlayGrowthEffect()
@@ -387,7 +438,6 @@ public class PlayerEffect : MonoBehaviour
       }
     }
   }
-
   private IEnumerator ScreenShake(float duration, float intensity)
   {
     if (playerCamera == null) yield break;
@@ -408,5 +458,97 @@ public class PlayerEffect : MonoBehaviour
     }
 
     playerCamera.transform.position = originalPosition;
+  }
+
+  // Utility Methods
+  public void SetEffectsEnabled(bool enabled)
+  {
+    effectsEnabled = enabled;
+    
+    if (enableDebugLogs)
+    {
+      Debug.Log($"Effects enabled: {enabled}");
+    }
+  }
+
+  public void StopAllEffects()
+  {
+    StopAllCoroutines();
+    currentEffectCount = 0;
+    
+    // Reset visual state
+    if (spriteRenderer != null)
+    {
+      spriteRenderer.color = originalSpriteColor;
+    }
+    
+    SetFlicker(false);
+    
+    if (enableDebugLogs)
+    {
+      Debug.Log("All effects stopped");
+    }
+  }
+
+  public void PlayCustomFlash(Color color, float duration)
+  {
+    StartCoroutine(FlashEffect(color, duration));
+  }
+
+  public void PlayCustomShake(float duration, float intensity)
+  {
+    if (enableScreenShake)
+    {
+      StartCoroutine(ScreenShake(duration, intensity));
+    }
+  }
+
+  public bool IsEffectPlaying()
+  {
+    return currentEffectCount > 0;
+  }
+
+  public int GetCurrentEffectCount()
+  {
+    return currentEffectCount;
+  }
+
+  public void ResetToOriginalState()
+  {
+    StopAllEffects();
+    
+    if (spriteRenderer != null)
+    {
+      spriteRenderer.color = originalSpriteColor;
+    }
+    
+    transform.localScale = Vector3.one;
+  }
+
+  // Performance optimization for particle systems
+  private void OptimizeParticleSystem(ParticleSystem particles)
+  {
+    if (particles == null) return;
+    
+    var main = particles.main;
+    main.maxParticles = Mathf.Min(main.maxParticles, 50); // Limit particles for performance
+  }
+
+  private void OnValidate()
+  {
+    // Validate settings in editor
+    maxConcurrentEffects = Mathf.Max(1, maxConcurrentEffects);
+    flickerRate = Mathf.Max(0.01f, flickerRate);
+    
+    // Optimize particle systems
+    if (enableParticlePooling)
+    {
+      OptimizeParticleSystem(eatParticles);
+      OptimizeParticleSystem(growthParticles);
+      OptimizeParticleSystem(deathParticles);
+      OptimizeParticleSystem(dashParticles);
+      OptimizeParticleSystem(evolutionParticles);
+      OptimizeParticleSystem(spawnParticles);
+    }
   }
 }
