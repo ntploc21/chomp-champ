@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f5ca5adee6231248aec8f6457b2e3b3, type: 3}
-  m_Name: Circle
+  m_Name: Big Big thingy 4
   m_EditorClassIdentifier: 
-  enemyName: Enemy
-  enemySprite: {fileID: 21300000, guid: 01b3079c2f955c249ac56478b939ed7e, type: 3}
+  enemyName: Predator
+  enemySprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
   animatorController: {fileID: 0}
-  sizeLevel: 1
-  size: 1
-  baseSpeed: 3
-  detectionRange: 5
-  enemyType: 2
+  sizeLevel: 5
+  size: 1.5
+  baseSpeed: 2.5
+  detectionRange: 10
+  enemyType: 1
   wanderRadius: 3
   fleeSpeedMultiplier: 1.5
   chaseSpeedMultiplier: 1.2
@@ -29,6 +29,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   deathEffectPrefab: {fileID: 0}
   spawnEffectPrefab: {fileID: 0}
-  maxSpawnCount: 20
-  spawnWeight: 1
-  canSpawnInWaves: 1
+  maxSpawnCount: 3
+  spawnWeight: 0.15
+  canSpawnInWaves: 0

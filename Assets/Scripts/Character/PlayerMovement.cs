@@ -77,7 +77,6 @@ public class PlayerMovement : MonoBehaviour
       _rigidbody = GetComponent<Rigidbody2D>();
     }
   }
-
   public void Initialize(PlayerCore core)
   {
     _playerCore = core;
@@ -347,6 +346,14 @@ public class PlayerMovement : MonoBehaviour
     if (_rigidbody != null)
     {
       _rigidbody.position = position;
+    }
+  }
+
+  public void SetCanCollide(bool canCollide)
+  {
+    if (_rigidbody != null)
+    {
+      _rigidbody.simulated = canCollide;
     }
   }
 

@@ -10,12 +10,15 @@ public enum EnemyType
 [CreateAssetMenu(fileName = "New Enemy Data", menuName = "Game/Enemy Data")]
 public class EnemyData : ScriptableObject
 {
+    #region Editor Data
     [Header("Basic Info")]
     public string enemyName = "Enemy";     // Default name
     public Sprite enemySprite;             // Default sprite
     public RuntimeAnimatorController animatorController;  // Animator controller for enemy animations    [Header("Size & Level")]
     [Range(1, 10)]
     public int sizeLevel = 1;               // Enemy level (fixed - no growth)
+    [Range(0.1f, 5f)]
+    public float size = 1f;                 // Fixed size of the enemy (no growth)
 
     [Header("Movement")]
     [Range(0.5f, 20f)]
@@ -42,10 +45,13 @@ public class EnemyData : ScriptableObject
     public GameObject spawnEffectPrefab;      // Visual effect played on enemy spawn
 
     [Header("Spawning")]
+    public int maxSpawnCount = 10; // Maximum number of this enemy type that can spawn
     [Range(0.1f, 1f)]
     public float spawnWeight = 1f; // Relative spawn chance
     public bool canSpawnInWaves = true; // Whether this enemy can spawn in waves (schools)    // Validation - optimized to reduce repeated calculations
-    
+    #endregion
+
+
     private void OnValidate()
     {
         // Use Mathf.Max with single calls to avoid repeated function calls

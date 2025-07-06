@@ -1,413 +1,329 @@
 using UnityEngine;
-using System;
 using UnityEngine.Events;
 
+/// <summary>
+/// Updated PlayerCore that uses the separated PlayerDataManager
+/// This focuses on game logic while data management is handled separately
+/// </summary>
 public class PlayerCore : MonoBehaviour
 {
-  #region Editor Data
-  [Header("Components")]
-  [SerializeField] private PlayerMovement playerMovement;
-  [SerializeField] private PlayerGrowth playerGrowth;
-  [SerializeField] private PlayerEffect playerEffect;
-
-  [Header("Player Stats")]
-  [SerializeField] private float startSize = 1f;
-  [SerializeField] private int startLives = 3;
-  [SerializeField] private int maxLives = 5;
-  [SerializeField] private float invincibilityDuration = 2f;
-
-  [Header("Gameplay Settings")]
-  [SerializeField] private float respawnDelay = 1f;
-
-  [Header("Audio")]
-  [SerializeField] private AudioClip eatSFX;
-  [SerializeField] private AudioClip growthSFX;
-  [SerializeField] private AudioClip deathSFX;
-  [SerializeField] private AudioClip respawnSFX;
-
-  [Header("Debug")]
-  [SerializeField] private bool enableDebugLogs = false;
-  #endregion
-
-  #region Runtime Data
-  [Header("Runtime Stats")]
-  [Space(10)]
-  public float currentSize = 1f;
-  public int lives = 3;
-  public float score = 0f;
-  public bool isAlive = true;
-  public bool isInvincible = false;
-
-  [Space(5)]
-  public int enemiesEaten = 0;
-  public float playTime = 0f;
-  #endregion  // Events
-
-  [Header("Events")]
-  public UnityAction<PlayerCore> OnPlayerDeath;
-  public UnityAction<PlayerCore, float> OnPlayerGrowth;
-  public UnityAction<PlayerCore, EnemyCore> OnPlayerEatEnemy;
-
-  #region Properties
-  public PlayerMovement Movement => playerMovement;
-  public PlayerGrowth Growth => playerGrowth;
-  public PlayerEffect Effect => playerEffect;
-  public bool IsAlive => isAlive;
-  public bool IsInvincible => isInvincible;
-  public float CurrentSize => currentSize;
-  public int Lives => lives;
-  public float Score => score;
-  #endregion
-
-  // Cached Components
-  private AudioSource audioSource;
-  private Camera playerCamera;
-
-  // Performance optimization
-  private float lastUpdateTime;
-  private const float UPDATE_INTERVAL = 0.1f;
-
-  private void Awake()
-  {
-    InitializeComponents();
-    CacheComponents();
-  }
-
-  private void Start()
-  {
-    InitializePlayer();
-  }
-
-  private void Update()
-  {
-    // Update play time
-    if (isAlive)
+    [Header("Components")]
+    [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayerGrowth playerGrowth;
+    [SerializeField] private PlayerEffect playerEffect;
+    
+    [Header("Data Management")]
+    [SerializeField] private PlayerDataManager dataManager;
+    
+    [Header("Gameplay Settings")]
+    [SerializeField] private float invincibilityDuration = 2f;
+    [SerializeField] private float respawnDelay = 1f;
+    
+    [Header("Events")]
+    public UnityEvent<PlayerCore> OnPlayerDeath;
+    public UnityEvent<PlayerCore, EnemyCore> OnPlayerEatEnemy;
+    public UnityEvent<PlayerCore> OnPlayerSpawn;
+    
+    // Properties that delegate to data manager
+    public bool IsAlive => dataManager.Data.isAlive;
+    public bool IsInvincible => dataManager.Data.isInvincible;
+    public float CurrentSize => dataManager.Data.currentSize;
+    public int CurrentLevel => dataManager.Data.currentLevel;
+    public int Lives => dataManager.Data.lives;
+    public float Score => dataManager.Data.score;
+    public int Level => dataManager.Data.currentLevel;
+    public Vector2 LastPosition => dataManager.Data.lastPosition;
+    
+    // Component references
+    public PlayerMovement Movement => playerMovement;
+    public PlayerGrowth Growth => playerGrowth;
+    public PlayerEffect Effect => playerEffect;
+    public PlayerDataManager DataManager => dataManager;
+    
+    private Coroutine invincibilityCoroutine;
+    
+    #region Unity Lifecycle
+    private void Awake()
     {
-      playTime += Time.deltaTime;
+        InitializeComponents();
     }
-
-    // Periodic updates for performance
-    if (Time.time - lastUpdateTime >= UPDATE_INTERVAL)
+    
+    private void Start()
     {
-      lastUpdateTime = Time.time;
-      PeriodicUpdate();
+        InitializePlayer();
+        SubscribeToDataEvents();
     }
-  }
-
-  private void CacheComponents()
-  {
-    audioSource = GetComponent<AudioSource>();
-    if (audioSource == null)
+    
+    private void OnDestroy()
     {
-      audioSource = gameObject.AddComponent<AudioSource>();
+        UnsubscribeFromDataEvents();
     }
-
-    playerCamera = Camera.main;
-    if (playerCamera == null)
+    
+    private void Update()
     {
-      playerCamera = FindObjectOfType<Camera>();
+        // Update position in data manager
+        dataManager.UpdatePosition(transform.position);
+        
+        // Handle any real-time logic here
+        HandleMovementBasedOnSize();
     }
-  }
-
-  private void PeriodicUpdate()
-  {
-    // Any periodic checks that don't need to run every frame
-    ValidateComponents();
-  }
-
-  private void ValidateComponents()
-  {
-    if (enableDebugLogs)
+    #endregion
+    
+    #region Initialization
+    private void InitializeComponents()
     {
-      if (playerMovement == null) Debug.LogWarning("PlayerMovement component missing!");
-      if (playerGrowth == null) Debug.LogWarning("PlayerGrowth component missing!");
-      if (playerEffect == null) Debug.LogWarning("PlayerEffect component missing!");
+        if (playerMovement == null)
+            playerMovement = GetComponent<PlayerMovement>();
+            
+        if (playerGrowth == null)
+            playerGrowth = GetComponent<PlayerGrowth>();
+            
+        if (playerEffect == null)
+            playerEffect = GetComponent<PlayerEffect>();
+            
+        if (dataManager == null)
+            dataManager = GetComponent<PlayerDataManager>();
+        
+        // Initialize components with this core reference
+        playerMovement?.Initialize(this);
+        playerGrowth?.Initialize(this);
+        playerEffect?.Initialize(this);
     }
-  }
-
-  private void InitializeComponents()
-  {
-    if (playerMovement == null)
-      playerMovement = GetComponent<PlayerMovement>();
-
-    if (playerGrowth == null)
-      playerGrowth = GetComponent<PlayerGrowth>();
-
-    if (playerEffect == null)
-      playerEffect = GetComponent<PlayerEffect>();
-
-    // Initialize all components with reference to this core
-    playerMovement?.Initialize(this);
-    playerGrowth?.Initialize(this);
-    playerEffect?.Initialize(this);
-  }
-  private void InitializePlayer()
-  {
-    // Initialize from start values
-    lives = startLives;
-    currentSize = startSize;
-    score = 0f;
-    enemiesEaten = 0;
-    playTime = 0f;
-
-    isAlive = true;
-    isInvincible = false;
-
-    // Set initial size
-    if (playerGrowth != null)
+    
+    private void InitializePlayer()
     {
-      playerGrowth.ResetGrowth();
-      playerGrowth.SetSize(currentSize, true);
+        // Apply initial data to visual components
+        ApplyDataToVisuals();
+        
+        // Play spawn effect
+        if (playerEffect != null)
+            playerEffect.PlaySpawnEffect();
+        
+        OnPlayerSpawn?.Invoke(this);
     }
-
-    // Initialize effects
-    if (playerEffect != null)
+    
+    private void SubscribeToDataEvents()
     {
-      playerEffect.PlaySpawnEffect();
+        if (dataManager != null)
+        {
+            dataManager.OnLevelUp.AddListener(OnLevelUpHandler);
+            dataManager.OnLivesChanged.AddListener(OnLivesChangedHandler);
+            dataManager.OnDataChanged.AddListener(OnDataChangedHandler);
+        }
     }
-
-    if (enableDebugLogs)
+    
+    private void UnsubscribeFromDataEvents()
     {
-      Debug.Log($"Player initialized - Size: {currentSize}, Lives: {lives}");
+        if (dataManager != null)
+        {
+            dataManager.OnLevelUp.RemoveListener(OnLevelUpHandler);
+            dataManager.OnLivesChanged.RemoveListener(OnLivesChangedHandler);
+            dataManager.OnDataChanged.RemoveListener(OnDataChangedHandler);
+        }
     }
-  }
-
-  public void EatEnemy(EnemyCore enemy)
-  {
-    if (!isAlive || enemy == null) return;
-
-    // Calculate score bonus
-    float scoreGain = enemy.Data.sizeLevel * 10f;
-
-    // Size-based bonus scoring
-    float sizeDifference = currentSize - enemy.Data.sizeLevel;
-    if (sizeDifference > 1f) // Bonus for eating much smaller enemies
+    #endregion
+    
+    #region Core Gameplay
+    public void EatEnemy(EnemyCore enemy)
     {
-      scoreGain *= 1.5f;
+        if (!IsAlive || enemy == null) return;
+        
+        // Determine if this is a streak or speed kill
+        bool isStreak = false; // Logic for streak detection could be added
+        bool isSpeedKill = false; // Logic for speed kill detection could be added
+        
+        // Handle data changes through data manager
+        dataManager.EatEnemy(enemy.Data.sizeLevel, isStreak, isSpeedKill);
+        
+        // Play effects
+        if (playerEffect != null)
+            playerEffect.PlayEatEffect();
+        
+        // Fire events
+        OnPlayerEatEnemy?.Invoke(this, enemy);
     }
-    else if (sizeDifference < 0.5f) // Bonus for eating similar/larger enemies
+    
+    public void OnEaten()
     {
-      scoreGain *= 2f;
+        if (!IsAlive || IsInvincible) return;
+        
+        // Handle life loss through data manager
+        dataManager.LoseLife();
+        
+        if (Lives <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            StartCoroutine(RespawnCoroutine());
+        }
     }
-
-    // Update stats
-    score += scoreGain;
-    enemiesEaten++;
-
-    // Play audio
-    // Use UIManagerAudio
-
-    // Trigger growth
-    if (playerGrowth != null)
+    
+    private void Die()
     {
-      float xpGain = enemy.Data.sizeLevel * 5f; // Example XP gain
-      playerGrowth.AddXP(xpGain);
+        // Disable movement
+        if (playerMovement != null)
+            playerMovement.SetCanMove(false);
+        
+        // Play death effect
+        if (playerEffect != null)
+            playerEffect.PlayDeathEffect();
+        
+        // Fire death event
+        OnPlayerDeath?.Invoke(this);
+        
+        Debug.Log($"Player died! Final Score: {Score:F1}, Level: {Level}");
     }
-
-    // Play eat effect
-    if (playerEffect != null)
+    private void Respawn()
     {
-      playerEffect.PlayEatEffect();
+        // Make player temporarily invincible
+        SetInvincible(invincibilityDuration);
+
+        // Re-enable movement
+        if (playerMovement != null)
+            playerMovement.SetCanMove(true);
+        
+        // Play respawn effect
+        if (playerEffect != null)
+            playerEffect.PlayRespawnEffect();
+        // Set isAlive to true
+
+        dataManager.Data.isAlive = true;
+        
+        Debug.Log($"Player respawned! Lives: {Lives}, Size: {CurrentSize:F2}");
     }
-
-    // Fire events
-    OnPlayerEatEnemy?.Invoke(this, enemy);
-
-    if (enableDebugLogs)
+    
+    private System.Collections.IEnumerator RespawnCoroutine()
     {
-      Debug.Log($"Player ate {enemy.name}! Score gained: {scoreGain:F1}, Total score: {score:F1}, Current size: {currentSize:F2}");
+        // Disable movement temporarily
+        if (playerMovement != null)
+            playerMovement.SetCanMove(false);
+
+        DataManager.Data.isAlive = false;
+
+        yield return new WaitForSeconds(respawnDelay);
+        
+        Respawn();
     }
-  }
-  public void OnEaten()
-  {
-    if (!isAlive || isInvincible) return;
-
-    // Player loses a life
-    lives--;
-
-    if (enableDebugLogs)
+    
+    
+    public void SetInvincible(float duration)
     {
-      Debug.Log($"Player was eaten! Lives remaining: {lives}");
+        if (invincibilityCoroutine != null)
+            StopCoroutine(invincibilityCoroutine);
+        
+        invincibilityCoroutine = StartCoroutine(InvincibilityCoroutine(duration));
     }
-
-    if (lives <= 0)
+    
+    private System.Collections.IEnumerator InvincibilityCoroutine(float duration)
     {
-      // Player has no lives left, trigger death
-      Die();
+        dataManager.SetInvincible(true);
+        
+        // Visual feedback for invincibility
+        if (playerEffect != null)
+            playerEffect.SetFlicker(true);
+        
+        yield return new WaitForSeconds(duration);
+        
+        dataManager.SetInvincible(false);
+        
+        if (playerEffect != null)
+            playerEffect.SetFlicker(false);
     }
-    else
+    #endregion
+    
+    #region Data Event Handlers
+    private void OnLevelUpHandler(int newLevel)
     {
-      StartCoroutine(RespawnCoroutine());
+        // Handle visual/audio feedback for level up
+        if (playerEffect != null)
+            playerEffect.PlayGrowthEffect();
+        
+        // Update visual size
+        ApplyDataToVisuals();
+        
+        Debug.Log($"Level up! New level: {newLevel}");
     }
-  }
-
-  private void Die()
-  {
-    isAlive = false;
-
-    // Play death audio
-    // Use UIManagerAudio
-
-    // Play death effect
-    if (playerEffect != null)
+    
+    private void OnLivesChangedHandler(int newLives)
     {
-      playerEffect.PlayDeathEffect();
+        // Handle UI updates or other life-related effects
+        Debug.Log($"Lives changed: {newLives}");
     }
-
-    // Disable movement
-    if (playerMovement != null)
+    
+    private void OnDataChangedHandler(PlayerData data)
     {
-      playerMovement.SetCanMove(false);
+        // Apply any data changes to visual components
+        ApplyDataToVisuals();
     }
-
-    // Fire death event
-    OnPlayerDeath?.Invoke(this);
-
-    if (enableDebugLogs)
+    #endregion
+    
+    #region Visual Updates
+    private void ApplyDataToVisuals()
     {
-      Debug.Log($"Player died! Final score: {score:F1}, Enemies eaten: {enemiesEaten}, Play time: {playTime:F1}s");
+        // Update size
+        if (playerGrowth != null)
+            playerGrowth.SetSize(CurrentSize, false);
+        
+        // Update any other visual elements based on data
+        UpdateMovementBasedOnSize();
     }
-  }
-
-  private System.Collections.IEnumerator RespawnCoroutine()
-  {
-    // Disable movement temporarily
-    if (playerMovement != null)
+    
+    private void HandleMovementBasedOnSize()
     {
-      playerMovement.SetCanMove(false);
+        // This could adjust movement speed based on size
+        // Implementation depends on your game design
     }
-
-    // Wait for respawn delay
-    yield return new WaitForSeconds(respawnDelay);
-
-    Respawn();
-  }
-
-  private void Respawn()
-  {
-    if (isAlive || lives <= 0) return;
-
-    // Make player temporarily invincible
-    StartCoroutine(InvincibilityCoroutine());
-
-    // Re-enable movement
-    if (playerMovement != null)
+    
+    private void UpdateMovementBasedOnSize()
     {
-      playerMovement.SetCanMove(true);
+        // Adjust movement parameters based on current size
+        // This is just an example - adjust based on your needs
+        if (playerMovement != null)
+        {
+            float sizeModifier = Mathf.Lerp(1.2f, 0.8f, (CurrentSize - 1f) / 9f); // Smaller = faster
+            // Apply size modifier to movement (this would need to be implemented in PlayerMovement)
+        }
     }
-
-    // Play respawn audio
-    // Use UIManagerAudio
-
-    // Play respawn effect
-    if (playerEffect != null)
+    #endregion
+    
+    #region Utility Methods
+    public void ResetPlayer()
     {
-      playerEffect.PlayRespawnEffect();
+        // Reset through data manager
+        dataManager.ResetPlayerData();
+        
+        // Reset visual state
+        ApplyDataToVisuals();
+        
+        // Re-enable movement
+        if (playerMovement != null)
+            playerMovement.SetCanMove(true);
+        
+        // Stop any running coroutines
+        if (invincibilityCoroutine != null)
+        {
+            StopCoroutine(invincibilityCoroutine);
+            invincibilityCoroutine = null;
+        }
+        
+        Debug.Log("Player reset to initial state");
     }
-
-    if (enableDebugLogs)
+    
+    public void AddLife()
     {
-      Debug.Log($"Player respawned! Lives: {lives}, Size: {currentSize:F2}");
+        dataManager.AddLife();
     }
-  }
-  private System.Collections.IEnumerator InvincibilityCoroutine(float duration = -1f)
-  {
-    isInvincible = true;
-
-    // Use provided duration or default
-    float invincibilityTime = duration > 0 ? duration : invincibilityDuration;
-
-    float elapsed = 0f;
-    while (elapsed < invincibilityTime)
+    
+    public void AddScore(float points)
     {
-      elapsed += Time.deltaTime;
-
-      // Flicker effect
-      if (playerEffect != null)
-      {
-        playerEffect.SetFlicker(true);
-      }
-
-      yield return null;
+        dataManager.AddScore(points);
     }
-
-    isInvincible = false;
-
-    if (playerEffect != null)
+    
+    public void DebugPlayerState()
     {
-      playerEffect.SetFlicker(false);
+        dataManager.DebugPrintData();
     }
-
-    if (enableDebugLogs)
-    {
-      Debug.Log("Invincibility ended");
-    }
-  }
-  public void AddLife()
-  {
-    if (lives < maxLives)
-    {
-      lives++;
-      // Use UIManagerAudio
-
-      if (enableDebugLogs)
-      {
-        Debug.Log($"Life added! Current lives: {lives}");
-      }
-    }
-  }
-
-  public void SetInvincible(float duration)
-  {
-    if (isInvincible) return;
-
-    StartCoroutine(InvincibilityCoroutine(duration));
-  }
-
-  public void AddScore(float points)
-  {
-    score += points;
-
-    if (enableDebugLogs)
-    {
-      Debug.Log($"Score added: {points:F1}, Total: {score:F1}");
-    }
-  }
-
-  // Method to reset player to initial state (useful for game restart)
-  public void ResetPlayer()
-  {
-    lives = startLives;
-    currentSize = startSize;
-    score = 0f;
-    enemiesEaten = 0;
-    playTime = 0f;
-    isAlive = true;
-    isInvincible = false;
-
-    // Stop any running coroutines
-    StopAllCoroutines();
-
-    // Reset components
-    if (playerGrowth != null)
-    {
-      playerGrowth.ResetGrowth();
-      playerGrowth.SetSize(currentSize, true);
-    }
-
-    if (playerMovement != null)
-    {
-      playerMovement.SetCanMove(true);
-    }
-
-    if (playerEffect != null)
-    {
-      playerEffect.SetFlicker(false);
-    }
-
-    if (enableDebugLogs)
-    {
-      Debug.Log("Player reset to initial state");
-    }
-  }
+    #endregion
 }

@@ -5,20 +5,11 @@ using UnityEngine.Events;
 public class PlayerGrowth : MonoBehaviour
 {
   #region Editor Data
-  [Header("Growth Settings")]
-  [SerializeField] private float growthFactor = 1.1f; // Growth factor per level
-
-  [Header("XP Settings")]
-  [SerializeField] private float initialXPToNextLevel = 100f; // Initial XP required for level 2
-  [SerializeField] private float xpGrowthFactor = 1.2f; // XP growth factor per level
   #endregion
 
   #region Runtime Data
-  [Header("Runtime Stats")]
-  [Space(10)]
-  public int currentLevel = 1; // Current level of the player
-  public float currentXP = 0f; // Current XP of the player
-  public float xpToNextLevel = 100f; // XP required for the next level
+  // Note: Level and XP data is now managed by PlayerDataManager
+  // This component now focuses only on visual size management
   #endregion
 
   #region Events
@@ -27,88 +18,96 @@ public class PlayerGrowth : MonoBehaviour
   #endregion
 
   #region Internal Data
+  private LevelData levelData;
   private PlayerCore playerCore;
   private float baseSize = 1f;
   #endregion
 
   #region Properties
-  public int Level => currentLevel;
-  public float CurrentXP => currentXP;
-  public float XPToNextLevel => xpToNextLevel;
+  public int Level => playerCore?.Level ?? 1;
+  public float CurrentXP => playerCore?.DataManager?.Data.currentXP ?? 0f;
+  public float XPToNextLevel => playerCore?.DataManager?.Data.xpToNextLevel ?? 100f;
   #endregion
 
   public void Initialize(PlayerCore core)
   {
     playerCore = core;
     baseSize = playerCore.CurrentSize;
+    
+    // Subscribe to data manager events
+    if (playerCore.DataManager != null)
+    {
+      playerCore.DataManager.OnLevelUp.AddListener(OnLevelUpFromDataManager);
+      playerCore.DataManager.OnXPChanged.AddListener(OnXPChangedFromDataManager);
+    }
   }
 
   public void AddXP(float xpAmount)
   {
-    if (!playerCore.IsAlive || xpAmount <= 0)
-      return;
-
-    currentXP += xpAmount;
-
-    // Use a while loop to handle multiple level-ups in one call
-    while (currentXP >= xpToNextLevel)
+    // Delegate XP management to PlayerDataManager
+    if (playerCore?.DataManager != null)
     {
-      LevelUp();
+      playerCore.DataManager.AddXP(xpAmount);
     }
-
-    // Notify listeners about the XP change
-    OnXPChanged?.Invoke(currentXP, xpToNextLevel);
   }
 
   public void SetSize(float newSize, bool isImmediate = true)
   {
     transform.localScale = new Vector3(newSize, newSize, 1f);
-
-    if (playerCore != null)
-    {
-      playerCore.currentSize = newSize;
-    }
+    
+    // The size is now stored in PlayerDataManager, so we don't need to set it on PlayerCore
+    // The DataManager will handle size updates through its level system
   }
 
   public void ResetGrowth()
   {
-    currentLevel = 1;
-    currentXP = 0f;
-    xpToNextLevel = initialXPToNextLevel; // Reset to initial value
+    // Reset through data manager
+    if (playerCore?.DataManager != null)
+    {
+      playerCore.DataManager.ResetPlayerData();
+    }
+    
     SetSize(baseSize, true);
-
-    // Notify listeners about reset
-    OnXPChanged?.Invoke(currentXP, xpToNextLevel);
-    OnLevelUp?.Invoke(currentLevel, baseSize);
   }
 
-  private void LevelUp()
+  private void OnLevelUpFromDataManager(int newLevel)
   {
-    // Subtract the XP needed for the next level
-    currentXP -= xpToNextLevel;
-    currentLevel++;
-
-    // Calculate new XP requirement (example: increase by 20% each level)
-    xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * xpGrowthFactor);
-
-    // Apply the visual and logical growth
+    // Update visual size based on the new level
     ApplyGrowth();
+    
+    // Forward the event
+    OnLevelUp?.Invoke(newLevel, playerCore.CurrentSize);
+  }
 
-    // Notify listeners about the level-up
-    OnLevelUp?.Invoke(currentLevel, playerCore.CurrentSize);
+  private void OnXPChangedFromDataManager(float currentXP, float xpToNextLevel)
+  {
+    // Forward the event
+    OnXPChanged?.Invoke(currentXP, xpToNextLevel);
   }
 
   private void ApplyGrowth()
   {
-    // Calculate new size based on growth factor and current level
-    float newSize = baseSize * Mathf.Pow(growthFactor, currentLevel - 1);
-    SetSize(newSize, true);
-
-    // Update player's current size
-    if (playerCore != null)
+    // Calculate new size based on growth factor and current level from data manager
+    if (playerCore?.DataManager?.LevelConfig != null)
     {
-      playerCore.currentSize = newSize;
-      playerCore.Effect?.PlayGrowthEffect();
+      float newSize = playerCore.DataManager.LevelConfig.GetSizeForLevel(Level);
+      SetSize(newSize, true);
+    }
+    
+    // Play growth effect
+    if (playerCore?.Effect != null)
+    {
+      playerCore.Effect.PlayGrowthEffect();
+    }
+  }
+
+  private void OnDestroy()
+  {
+    // Unsubscribe from events
+    if (playerCore?.DataManager != null)
+    {
+      playerCore.DataManager.OnLevelUp.RemoveListener(OnLevelUpFromDataManager);
+      playerCore.DataManager.OnXPChanged.RemoveListener(OnXPChangedFromDataManager);
     }
   }
 }

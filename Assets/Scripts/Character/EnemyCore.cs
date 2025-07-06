@@ -9,7 +9,8 @@ public class EnemyCore : MonoBehaviour
     [SerializeField] private EnemyEffect enemyEffect;
 
     [Header("Runtime Properties")]
-    [SerializeField] public float currentSize = 1f;
+    [SerializeField] public int currentLevel = 1;
+    [SerializeField][Range(0.1f, 5f)] public float size = 1f; // Fixed size (no growth)
     [SerializeField] public bool isActive = true;
 
     [Header("Dependencies")]
@@ -31,16 +32,10 @@ public class EnemyCore : MonoBehaviour
             _rigidbody = GetComponent<Rigidbody2D>();
         if (_collider == null)
             _collider = GetComponent<Collider2D>();
+        if (enemyData != null)
+            SetEnemyData(enemyData);
 
         InitializeComponents();
-    }
-
-    private void Start()
-    {
-        if (enemyData != null)
-        {
-            InitializeFromData();
-        }
     }
 
     private void InitializeComponents()
@@ -57,7 +52,19 @@ public class EnemyCore : MonoBehaviour
         if (enemyData == null) return;
 
         // Set fixed size from size level (no growth)
-        currentSize = enemyData.sizeLevel;
+        currentLevel = enemyData.sizeLevel;
+        size = enemyData.size;
+
+        // Set sprite and animator
+        if (enemyData.enemySprite != null)
+        {
+            var spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.sprite = enemyData.enemySprite;
+                spriteRenderer.transform.localScale = Vector3.one * size;
+            }
+        }
 
         // Initialize behavior
         if (enemyBehaviour != null)
@@ -94,7 +101,6 @@ public class EnemyCore : MonoBehaviour
 
         isActive = true;
     }
-
     public void SetEnemyData(EnemyData data)
     {
         enemyData = data;
@@ -121,18 +127,18 @@ public class EnemyCore : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public float GetSizeComparison(float otherSize)
+    public int GetLevelComparison(int otherLevel)
     {
-        return currentSize - otherSize;
+        return currentLevel - otherLevel;
     }
 
-    public bool IsLargerThan(float otherSize)
+    public bool IsLargerThan(int otherLevel)
     {
-        return currentSize > otherSize;
+        return currentLevel > otherLevel;
     }
 
-    public bool IsSmallerThan(float otherSize)
+    public bool IsSmallerThan(int otherLevel)
     {
-        return currentSize < otherSize;
+        return currentLevel < otherLevel;
     }
 }

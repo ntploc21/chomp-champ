@@ -42,8 +42,8 @@ public class CollisionHandler : MonoBehaviour
     bool isOtherEnemy = IsInLayerMask(otherObject, enemyLayer);
     bool isOtherPickup = IsInLayerMask(otherObject, pickupLayer);
 
-    Debug.Log($"Collision detected: {thisObject.name} with {otherObject.name}");
-    Debug.Log($"Collision types - This: Player={isThisPlayer}, Enemy={isThisEnemy}, Other: Player={isOtherPlayer}, Enemy={isOtherEnemy}, Pickup={isOtherPickup}");
+    // Debug.Log($"Collision detected: {thisObject.name} with {otherObject.name}");
+    // Debug.Log($"Collision types - This: Player={isThisPlayer}, Enemy={isThisEnemy}, Other: Player={isOtherPlayer}, Enemy={isOtherEnemy}, Pickup={isOtherPickup}");
 
     // Player vs Enemy collision
     if (isThisPlayer && isOtherEnemy)
@@ -63,7 +63,7 @@ public class CollisionHandler : MonoBehaviour
     else if (isThisEnemy && isOtherEnemy)
     {
       HandleEnemyEnemyCollision(thisObject, otherObject);
-    }
+    } 
   }
 
   private void HandlePlayerEnemyCollision(GameObject player, GameObject enemy)
@@ -78,10 +78,10 @@ public class CollisionHandler : MonoBehaviour
       return;
     }
 
-    // Compare sizes
-    float sizeDifference = playerCore.currentSize - enemyCore.currentSize;
+    // Compare Level
+    float levelDifference = playerCore.CurrentLevel - enemyCore.currentLevel;
 
-    if (sizeDifference >= 0) // Player is larger
+    if (levelDifference >= 0) // Player is larger
     {
       // Player eats enemy
       OnPlayerEatsEnemy?.Invoke(player, enemy);
@@ -91,10 +91,8 @@ public class CollisionHandler : MonoBehaviour
 
       // Trigger death on enemy
       enemyCore.OnEaten();
-
-      Debug.Log($"Player ate {enemy.name}! Size difference: {sizeDifference}");
     }
-    else if (sizeDifference < 0) // Enemy is larger
+    else if (levelDifference < 0) // Enemy is larger
     {
       // Enemy eats player (player loses life)
       OnEnemyEatsPlayer?.Invoke(enemy, player);
@@ -107,8 +105,6 @@ public class CollisionHandler : MonoBehaviour
       {
         enemyCore.Effects.PlayEatEffect();
       }
-
-      Debug.Log($"{enemy.name} ate player! Size difference: {sizeDifference}");
     }
   }
 
@@ -142,14 +138,14 @@ public class CollisionHandler : MonoBehaviour
     // Only allow predators to eat prey
     if (enemyCore1.Data.enemyType == EnemyType.Predator &&
         enemyCore2.Data.enemyType == EnemyType.Prey &&
-        enemyCore1.currentSize > enemyCore2.currentSize)
+        enemyCore1.currentLevel > enemyCore2.currentLevel)
     {
       // Enemy 1 eats Enemy 2
       enemyCore2.OnEaten();
     }
     else if (enemyCore2.Data.enemyType == EnemyType.Predator &&
              enemyCore1.Data.enemyType == EnemyType.Prey &&
-             enemyCore2.currentSize > enemyCore1.currentSize)
+             enemyCore2.currentLevel > enemyCore1.currentLevel)
     {
       // Enemy 2 eats Enemy 1
       enemyCore1.OnEaten();

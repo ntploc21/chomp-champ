@@ -34,10 +34,9 @@ public class PlayerEffect : MonoBehaviour
   [SerializeField] private Color dashFlashColor = Color.white;
 
   [Header("Animation Settings")]
-  [SerializeField] private float spawnDuration = 0.5f;
-  [SerializeField] private float growthPulseDuration = 0.3f;
-  [SerializeField] private float evolutionDuration = 0.8f;
-  [SerializeField] private float deathFadeDuration = 1f;
+  // [SerializeField] private float spawnDuration = 0.5f;
+  // [SerializeField] private float growthPulseDuration = 0.3f;
+  // [SerializeField] private float deathFadeDuration = 1f;
   [SerializeField] private float flickerRate = 0.1f;
 
   [Header("Performance")]
@@ -48,6 +47,7 @@ public class PlayerEffect : MonoBehaviour
   [Header("Debug")]
   [SerializeField] private bool enableDebugLogs = false;
   #endregion
+  
   #region Internal Data
   private PlayerCore playerCore;
   private Camera playerCamera;
