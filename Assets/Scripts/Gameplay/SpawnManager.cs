@@ -10,6 +10,7 @@ using System.Linq;
 /// </summary>
 public class SpawnManager : MonoBehaviour
 {
+    #region Editor Data
     [Header("Spawn Configuration")]
     [SerializeField] private bool isSpawning = false;
     [SerializeField] private float baseSpawnRate = 2f; // Seconds between spawns
@@ -57,19 +58,23 @@ public class SpawnManager : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool enableDebugLogs = false;
     [SerializeField] private bool showSpawnGizmos = false;
-
+    #endregion
+    
+    #region Internal Data
     // Private variables
     private ObjectPool<GameObject> enemyPool;
     private List<GameObject> activeEnemies = new List<GameObject>();
     private Coroutine spawnCoroutine;
     private float lastSpawnTime;
     private float currentDifficulty = 0f;
+    #endregion
 
-    // Properties
+    #region Properties
     public bool IsSpawning => isSpawning;
     public int ActiveEnemyCount => activeEnemies.Count;
     public int PooledEnemyCount => enemyPool?.CountInactive ?? 0;
     public float CurrentDifficulty => currentDifficulty;
+    #endregion
 
     #region Unity Lifecycle
     private void Awake()
@@ -390,12 +395,12 @@ public class SpawnManager : MonoBehaviour
             // Ensure the enemy is properly activated
             enemyCore.isActive = true;
 
-            // Use the enemy's natural level from EnemyData (no scaling)
-            enemyCore.currentLevel = enemyData.sizeLevel;
+            // Use the enemy's natural level from EnemyData
+            enemyCore.SetLevel(enemyData.level);
         }
 
         if (enableDebugLogs)
-            Debug.Log($"SpawnManager: Spawned {enemyData.enemyName} at level {enemyData.sizeLevel} at {position}");
+            Debug.Log($"SpawnManager: Spawned {enemyData.enemyName} at level {enemyData.level} at {position}");
     }
     #endregion
 
@@ -522,8 +527,6 @@ public class SpawnManager : MonoBehaviour
         {
             Vector3 screenPos = gameCamera.WorldToViewportPoint(position);
             bool onScreen = screenPos.x >= 0 && screenPos.x <= 1 && screenPos.y >= 0 && screenPos.y <= 1;
-
-            Debug.Log($"SpawnManager: Checking position {position} - On Screen: {onScreen}");
 
             // For off-screen spawning, we want positions just outside the camera view
             if (!onScreen)

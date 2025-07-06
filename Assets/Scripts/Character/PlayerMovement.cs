@@ -1,19 +1,30 @@
 using UnityEngine;
 
+/// <summary>
+/// PlayerMovement handles player character movement, including walking, sprinting, and dashing.
+/// It manages input, applies forces, and updates the player's position and rotation.
+/// </summary>
 public class PlayerMovement : MonoBehaviour
 {
   #region Editor Data
   [Header("Movement Settings")]
+  [Tooltip("Base speed of the player character.")]
   [SerializeField] private float baseSpeed = 5f;
+  [Tooltip("Speed multiplier when the player is sprinting.")]
   [SerializeField] private float sprintMultiplier = 1.5f;
   [SerializeField] private float acceleration = 20f;
-  [SerializeField] private float deceleration = 15f;
+  [SerializeField] private float deceleration = 10f;
+  [Tooltip("Rotation speed of the player character.")]
   [SerializeField] private float rotationSpeed = 10f;
 
   [Header("Dash Settings")]
+  [Tooltip("Force applied during the dash.")]
   [SerializeField] private float dashForce = 10f;
+  [Tooltip("Duration of the dash in seconds.")]
   [SerializeField] private float dashDuration = 0.2f;
+  [Tooltip("Cooldown time between dashes in seconds.")]
   [SerializeField] private float dashCooldown = 1f;
+  [Tooltip("Time during which the player is invulnerable after dashing.")]
   [SerializeField] private float dashInvulnerabilityTime = 0.1f;
 
   [Header("Size-based Modifiers")]
@@ -28,7 +39,9 @@ public class PlayerMovement : MonoBehaviour
   [SerializeField] private Rigidbody2D _rigidbody = null;
 
   [Header("Debug")]
+  [Tooltip("Enable debug logs for movement actions.")]
   [SerializeField] private bool enableDebugLogs = false;
+  [Tooltip("Show movement gizmos in the editor for debugging.")]
   [SerializeField] private bool showMovementGizmos = false;
   #endregion
 
@@ -36,16 +49,16 @@ public class PlayerMovement : MonoBehaviour
   private Vector2 inputVector;
   private Vector2 currentVelocity;
   private Vector2 targetVelocity;
-  private Vector2 lastMovementDirection;
+  private Vector2 lastMovementDirection = Vector2.right; // Default to right for dash direction
 
   private bool canMove = true;
   private bool isSprinting = false;
   private bool isDashing = false;
   private bool isDashInvulnerable = false;
 
-  private float dashTimer;
-  private float dashCooldownTimer;
-  private float dashInvulnerabilityTimer;
+  private float dashTimer = 0f;
+  private float dashCooldownTimer = 0f;
+  private float dashInvulnerabilityTimer = 0f;
 
   // Cached values for performance
   private float cachedSizeSpeedModifier = 1f;
@@ -64,12 +77,7 @@ public class PlayerMovement : MonoBehaviour
   public float MaxSpeed => CalculateCurrentMaxSpeed();
   #endregion
 
-  private float CalculateCurrentMaxSpeed()
-  {
-    float speed = baseSpeed;
-    if (isSprinting) speed *= sprintMultiplier;
-    return speed * cachedSizeSpeedModifier;
-  }
+  #region Unity Events
   private void Awake()
   {
     if (_rigidbody == null)
@@ -104,27 +112,9 @@ public class PlayerMovement : MonoBehaviour
     _inputReader.OnSprintStoppedEvent -= HandleSprintStop;
     _inputReader.OnDashEvent -= HandleDash;
   }
+  #endregion
 
-  private void UpdateCachedValues()
-  {
-    // Update size-based speed modifier periodically for performance
-    if (Time.time - lastSizeCheck >= SIZE_CHECK_INTERVAL)
-    {
-      lastSizeCheck = Time.time;
-      UpdateSizeSpeedModifier();
-    }
-  }
-
-  private void UpdateSizeSpeedModifier()
-  {
-    if (_playerCore != null)
-    {
-      float normalizedSize = Mathf.InverseLerp(sizeReferenceMin, sizeReferenceMax, _playerCore.CurrentSize);
-      cachedSizeSpeedModifier = Mathf.Lerp(minSizeSpeedMultiplier, maxSizeSpeedMultiplier, normalizedSize);
-    }
-  }
-
-#region Tick
+  #region Tick
   private void Update()
   {
     UpdateTimers();
@@ -146,7 +136,58 @@ public class PlayerMovement : MonoBehaviour
   }
   #endregion
 
-#region Input Handlers
+  #region Utility Methods
+  /// <summary>
+  /// Calculates the current maximum speed based on base speed, sprint multiplier, and size-based speed modifier.
+  /// This method is called to determine the effective speed of the player character during movement.
+  /// </summary>
+  /// <returns></returns>
+  private float CalculateCurrentMaxSpeed()
+  {
+    float speed = baseSpeed;
+    if (isSprinting) speed *= sprintMultiplier;
+    return speed * cachedSizeSpeedModifier;
+  }
+
+  private void UpdateCachedValues()
+  {
+    // Update size-based speed modifier periodically for performance
+    if (Time.time - lastSizeCheck >= SIZE_CHECK_INTERVAL)
+    {
+      lastSizeCheck = Time.time;
+      UpdateSizeSpeedModifier();
+    }
+  }
+
+  private void UpdateSizeSpeedModifier()
+  {
+    if (_playerCore != null)
+    {
+      float normalizedSize = Mathf.InverseLerp(sizeReferenceMin, sizeReferenceMax, _playerCore.CurrentSize);
+      cachedSizeSpeedModifier = Mathf.Lerp(minSizeSpeedMultiplier, maxSizeSpeedMultiplier, normalizedSize);
+    }
+  }
+
+  /// <summary>
+  /// Updates the timers for dash cooldown and invulnerability.
+  /// This method is called every frame to manage the state of dashing and invulnerability.
+  /// </summary>
+  private void UpdateTimers()
+  {
+    if (dashCooldownTimer > 0f)
+    {
+      dashCooldownTimer -= Time.deltaTime;
+    }
+
+    if (dashInvulnerabilityTimer > 0f)
+    {
+      dashInvulnerabilityTimer -= Time.deltaTime;
+      isDashInvulnerable = dashInvulnerabilityTimer > 0f;
+    }
+  }
+  #endregion
+
+  #region Input Handlers
   private void HandleMoveInput(Vector2 moveInput)
   {
     inputVector = moveInput;
@@ -225,6 +266,13 @@ public class PlayerMovement : MonoBehaviour
       Debug.Log($"Dash started! Direction: {direction}, Power: {dashPower:F1}");
     }
   }
+  #endregion
+
+  #region Movement Handlers
+  /// <summary>
+  /// Handles normal movement logic, applying input-based velocity and smoothing acceleration/deceleration.
+  /// This method is called when the player is not dashing and can move normally.
+  /// </summary>
   private void HandleNormalMovement()
   {
     // Calculate target velocity based on input
@@ -238,7 +286,6 @@ public class PlayerMovement : MonoBehaviour
 
     // Apply cached size-based speed modifications
     currentSpeed *= cachedSizeSpeedModifier;
-
     targetVelocity = inputVector.normalized * currentSpeed;
 
     // Smooth acceleration/deceleration
@@ -247,7 +294,7 @@ public class PlayerMovement : MonoBehaviour
 
     _rigidbody.velocity = currentVelocity;
 
-    // Optional rotation towards movement direction
+    // Optional: Rotate the player towards the movement direction
     if (rotationSpeed > 0f && currentVelocity.magnitude > 0.1f)
     {
       float targetAngle = Mathf.Atan2(currentVelocity.y, currentVelocity.x) * Mathf.Rad2Deg - 90f;
@@ -257,6 +304,10 @@ public class PlayerMovement : MonoBehaviour
     }
   }
 
+  /// <summary>
+  /// Handles the dash movement logic, applying a burst of speed in the specified direction.
+  /// Smoothly transitions back to normal movement after the dash duration.
+  /// </summary>
   private void HandleDashMovement()
   {
     dashTimer -= Time.fixedDeltaTime;
@@ -268,22 +319,10 @@ public class PlayerMovement : MonoBehaviour
       currentVelocity = _rigidbody.velocity * 0.5f; // Reduce velocity after dash
     }
   }
-#endregion
+  #endregion
 
-  private void UpdateTimers()
-  {
-    if (dashCooldownTimer > 0f)
-    {
-      dashCooldownTimer -= Time.deltaTime;
-    }
 
-    if (dashInvulnerabilityTimer > 0f)
-    {
-      dashInvulnerabilityTimer -= Time.deltaTime;
-      isDashInvulnerable = dashInvulnerabilityTimer > 0f;
-    }
-  }
-
+  #region Public Methods
   public void SetCanMove(bool canMove)
   {
     this.canMove = canMove;
@@ -356,7 +395,9 @@ public class PlayerMovement : MonoBehaviour
       _rigidbody.simulated = canCollide;
     }
   }
+  #endregion
 
+  #region Debugging
   private void OnDrawGizmos()
   {
     if (!showMovementGizmos) return;
@@ -387,4 +428,5 @@ public class PlayerMovement : MonoBehaviour
       Gizmos.DrawWireSphere(transform.position, 0.8f);
     }
   }
+  #endregion
 }

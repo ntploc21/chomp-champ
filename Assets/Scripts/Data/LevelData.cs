@@ -2,34 +2,54 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
+/// <summary>
+/// ScriptableObject to hold level data and progression settings.
+/// This class is used to store various properties of a level, such as growth settings,
+/// XP requirements, level rewards, and evolution levels.`
+/// </summary>
 [CreateAssetMenu(fileName = "New Level Data", menuName = "Game/Level Data", order = 1)]
 public class LevelData : ScriptableObject
 {
     #region Editor Data
     [Header("Basic Growth Settings")]
-    public float growthFactor = 1.1f; // Growth factor per level
-    public float baseSize = 1f; // Starting size
-    public float maxSize = 10f; // Maximum achievable size
+    [Tooltip("Growth factor for player size per level.")]
+    public float growthFactor = 1.1f;
+    [Tooltip("Base size of the player at level 1.")]
+    public float baseSize = 1f;
+    [Tooltip("Maximum size the player can reach.")]
+    public float maxSize = 10f;
 
     [Header("XP Settings")]
-    public float initialXPToNextLevel = 100f; // Initial XP required for level 2
-    public float xpGrowthFactor = 1.2f; // XP growth factor per level
-    public AnimationCurve xpCurve = AnimationCurve.EaseInOut(0, 100, 10, 1000); // XP curve for levels
+    [Tooltip("Initial XP required for level 2.")]
+    public float initialXPToNextLevel = 100f;
+    [Tooltip("XP growth factor per level.")]
+    public float xpGrowthFactor = 1.2f;
+    [Tooltip("XP curve for levels.")]
+    public AnimationCurve xpCurve = AnimationCurve.EaseInOut(0, 100, 10, 1000);
 
     [Header("Level Rewards")]
+    [Tooltip("List of rewards given at specific levels.")]
     public List<LevelReward> levelRewards = new List<LevelReward>();
 
     [Header("Special Levels")]
+    [Tooltip("List of evolution levels where player can evolve.")]
     public List<EvolutionLevel> evolutionLevels = new List<EvolutionLevel>();
 
     [Header("Progression Settings")]
+    [Tooltip("Maximum level the player can reach in the level.")]
     public int maxLevel = 50;
+    [Tooltip("Use exponential growth for XP requirements instead of a curve.")]
     public bool useExponentialGrowth = true;
+    [Tooltip("Base for exponential growth calculations.")]
+    [Range(0.5f, 5.0f)]
     public float exponentialBase = 1.15f;
 
     [Header("Bonus Multipliers")]
-    public float streakMultiplier = 1.5f; // Bonus for eating enemies in succession
-    public float speedKillBonus = 2.0f; // Bonus for quick kills
+    [Tooltip("Multiplier for XP gained from eating enemies in succession.")]
+    public float streakMultiplier = 1.5f;
+
+    [Tooltip("Multiplier for XP gained from quick kills.")]
+    public float speedKillBonus = 2.0f;
 
     [Header("Debug")]
     public bool showDebugInfo = false;
@@ -40,11 +60,11 @@ public class LevelData : ScriptableObject
     /// </summary>
     public float GetXPForLevel(int level)
     {
-        if (level <= 1) return 0f;
+        if (level <= 0) return 0f;
 
         if (useExponentialGrowth)
         {
-            return initialXPToNextLevel * Mathf.Pow(exponentialBase, level - 2);
+            return initialXPToNextLevel * Mathf.Pow(exponentialBase, level - 1);
         }
         else
         {

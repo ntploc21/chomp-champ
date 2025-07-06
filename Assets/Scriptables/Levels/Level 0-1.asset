@@ -45,8 +45,7 @@ MonoBehaviour:
   evolutionLevels: []
   maxLevel: 4
   useExponentialGrowth: 1
-  exponentialBase: 1.5
-  sizeToXPMultiplier: 5
+  exponentialBase: 1.2
   streakMultiplier: 1.5
   speedKillBonus: 2
   showDebugInfo: 0

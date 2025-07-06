@@ -15,11 +15,11 @@ MonoBehaviour:
   enemyName: Predator
   enemySprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
   animatorController: {fileID: 0}
-  sizeLevel: 5
+  level: 5
   size: 1.5
   baseSpeed: 2.5
   detectionRange: 10
-  enemyType: 1
+  behaviorType: 1
   wanderRadius: 3
   fleeSpeedMultiplier: 1.5
   chaseSpeedMultiplier: 1.2

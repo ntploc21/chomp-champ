@@ -15,11 +15,11 @@ MonoBehaviour:
   enemyName: Predator
   enemySprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   animatorController: {fileID: 0}
-  sizeLevel: 3
+  level: 3
   size: 1.5
   baseSpeed: 2.5
   detectionRange: 5
-  enemyType: 1
+  behaviorType: 1
   wanderRadius: 3
   fleeSpeedMultiplier: 1.5
   chaseSpeedMultiplier: 1.2
@@ -29,5 +29,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   deathEffectPrefab: {fileID: 0}
   spawnEffectPrefab: {fileID: 0}
+  maxSpawnCount: 10
   spawnWeight: 0.33
   canSpawnInWaves: 0

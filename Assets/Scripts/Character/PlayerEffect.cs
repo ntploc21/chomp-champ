@@ -205,7 +205,7 @@ public class PlayerEffect : MonoBehaviour
     // Play dash sound
     if (UIManagerAudio.instance != null)
     {
-      UIManagerAudio.instance.PlaySFX("DashSound");
+      UIManagerAudio.instance.PlaySFXWithSettings("DashSound");
     }
 
     // Play dash particles

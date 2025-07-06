@@ -10,6 +10,7 @@ public interface IPickup
 
 public class CollisionHandler : MonoBehaviour
 {
+  #region Editor Data
   [Header("Collision Settings")]
   public LayerMask playerLayer = 1 << 6;  // Player layer
   public LayerMask enemyLayer = 1 << 7;   // Enemy layer
@@ -19,7 +20,9 @@ public class CollisionHandler : MonoBehaviour
   public event UnityAction<GameObject, GameObject> OnPlayerEatsEnemy;
   public event UnityAction<GameObject, GameObject> OnEnemyEatsPlayer;
   public event UnityAction<GameObject, GameObject> OnPickupCollected;
+  #endregion
 
+  #region Runtime Data
   private void OnTriggerEnter2D(Collider2D other)
   {
     HandleCollision(other);
@@ -29,7 +32,9 @@ public class CollisionHandler : MonoBehaviour
   {
     HandleCollision(other.collider);
   }
+  #endregion
 
+  #region Collision Handling
   private void HandleCollision(Collider2D other)
   {
     GameObject thisObject = gameObject;
@@ -41,9 +46,6 @@ public class CollisionHandler : MonoBehaviour
     bool isOtherPlayer = IsInLayerMask(otherObject, playerLayer);
     bool isOtherEnemy = IsInLayerMask(otherObject, enemyLayer);
     bool isOtherPickup = IsInLayerMask(otherObject, pickupLayer);
-
-    // Debug.Log($"Collision detected: {thisObject.name} with {otherObject.name}");
-    // Debug.Log($"Collision types - This: Player={isThisPlayer}, Enemy={isThisEnemy}, Other: Player={isOtherPlayer}, Enemy={isOtherEnemy}, Pickup={isOtherPickup}");
 
     // Player vs Enemy collision
     if (isThisPlayer && isOtherEnemy)
@@ -63,7 +65,7 @@ public class CollisionHandler : MonoBehaviour
     else if (isThisEnemy && isOtherEnemy)
     {
       HandleEnemyEnemyCollision(thisObject, otherObject);
-    } 
+    }
   }
 
   private void HandlePlayerEnemyCollision(GameObject player, GameObject enemy)
@@ -79,7 +81,7 @@ public class CollisionHandler : MonoBehaviour
     }
 
     // Compare Level
-    float levelDifference = playerCore.CurrentLevel - enemyCore.currentLevel;
+    float levelDifference = playerCore.CurrentLevel - enemyCore.CurrentLevel;
 
     if (levelDifference >= 0) // Player is larger
     {
@@ -136,16 +138,16 @@ public class CollisionHandler : MonoBehaviour
     if (enemyCore1 == null || enemyCore2 == null) return;
 
     // Only allow predators to eat prey
-    if (enemyCore1.Data.enemyType == EnemyType.Predator &&
-        enemyCore2.Data.enemyType == EnemyType.Prey &&
-        enemyCore1.currentLevel > enemyCore2.currentLevel)
+    if (enemyCore1.Data.behaviorType == EnemyType.Predator &&
+        enemyCore2.Data.behaviorType == EnemyType.Prey &&
+        enemyCore1.CurrentLevel > enemyCore2.CurrentLevel)
     {
       // Enemy 1 eats Enemy 2
       enemyCore2.OnEaten();
     }
-    else if (enemyCore2.Data.enemyType == EnemyType.Predator &&
-             enemyCore1.Data.enemyType == EnemyType.Prey &&
-             enemyCore2.currentLevel > enemyCore1.currentLevel)
+    else if (enemyCore2.Data.behaviorType == EnemyType.Predator &&
+             enemyCore1.Data.behaviorType == EnemyType.Prey &&
+             enemyCore2.CurrentLevel > enemyCore1.CurrentLevel)
     {
       // Enemy 2 eats Enemy 1
       enemyCore1.OnEaten();
@@ -167,6 +169,7 @@ public class CollisionHandler : MonoBehaviour
       rb2.AddForce(-direction * bounceForce, ForceMode2D.Impulse);
     }
   }
+  #endregion
 
   private bool IsInLayerMask(GameObject obj, LayerMask layerMask)
   {

@@ -25,15 +25,16 @@ public class PlayerGrowth : MonoBehaviour
 
   #region Properties
   public int Level => playerCore?.Level ?? 1;
-  public float CurrentXP => playerCore?.DataManager?.Data.currentXP ?? 0f;
-  public float XPToNextLevel => playerCore?.DataManager?.Data.xpToNextLevel ?? 100f;
+  public float CurrentXP => playerCore?.DataManager?.SessionData.currentXP ?? 0f;
+  public float XPToNextLevel => playerCore?.DataManager?.SessionData.xpToNextLevel ?? 100f;
   #endregion
-
+  
+  #region Unity Events
   public void Initialize(PlayerCore core)
   {
     playerCore = core;
     baseSize = playerCore.CurrentSize;
-    
+
     // Subscribe to data manager events
     if (playerCore.DataManager != null)
     {
@@ -42,6 +43,18 @@ public class PlayerGrowth : MonoBehaviour
     }
   }
 
+  private void OnDestroy()
+  {
+    // Unsubscribe from events
+    if (playerCore?.DataManager != null)
+    {
+      playerCore.DataManager.OnLevelUp.RemoveListener(OnLevelUpFromDataManager);
+      playerCore.DataManager.OnXPChanged.RemoveListener(OnXPChangedFromDataManager);
+    }
+  }
+  #endregion
+
+  #region Public Methods
   public void AddXP(float xpAmount)
   {
     // Delegate XP management to PlayerDataManager
@@ -54,9 +67,6 @@ public class PlayerGrowth : MonoBehaviour
   public void SetSize(float newSize, bool isImmediate = true)
   {
     transform.localScale = new Vector3(newSize, newSize, 1f);
-    
-    // The size is now stored in PlayerDataManager, so we don't need to set it on PlayerCore
-    // The DataManager will handle size updates through its level system
   }
 
   public void ResetGrowth()
@@ -69,12 +79,14 @@ public class PlayerGrowth : MonoBehaviour
     
     SetSize(baseSize, true);
   }
+  #endregion
 
+  #region Data Event Handlers
   private void OnLevelUpFromDataManager(int newLevel)
   {
     // Update visual size based on the new level
     ApplyGrowth();
-    
+
     // Forward the event
     OnLevelUp?.Invoke(newLevel, playerCore.CurrentSize);
   }
@@ -84,6 +96,7 @@ public class PlayerGrowth : MonoBehaviour
     // Forward the event
     OnXPChanged?.Invoke(currentXP, xpToNextLevel);
   }
+  #endregion
 
   private void ApplyGrowth()
   {
@@ -93,21 +106,11 @@ public class PlayerGrowth : MonoBehaviour
       float newSize = playerCore.DataManager.LevelConfig.GetSizeForLevel(Level);
       SetSize(newSize, true);
     }
-    
+
     // Play growth effect
     if (playerCore?.Effect != null)
     {
       playerCore.Effect.PlayGrowthEffect();
-    }
-  }
-
-  private void OnDestroy()
-  {
-    // Unsubscribe from events
-    if (playerCore?.DataManager != null)
-    {
-      playerCore.DataManager.OnLevelUp.RemoveListener(OnLevelUpFromDataManager);
-      playerCore.DataManager.OnXPChanged.RemoveListener(OnXPChangedFromDataManager);
     }
   }
 }
