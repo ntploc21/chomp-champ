@@ -22428,130 +22428,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!1 &938764111
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 938764112}
-  - component: {fileID: 938764113}
-  m_Layer: 0
-  m_Name: Spawn Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &938764112
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 938764111}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1168991509}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &938764113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 938764111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77ac904d1834567498925f5be88dcc81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isSpawning: 0
-  baseSpawnRate: 2
-  spawnRateVariation: 0.5
-  maxEnemiesOnScreen: 50
-  spawnDistance: 15
-  enemyTypes:
-  - {fileID: 11400000, guid: 3e2618b134d565d43aafb9ccb4908918, type: 2}
-  - {fileID: 11400000, guid: 44e9aea7684977240b6202aadbb6f2c8, type: 2}
-  - {fileID: 11400000, guid: 61c456dc09bc5f845b5fa439a867078a, type: 2}
-  - {fileID: 11400000, guid: 10550f19b7bd64d42a28d05dc834c800, type: 2}
-  enemyPrefab: {fileID: 905107209197507577, guid: 190d4dce4ceae4a4b9d6674103d85466, type: 3}
-  spawnPoints: []
-  spawnBounds: {fileID: 1943340838}
-  useSpawnBounds: 1
-  spawnRateCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0.2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 10
-      value: 3
-      inSlope: 0.2
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  enemyLevelCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0.4
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 10
-      value: 5
-      inSlope: 0.4
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  difficultyScaleTime: 60
-  enableWaveSpawning: 1
-  waveChance: 0.2
-  minWaveSize: 3
-  maxWaveSize: 8
-  waveSpawnRadius: 3
-  scaleWithPlayerLevel: 0
-  playerLevelInfluence: 0
-  avoidPlayerSpawning: 1
-  playerAvoidRadius: 8
-  poolInitialSize: 20
-  poolMaxSize: 100
-  collectionCheck: 0
-  playerCore: {fileID: 2002656654}
-  gameState: {fileID: 1696440811}
-  gameCamera: {fileID: 519420031}
-  enableDebugLogs: 0
-  showSpawnGizmos: 0
 --- !u!1 &1033820610
 GameObject:
   m_ObjectHideFlags: 0
@@ -22655,7 +22531,7 @@ Transform:
   m_Children:
   - {fileID: 1977048620}
   - {fileID: 1696440810}
-  - {fileID: 938764112}
+  - {fileID: 1385091526}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1236318777
@@ -22689,6 +22565,176 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1385091525
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1385091526}
+  - component: {fileID: 1385091527}
+  m_Layer: 0
+  m_Name: Spawn Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1385091526
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385091525}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1168991509}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1385091527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385091525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e080d4c8f8a9e14ab752a8e20e09668, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isSpawning: 0
+  baseSpawnRate: 2
+  spawnRateVariation: 0.5
+  maxEnemiesOnScreen: 50
+  spawnDistance: 15
+  enemyTypes:
+  - {fileID: 11400000, guid: 3e2618b134d565d43aafb9ccb4908918, type: 2}
+  - {fileID: 11400000, guid: 44e9aea7684977240b6202aadbb6f2c8, type: 2}
+  - {fileID: 11400000, guid: 61c456dc09bc5f845b5fa439a867078a, type: 2}
+  - {fileID: 11400000, guid: 10550f19b7bd64d42a28d05dc834c800, type: 2}
+  enemyPrefab: {fileID: 905107209197507577, guid: 190d4dce4ceae4a4b9d6674103d85466, type: 3}
+  useFeedingFrenzySystem: 1
+  levelRange: 3
+  levelRangeBehind: 1
+  levelWeightCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 10
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 3
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  levelUpThreshold: 10
+  useExperienceProgression: 0
+  experiencePerLevel: 100
+  progressionType: 0
+  timePerLevel: 30
+  showProgressionDebug: 1
+  spawnPatterns: []
+  enableAdaptiveSpawning: 1
+  adaptiveCheckInterval: 5
+  playerStressThreshold: 0.7
+  spawnPoints: []
+  spawnBounds: {fileID: 1943340838}
+  useSpawnBounds: 1
+  preferOffScreenSpawning: 0
+  offScreenBuffer: 2
+  spawnRateCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0.2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 10
+      value: 3
+      inSlope: 0.2
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  enemyDensityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0.1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 10
+      value: 2
+      inSlope: 0.1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  difficultyScaleTime: 60
+  enableWaveSpawning: 1
+  waveChance: 0.15
+  minWaveSize: 3
+  maxWaveSize: 6
+  waveSpawnRadius: 4
+  waveTypes: []
+  avoidPlayerSpawning: 1
+  playerAvoidRadius: 8
+  playerDetectionRadius: 20
+  balanceAroundPlayer: 1
+  poolInitialSize: 30
+  poolMaxSize: 150
+  collectionCheck: 0
+  preWarmPool: 1
+  maxSpawnsPerFrame: 3
+  cleanupInterval: 2
+  useDistanceCulling: 1
+  cullDistance: 50
+  playerCore: {fileID: 2002656654}
+  gameState: {fileID: 1696440811}
+  gameCamera: {fileID: 519420031}
+  enableDebugLogs: 0
+  showSpawnGizmos: 0
+  showLevelDistribution: 0
 --- !u!1 &1696440809
 GameObject:
   m_ObjectHideFlags: 0
@@ -22741,13 +22787,13 @@ MonoBehaviour:
   isPaused: 0
   gameInProgress: 0
   playerCore: {fileID: 2002656654}
-  spawnManager: {fileID: 938764113}
+  spawnManager: {fileID: 0}
   gameCamera: {fileID: 519420031}
   pauseMenuManager: {fileID: 0}
   gameOverDelay: 2
   victoryDelay: 3
   allowPause: 1
-  victoryLevel: 3
+  victoryLevel: 4
   victoryScore: 10000
   victoryTime: 300
   OnStateChanged:

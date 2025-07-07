@@ -179,5 +179,12 @@ public class EnemyCore : MonoBehaviour
         if (level < 1) level = 1; // Ensure minimum level is 1
         currentLevel = level;
     }
+
+    public void ResetEnemy()
+    {
+        currentLevel = 1; // Reset to default level
+        currentSize = 1f; // Reset size to default
+        InitializeFromData(); // Reinitialize with current data
+    }
     #endregion
 }

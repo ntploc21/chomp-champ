@@ -6,14 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Persistent Game State.unity
+    guid: f801e950c57540f4c869c4f946e22f56
+  - enabled: 1
     path: Assets/Scenes/Main Menu.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/Story Mode.unity
     guid: 1d3b29a2dd63aed4ea755734093e5aae
-  - enabled: 1
-    path: Assets/Scenes/Persistent Game State.unity
-    guid: f801e950c57540f4c869c4f946e22f56
   - enabled: 1
     path: Assets/Scenes/Levels/Level 0-1.unity
     guid: 84e89e884f68dbf4897d69335c4eda57
