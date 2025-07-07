@@ -265,8 +265,6 @@ public class EnemyMovement : MonoBehaviour
     // Don't stop completely - instead prepare for next target
     if (wanderTimer <= 0f)
     {
-      Debug.Log("Generating new wander target");
-
       // Generate new wander target immediately for smooth movement
       GenerateWanderTarget();
       SetTarget(wanderTarget);

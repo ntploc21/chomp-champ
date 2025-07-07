@@ -173,8 +173,6 @@ public class GameState : MonoBehaviour
             // Set initial state for non-game scenes
             ChangeState(GameStateType.MainMenu);
         }
-
-        Debug.Log("GameState initialized");
     }
 
     private void SubscribeToEvents()
@@ -217,8 +215,6 @@ public class GameState : MonoBehaviour
 
         previousState = currentState;
         currentState = newState;
-
-        Debug.Log($"Game state changed from {previousState} to {currentState}");
 
         HandleStateChange();
         OnStateChanged?.Invoke(currentState);
@@ -488,7 +484,7 @@ public class GameState : MonoBehaviour
 
     private void OnPlayerSpawn(PlayerCore player)
     {
-        Debug.Log("Player spawned/respawned");
+        //  Debug.Log("Player spawned/respawned");
     }
 
     // Called when PauseMenuManager opens pause menu
