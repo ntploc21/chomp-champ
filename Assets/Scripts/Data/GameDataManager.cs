@@ -187,7 +187,7 @@ public class GameDataManager : MonoBehaviour
 
     // Update level data
     gameSessionData.xpToNextLevel = levelData.GetXPForLevel(gameSessionData.currentLevel + 1);
-    gameSessionData.currentSize *= levelData.GetSizeForLevel(gameSessionData.currentLevel);
+    gameSessionData.currentSize = levelData.GetSizeForLevel(gameSessionData.currentLevel);
 
     OnLevelUp?.Invoke(gameSessionData.currentLevel);
     OnDataChanged?.Invoke(gameSessionData);

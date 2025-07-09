@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using Michsky.UI.Reach;
+using Cinemachine;
+using UnityEngine.Rendering;
 
 public class PlayerEffect : MonoBehaviour
 {
@@ -16,15 +18,20 @@ public class PlayerEffect : MonoBehaviour
   [SerializeField] private ParticleSystem dashParticles;
   [SerializeField] private ParticleSystem evolutionParticles;
   [SerializeField] private ParticleSystem spawnParticles;
-
   [Header("Screen Effects")]
   [SerializeField] private bool enableScreenShake = true;
+  [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
   [SerializeField] private float eatShakeDuration = 0.1f;
   [SerializeField] private float eatShakeIntensity = 0.1f;
   [SerializeField] private float dashShakeDuration = 0.2f;
   [SerializeField] private float dashShakeIntensity = 0.15f;
   [SerializeField] private float deathShakeDuration = 0.3f;
   [SerializeField] private float deathShakeIntensity = 0.2f;
+
+  [Header("Advanced Shake Settings")]
+  [SerializeField] private AnimationCurve shakeDecayCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+  [SerializeField] private float defaultShakeFrequency = 25f;
+  [SerializeField] private bool useAdvancedShake = false;
 
   [Header("Flash Effects")]
   [SerializeField] private Color eatFlashColor = Color.green;
@@ -47,7 +54,7 @@ public class PlayerEffect : MonoBehaviour
   [Header("Debug")]
   [SerializeField] private bool enableDebugLogs = false;
   #endregion
-  
+
   #region Internal Data
   private PlayerCore playerCore;
   private Camera playerCamera;
@@ -56,11 +63,11 @@ public class PlayerEffect : MonoBehaviour
   // Flicker effect variables
   private bool isFlickering = false;
   private Coroutine flickerCoroutine;
-  
+
   // Performance tracking
   private int currentEffectCount = 0;
   private bool effectsEnabled = true;
-  
+
   // Caching
   private WaitForSeconds flickerWait;
   private WaitForSeconds flashWait;
@@ -85,7 +92,7 @@ public class PlayerEffect : MonoBehaviour
     {
       playerCamera = FindObjectOfType<Camera>();
     }
-    
+
     // Cache wait times for performance
     flickerWait = new WaitForSeconds(flickerRate);
     flashWait = new WaitForSeconds(0.1f);
@@ -110,14 +117,14 @@ public class PlayerEffect : MonoBehaviour
   public void PlayEatEffect()
   {
     if (!effectsEnabled || currentEffectCount >= maxConcurrentEffects) return;
-    
+
     StartCoroutine(PlayEatEffectCoroutine());
   }
 
   private IEnumerator PlayEatEffectCoroutine()
   {
     currentEffectCount++;
-    
+
     // Play eat sound
     if (UIManagerAudio.instance != null)
     {
@@ -128,12 +135,13 @@ public class PlayerEffect : MonoBehaviour
     if (eatParticles != null)
     {
       eatParticles.Play();
-    }
-
-    // Screen shake
+    }    // Screen shake
     if (enableScreenShake)
     {
-      StartCoroutine(ScreenShake(eatShakeDuration, eatShakeIntensity));
+      if (useAdvancedShake)
+        PlayAdvancedShake(eatShakeIntensity, ShakeType.Normal);
+      else
+        StartCoroutine(ScreenShake(eatShakeDuration, eatShakeIntensity));
     }
 
     // Flash effect
@@ -144,12 +152,12 @@ public class PlayerEffect : MonoBehaviour
     {
       animator.SetTrigger("Eat");
     }
-    
+
     if (enableDebugLogs)
     {
       Debug.Log("Eat effect played");
     }
-    
+
     yield return new WaitForSeconds(0.5f); // Effect duration
     currentEffectCount--;
   }
@@ -213,11 +221,13 @@ public class PlayerEffect : MonoBehaviour
     {
       dashParticles.Play();
     }
-
     // Screen shake
     if (enableScreenShake)
     {
-      StartCoroutine(ScreenShake(dashShakeDuration, dashShakeIntensity));
+      if (useAdvancedShake)
+        PlayAdvancedShake(dashShakeIntensity, ShakeType.Impulse);
+      else
+        StartCoroutine(ScreenShake(dashShakeDuration, dashShakeIntensity));
     }
 
     // Dash trail effect
@@ -438,33 +448,147 @@ public class PlayerEffect : MonoBehaviour
       }
     }
   }
+
   private IEnumerator ScreenShake(float duration, float intensity)
   {
     if (playerCamera == null) yield break;
+    if (cinemachineVirtualCamera == null)
+    {
+      yield break;
+    }
 
-    Vector3 originalPosition = playerCamera.transform.position;
+    CinemachineBasicMultiChannelPerlin noise = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+    if (noise == null) yield break;
+
+    // Store original values
+    float originalAmplitude = noise.m_AmplitudeGain;
+    float originalFrequency = noise.m_FrequencyGain;
+
+    // Set shake values
+    noise.m_AmplitudeGain = intensity;
+    noise.m_FrequencyGain = 5f; // Optional: adjust frequency for different shake feel
+
+    // Wait for the shake duration
+    yield return new WaitForSeconds(duration);
+
+    // Restore original values
+    noise.m_AmplitudeGain = originalAmplitude;
+    noise.m_FrequencyGain = originalFrequency;
+
+    if (enableDebugLogs)
+    {
+      Debug.Log($"Screen shake completed - Duration: {duration}s, Intensity: {intensity}");
+    }
+  }
+
+  // Advanced screen shake with decay
+  private IEnumerator ScreenShakeWithDecay(float duration, float startIntensity, AnimationCurve decayCurve = null)
+  {
+    if (playerCamera == null) yield break;
+    if (cinemachineVirtualCamera == null) yield break;
+
+    CinemachineBasicMultiChannelPerlin noise = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+    if (noise == null) yield break;
+
+    // Store original values
+    float originalAmplitude = noise.m_AmplitudeGain;
+    float originalFrequency = noise.m_FrequencyGain;
+
+    // Use default decay curve if none provided
+    if (decayCurve == null)
+    {
+      decayCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+    }
+
     float elapsed = 0f;
 
     while (elapsed < duration)
     {
       elapsed += Time.deltaTime;
+      float progress = elapsed / duration;
+      float currentIntensity = startIntensity * decayCurve.Evaluate(progress);
 
-      float x = Random.Range(-1f, 1f) * intensity;
-      float y = Random.Range(-1f, 1f) * intensity;
-
-      playerCamera.transform.position = originalPosition + new Vector3(x, y, 0);
+      noise.m_AmplitudeGain = currentIntensity;
 
       yield return null;
     }
 
-    playerCamera.transform.position = originalPosition;
+    // Restore original values
+    noise.m_AmplitudeGain = originalAmplitude;
+    noise.m_FrequencyGain = originalFrequency;
+  }
+
+  // Impulse-based screen shake for more realistic feel
+  private IEnumerator ImpulseScreenShake(float intensity, float frequency = 25f)
+  {
+    if (playerCamera == null) yield break;
+    if (cinemachineVirtualCamera == null) yield break;
+
+    CinemachineBasicMultiChannelPerlin noise = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+    if (noise == null) yield break;
+
+    // Store original values
+    float originalAmplitude = noise.m_AmplitudeGain;
+    float originalFrequency = noise.m_FrequencyGain;
+
+    // Apply impulse
+    noise.m_AmplitudeGain = intensity;
+    noise.m_FrequencyGain = frequency;
+
+    // Decay the shake over time
+    float duration = intensity * 0.5f; // Duration based on intensity
+    float elapsed = 0f;
+
+    while (elapsed < duration)
+    {
+      elapsed += Time.deltaTime;
+      float progress = elapsed / duration;
+
+      // Exponential decay
+      float currentIntensity = intensity * Mathf.Exp(-progress * 5f);
+      noise.m_AmplitudeGain = currentIntensity;
+
+      yield return null;
+    }
+
+    // Restore original values
+    noise.m_AmplitudeGain = originalAmplitude;
+    noise.m_FrequencyGain = originalFrequency;
+  }
+
+  // Public method to trigger advanced screen shake
+  public void PlayAdvancedShake(float intensity, ShakeType shakeType = ShakeType.Normal)
+  {
+    if (!enableScreenShake) return;
+
+    switch (shakeType)
+    {
+      case ShakeType.Normal:
+        StartCoroutine(ScreenShake(0.2f, intensity));
+        break;
+      case ShakeType.Decay:
+        StartCoroutine(ScreenShakeWithDecay(0.5f, intensity));
+        break;
+      case ShakeType.Impulse:
+        StartCoroutine(ImpulseScreenShake(intensity));
+        break;
+    }
+  }
+
+  // Enum for different shake types
+  public enum ShakeType
+  {
+    Normal,
+    Decay,
+    Impulse
   }
 
   // Utility Methods
   public void SetEffectsEnabled(bool enabled)
   {
     effectsEnabled = enabled;
-    
+
     if (enableDebugLogs)
     {
       Debug.Log($"Effects enabled: {enabled}");
@@ -475,15 +599,15 @@ public class PlayerEffect : MonoBehaviour
   {
     StopAllCoroutines();
     currentEffectCount = 0;
-    
+
     // Reset visual state
     if (spriteRenderer != null)
     {
       spriteRenderer.color = originalSpriteColor;
     }
-    
+
     SetFlicker(false);
-    
+
     if (enableDebugLogs)
     {
       Debug.Log("All effects stopped");
@@ -494,12 +618,19 @@ public class PlayerEffect : MonoBehaviour
   {
     StartCoroutine(FlashEffect(color, duration));
   }
-
   public void PlayCustomShake(float duration, float intensity)
   {
     if (enableScreenShake)
     {
       StartCoroutine(ScreenShake(duration, intensity));
+    }
+  }
+
+  public void PlayCustomShake(float intensity, ShakeType shakeType)
+  {
+    if (enableScreenShake)
+    {
+      PlayAdvancedShake(intensity, shakeType);
     }
   }
 
@@ -516,12 +647,12 @@ public class PlayerEffect : MonoBehaviour
   public void ResetToOriginalState()
   {
     StopAllEffects();
-    
+
     if (spriteRenderer != null)
     {
       spriteRenderer.color = originalSpriteColor;
     }
-    
+
     transform.localScale = Vector3.one;
   }
 
@@ -529,7 +660,7 @@ public class PlayerEffect : MonoBehaviour
   private void OptimizeParticleSystem(ParticleSystem particles)
   {
     if (particles == null) return;
-    
+
     var main = particles.main;
     main.maxParticles = Mathf.Min(main.maxParticles, 50); // Limit particles for performance
   }
@@ -539,7 +670,7 @@ public class PlayerEffect : MonoBehaviour
     // Validate settings in editor
     maxConcurrentEffects = Mathf.Max(1, maxConcurrentEffects);
     flickerRate = Mathf.Max(0.01f, flickerRate);
-    
+
     // Optimize particle systems
     if (enableParticlePooling)
     {
