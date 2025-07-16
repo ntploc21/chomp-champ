@@ -83923,48 +83923,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: unity_full_tilepalette_v2_3162
-      rect:
-        serializedVersion: 2
-        x: 912
-        y: 704
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4ff296d1b9a223050800000000000000
-      internalID: 5778728117571497972
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: unity_full_tilepalette_v2_3163
-      rect:
-        serializedVersion: 2
-        x: 928
-        y: 704
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 326bbdc18475f7770800000000000000
-      internalID: 8610696979789100579
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: unity_full_tilepalette_v2_3164
       rect:
         serializedVersion: 2
@@ -85855,48 +85813,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: unity_full_tilepalette_v2_3254
-      rect:
-        serializedVersion: 2
-        x: 912
-        y: 688
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5e081efe4ba97a3c0800000000000000
-      internalID: -4348336813293600539
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: unity_full_tilepalette_v2_3255
-      rect:
-        serializedVersion: 2
-        x: 928
-        y: 688
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 07c1c178e9f3b04e0800000000000000
-      internalID: -2014446458214015888
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: unity_full_tilepalette_v2_3256
       rect:
         serializedVersion: 2
@@ -87593,48 +87509,6 @@ TextureImporter:
       bones: []
       spriteID: 39f04f46b09be7550800000000000000
       internalID: 6160564798878912403
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: unity_full_tilepalette_v2_3337
-      rect:
-        serializedVersion: 2
-        x: 912
-        y: 672
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6159e77c95f28b510800000000000000
-      internalID: 1565052933156803862
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: unity_full_tilepalette_v2_3338
-      rect:
-        serializedVersion: 2
-        x: 928
-        y: 672
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 546e5c30e9b839490800000000000000
-      internalID: -7740689823735355835
       vertices: []
       indices: 
       edges: []
@@ -137493,6 +137367,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: original_atlas_0
+      rect:
+        serializedVersion: 2
+        x: 914
+        y: 677
+        width: 27
+        height: 38
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 222ec6f8b35dcd74884975f29f728673
+      internalID: 1473798840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -137504,6 +137399,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      original_atlas_0: 1473798840
       unity_full_tilepalette_v2_0: 8811009653318499982
       unity_full_tilepalette_v2_1: 4811461106164278996
       unity_full_tilepalette_v2_10: -7072321982462594771
