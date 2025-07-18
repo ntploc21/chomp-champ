@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.SceneManagement;  // Add this for scene management
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -219,6 +220,10 @@ public class SpawnManager : MonoBehaviour
   private Transform playerTransform;
   private Transform cameraTransform;
   private Bounds cameraBounds;
+  
+  // Scene management for proper enemy assignment
+  private Scene levelScene;
+  private bool levelSceneFound = false;
   #endregion
 
   #region Properties
@@ -296,6 +301,40 @@ public class SpawnManager : MonoBehaviour
       cameraTransform = gameCamera.transform;
       UpdateCameraBounds();
     }
+    
+    // Find and cache the level scene for enemy spawning
+    InitializeLevelScene();
+  }
+  
+  /// <summary>
+  /// Find and cache the level scene to ensure enemies spawn in the correct scene
+  /// </summary>
+  private void InitializeLevelScene()
+  {
+    // Look for a scene that is not the Persistent Game Scene and is a level
+    for (int i = 0; i < SceneManager.sceneCount; i++)
+    {
+      Scene scene = SceneManager.GetSceneAt(i);
+      
+      // Skip the persistent scene, look for level scenes
+      if (scene.name != "Persistent Game State" && 
+          (scene.name.Contains("Level") || scene.name.Contains("level")))
+      {
+        levelScene = scene;
+        levelSceneFound = true;
+        
+        if (enableDebugLogs)
+          Debug.Log($"SpawnManager: Found level scene for enemy spawning: {levelScene.name}");
+        return;
+      }
+    }
+    
+    // Fallback: use active scene if no specific level scene found
+    levelScene = SceneManager.GetActiveScene();
+    levelSceneFound = true;
+    
+    if (enableDebugLogs)
+      Debug.Log($"SpawnManager: Using active scene for enemy spawning: {levelScene.name}");
   }
 
   private void InitializeObjectPool()
@@ -663,6 +702,32 @@ public class SpawnManager : MonoBehaviour
   {
     GameObject enemy = Instantiate(enemyPrefab);
     enemy.SetActive(false);
+    
+    // Move enemy to the level scene instead of Persistent Game Scene
+    if (levelSceneFound && levelScene.IsValid())
+    {
+      SceneManager.MoveGameObjectToScene(enemy, levelScene);
+      
+      if (enableDebugLogs)
+        Debug.Log($"SpawnManager: Moved enemy to level scene: {levelScene.name}");
+    }
+    else
+    {
+      // Re-initialize level scene if it's invalid (e.g., after scene reload)
+      InitializeLevelScene();
+      
+      if (levelSceneFound && levelScene.IsValid())
+      {
+        SceneManager.MoveGameObjectToScene(enemy, levelScene);
+        
+        if (enableDebugLogs)
+          Debug.Log($"SpawnManager: Re-initialized and moved enemy to level scene: {levelScene.name}");
+      }
+      else if (enableDebugLogs)
+      {
+        Debug.LogWarning("SpawnManager: Could not find valid level scene, enemy will remain in Persistent Game Scene");
+      }
+    }
 
     // Initialize with default components if needed
     if (enemy.GetComponent<EnemyCore>() == null)
@@ -1279,6 +1344,12 @@ public class SpawnManager : MonoBehaviour
   }
   public void ForceSpawnEnemy(EnemyData enemyData = null, int level = -1)
   {
+    // Re-check level scene before forced spawning
+    if (!levelSceneFound || !levelScene.IsValid())
+    {
+      InitializeLevelScene();
+    }
+    
     if (enemyData == null)
       enemyData = SelectEnemyType();
 
@@ -1294,6 +1365,12 @@ public class SpawnManager : MonoBehaviour
 
   public void ForceSpawnWave(EnemyData enemyData = null, int waveSize = -1)
   {
+    // Re-check level scene before forced spawning
+    if (!levelSceneFound || !levelScene.IsValid())
+    {
+      InitializeLevelScene();
+    }
+    
     if (enemyData == null)
       enemyData = SelectWaveEnemyType();
 
@@ -1310,6 +1387,26 @@ public class SpawnManager : MonoBehaviour
       int level = enemyData.level; // Use the actual level from EnemyData
       SpawnEnemyAtPosition(spawnPos, enemyData, level);
     }
+  }
+
+  /// <summary>
+  /// Public method to refresh the level scene reference after scene reload
+  /// Call this from UIManager after level replay
+  /// </summary>
+  public void RefreshLevelScene()
+  {
+    InitializeLevelScene();
+    
+    if (enableDebugLogs)
+      Debug.Log($"SpawnManager: Level scene reference refreshed to: {(levelSceneFound ? levelScene.name : "None")}");
+  }
+  
+  /// <summary>
+  /// Get the current level scene name (for debugging)
+  /// </summary>
+  public string GetCurrentLevelScene()
+  {
+    return levelSceneFound ? levelScene.name : "None";
   }
   #endregion
 
