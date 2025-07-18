@@ -33,6 +33,60 @@ MonoBehaviour:
     use3D: 0
     minDistance: 1
     maxDistance: 500
+  - sfxName: HitSFX
+    displayName: HitSFX
+    audioClip: {fileID: 8300000, guid: 6ee6265c9d43ac14c84012ecf1118508, type: 3}
+    defaultVolume: 0.7
+    defaultPitch: 1
+    spatialBlend: 0
+    loopByDefault: 0
+    category: 9
+    customCategory: 
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    use3D: 0
+    minDistance: 1
+    maxDistance: 500
+  - sfxName: DeathSound
+    displayName: DeathSound
+    audioClip: {fileID: 8300000, guid: efc1fbcb86b21644992ea59f76aa7468, type: 3}
+    defaultVolume: 1
+    defaultPitch: 1
+    spatialBlend: 0
+    loopByDefault: 0
+    category: 9
+    customCategory: 
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    use3D: 0
+    minDistance: 1
+    maxDistance: 500
+  - sfxName: GameOverSound
+    displayName: GameOverSound
+    audioClip: {fileID: 8300000, guid: fa8932e45e76ead47bf6505dd2fd4ac6, type: 3}
+    defaultVolume: 1
+    defaultPitch: 1
+    spatialBlend: 0
+    loopByDefault: 0
+    category: 9
+    customCategory: 
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    use3D: 0
+    minDistance: 1
+    maxDistance: 500
   defaultSFX:
     sfxName: 
     displayName: 

@@ -77,6 +77,13 @@ public class PlayerMovement : MonoBehaviour
   public float MaxSpeed => CalculateCurrentMaxSpeed();
   #endregion
 
+  [SerializeField] private Animator animator = null;
+
+  private void Start()
+  {
+    animator = GetComponent<Animator>();
+  }
+
   #region Unity Events
   private void Awake()
   {
@@ -119,6 +126,7 @@ public class PlayerMovement : MonoBehaviour
   {
     UpdateTimers();
     UpdateCachedValues();
+    animator.SetBool("isMoving", IsMoving);
   }
 
   private void FixedUpdate()
@@ -301,6 +309,16 @@ public class PlayerMovement : MonoBehaviour
       float currentAngle = transform.eulerAngles.z;
       float newAngle = Mathf.LerpAngle(currentAngle, targetAngle, rotationSpeed * Time.fixedDeltaTime);
       transform.rotation = Quaternion.Euler(0, 0, newAngle);
+    }
+
+    // flip sprite to left or right based on movement direction
+    if (currentVelocity.x < 0)
+    {
+      transform.localScale = new Vector3(-1, 1, 1); // Flip to left
+    }
+    else if (currentVelocity.x > 0)
+    {
+      transform.localScale = new Vector3(1, 1, 1); // Flip to right
     }
   }
 

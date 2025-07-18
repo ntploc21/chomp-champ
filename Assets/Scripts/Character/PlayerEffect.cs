@@ -234,7 +234,7 @@ public class PlayerEffect : MonoBehaviour
     // Play death sound
     if (UIManagerAudio.instance != null)
     {
-      UIManagerAudio.instance.PlaySFX("DeathSound");
+      UIManagerAudio.instance.PlaySFX("GameOverSound");
     }
 
     // Play death particles
@@ -248,7 +248,20 @@ public class PlayerEffect : MonoBehaviour
 
     if (animator != null)
     {
-      animator.SetTrigger("Death");
+      animator.SetBool("death", true);
+    }
+  }
+
+  public void PlayHitEffect()
+  {
+    // Play hit sound
+    if (UIManagerAudio.instance != null)
+    {
+      Debug.Log("Playing hit sound");
+      UIManagerAudio.instance.PlaySFX("HitSFX");
+    }
+    if (animator != null) {
+      animator.SetTrigger("hit");
     }
   }
 
@@ -259,7 +272,7 @@ public class PlayerEffect : MonoBehaviour
 
     if (animator != null)
     {
-      animator.SetTrigger("Respawn");
+      animator.SetTrigger("invincible");
     }
   }
 

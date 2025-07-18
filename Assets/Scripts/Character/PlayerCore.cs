@@ -175,6 +175,7 @@ public class PlayerCore : MonoBehaviour
         }
         else
         {
+            playerEffect?.PlayHitEffect();
             StartCoroutine(RespawnCoroutine(respawnDelay));
         }
     }
