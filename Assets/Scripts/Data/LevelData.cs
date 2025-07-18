@@ -78,7 +78,7 @@ public class LevelData : ScriptableObject
     public float GetTotalXPForLevel(int level)
     {
         float total = 0f;
-        for (int i = 2; i <= level; i++)
+        for (int i = 1; i <= level; i++)
         {
             total += GetXPForLevel(i);
         }

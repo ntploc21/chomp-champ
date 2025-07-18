@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4416768e9e5481d4da660e9fef5a2f89, type: 3}
   m_Name: Level 0-1
   m_EditorClassIdentifier: 
-  growthFactor: 1.5
-  baseSize: 5
+  growthFactor: 1.1
+  baseSize: 1
   maxSize: 10
-  initialXPToNextLevel: 150
+  initialXPToNextLevel: 50
   xpGrowthFactor: 1
   xpCurve:
     serializedVersion: 2
@@ -45,7 +45,7 @@ MonoBehaviour:
   evolutionLevels: []
   maxLevel: 4
   useExponentialGrowth: 1
-  exponentialBase: 1.2
+  exponentialBase: 1.5
   streakMultiplier: 1.5
   speedKillBonus: 2
   showDebugInfo: 0

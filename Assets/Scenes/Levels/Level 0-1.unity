@@ -23553,12 +23553,12 @@ MonoBehaviour:
   spawnManager: {fileID: 0}
   gameCamera: {fileID: 519420031}
   pauseMenuManager: {fileID: 0}
-  gameOverDelay: 2
-  victoryDelay: 3
+  gameOverDelay: 1
+  victoryDelay: 1
   allowPause: 1
   victoryLevel: 4
-  victoryScore: 10000
-  victoryTime: 9999
+  victoryScore: -1
+  victoryTime: 5
   OnStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -32554,6 +32554,8 @@ MonoBehaviour:
     isAlive: 1
     isInvincible: 0
     lastPosition: {x: 0, y: 0}
+    totalXP: 0
+    maximumXP: 0
   levelData: {fileID: 11400000, guid: a5c76cbcbc4133d428b3f2dc3809ac2e, type: 2}
   autoSaveEnabled: 1
   autoSaveInterval: 60

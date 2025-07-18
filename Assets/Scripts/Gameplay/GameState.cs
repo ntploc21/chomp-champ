@@ -61,11 +61,6 @@ public class GameState : MonoBehaviour
     public UnityEvent<float> OnGameTimerUpdate;
     #endregion
 
-    #region Internal Data
-    private GameObject VictoryCanvas; // Reference to Victory UI Canvas
-    private GameObject GameOverCanvas; // Reference to Game Over UI Canvas
-    #endregion
-
     // Properties
     public GameStateType CurrentState => currentState;
     public GameStateType PreviousState => previousState;
@@ -98,11 +93,16 @@ public class GameState : MonoBehaviour
 
         InitializeReferences();
     }
-
     private void Start()
     {
         InitializeGameState();
         SubscribeToEvents();
+
+        // Initialize UIManager when GameState starts
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.InitializeCanvasReferences();
+        }
     }
 
     private void Update()
@@ -140,25 +140,8 @@ public class GameState : MonoBehaviour
         if (gameCamera == null)
             gameCamera = Camera.main;
 
-        // Find PauseMenuManager from persistent scene
         if (pauseMenuManager == null)
             pauseMenuManager = FindObjectOfType<Michsky.UI.Reach.PauseMenuManager>();
-
-        if (VictoryCanvas == null)
-        {
-            // Try to find VictoryCanvas in the current scene
-            VictoryCanvas = FindGameObjectInScene("Canvas - Victory", "Persistent Game State");
-
-            if (VictoryCanvas == null)
-            {
-                Debug.LogWarning("VictoryCanvas not found in scene. Please assign it in the inspector.");
-            }
-        }
-
-        if (GameOverCanvas == null)
-        {
-
-        }
     }
 
     private void InitializeGameState()
@@ -249,7 +232,6 @@ public class GameState : MonoBehaviour
                 break;
         }
     }
-
     private void HandleMainMenuState()
     {
         gameInProgress = false;
@@ -258,9 +240,11 @@ public class GameState : MonoBehaviour
 
         // Disable game systems
         if (spawnManager != null)
-            spawnManager.StopSpawning();
+            spawnManager.StopSpawning(); Time.timeScale = 1f;
 
-        Time.timeScale = 1f;
+        // Hide all UI canvases
+        if (UIManager.Instance != null)
+            UIManager.Instance.HideAllCanvases();
     }
 
     private void HandlePlayingState()
@@ -273,6 +257,10 @@ public class GameState : MonoBehaviour
             spawnManager.StartSpawning();
 
         Time.timeScale = 1f;
+
+        // Hide all UI canvases when playing
+        if (UIManager.Instance != null)
+            UIManager.Instance.HideAllCanvases();
 
         OnGameStart?.Invoke();
     }
@@ -296,9 +284,12 @@ public class GameState : MonoBehaviour
 
         Time.timeScale = 1f;
 
+        // Show Game Over Canvas
+        if (UIManager.Instance != null)
+            UIManager.Instance.ShowGameOverCanvas();
+
         OnGameOver?.Invoke();
     }
-
     private void HandleVictoryState()
     {
         gameInProgress = false;
@@ -308,16 +299,21 @@ public class GameState : MonoBehaviour
         if (spawnManager != null)
             spawnManager.StopSpawning();
 
-        Time.timeScale = 1f;
+        Time.timeScale = 1f;        // Show Victory Canvas
+        if (UIManager.Instance != null)
+            UIManager.Instance.ShowVictoryCanvas();
 
         OnVictory?.Invoke();
     }
-
     private void HandleLoadingState()
     {
         gameInProgress = false;
         isPaused = false;
         Time.timeScale = 1f;
+
+        // Hide all UI canvases during loading
+        if (UIManager.Instance != null)
+            UIManager.Instance.HideAllCanvases();
     }
     #endregion
 
@@ -376,12 +372,10 @@ public class GameState : MonoBehaviour
         Debug.Log("Game Over!");
         StartCoroutine(GameOverCoroutine());
     }
-
     public void Victory()
     {
         if (currentState == GameStateType.Victory) return;
 
-        VictoryCanvas?.SetActive(true);
         Debug.Log("Victory!");
         StartCoroutine(VictoryCoroutine());
     }
@@ -433,7 +427,7 @@ public class GameState : MonoBehaviour
         }
 
         // Check time-based victory (survival mode), disabled by setting victoryTime to 0
-        if (gameTimer > 0 && gameTimer >= victoryTime)
+        if (victoryTime > 0 && gameTimer >= victoryTime)
         {
             Victory();
             return;
@@ -556,40 +550,7 @@ public class GameState : MonoBehaviour
                   $"\nGame Timer: {gameTimer:F2}" +
                   $"\nIs Paused: {isPaused}" +
                   $"\nGame In Progress: {gameInProgress}" +
-                  $"\nPlayer Level: {(playerCore != null ? playerCore.CurrentLevel : 0)}" +
-                  $"\nPlayer Score: {(playerCore != null ? playerCore.Score : 0)}");
+                  $"\nPlayer Level: {(playerCore != null ? playerCore.CurrentLevel : 0)}" + $"\nPlayer Score: {(playerCore != null ? playerCore.Score : 0)}");
     }
     #endregion
-
-    private GameObject FindGameObjectInScene(string objectName, string sceneName)
-    {
-        Scene scene = SceneManager.GetSceneByName(sceneName);
-
-        Debug.Log($"Searching for '{objectName}' in scene '{sceneName}' (isLoaded: {scene.isLoaded})");
-        if (scene.isLoaded)
-        {
-            GameObject[] rootObjects = scene.GetRootGameObjects();
-            foreach (GameObject rootObject in rootObjects)
-            {
-                GameObject found = FindInChildren(rootObject.transform, objectName);
-                if (found != null)
-                    return found;
-            }
-        }
-        return null;
-    }
-
-    private GameObject FindInChildren(Transform parent, string name)
-    {
-        if (parent.name == name)
-            return parent.gameObject;
-
-        for (int i = 0; i < parent.childCount; i++)
-        {
-            GameObject found = FindInChildren(parent.GetChild(i), name);
-            if (found != null)
-                return found;
-        }
-        return null;
-    }
 }

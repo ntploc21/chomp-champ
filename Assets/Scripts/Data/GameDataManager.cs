@@ -38,7 +38,6 @@ public class GameDataManager : MonoBehaviour
   public GameSessionData SessionData => gameSessionData;
   public LevelData LevelConfig => levelData;
   #endregion
-
   #region Unity Events
   private void Awake()
   {
@@ -46,6 +45,9 @@ public class GameDataManager : MonoBehaviour
     {
       gameSessionData = new GameSessionData();
     }
+
+    // Initialize session data from level data at game start
+    InitializeSessionFromLevelData();
 
     if (enablePersistence)
     {
@@ -92,16 +94,11 @@ public class GameDataManager : MonoBehaviour
     }
   }
   #endregion
-
   #region Data Management
   public void ResetPlayerData()
   {
-    // Reset to defaults
-    gameSessionData.ResetToDefaults();
-
-    // Fire data changed event
-    OnDataChanged?.Invoke(gameSessionData);
-    NotifyAllChanges();
+    // Reset to defaults and reinitialize from LevelData
+    ResetSessionData();
   }
 
   public void AddScore(float amount)
@@ -118,6 +115,7 @@ public class GameDataManager : MonoBehaviour
     if (!gameSessionData.isAlive || amount <= 0) return;
 
     gameSessionData.currentXP += amount;
+    gameSessionData.totalXP += amount; // Track total XP gained in the session
 
     // Check for level up
     if (gameSessionData.currentXP >= gameSessionData.xpToNextLevel && !IsMaxLevel())
@@ -274,7 +272,6 @@ public class GameDataManager : MonoBehaviour
 
     Debug.Log("Game data deleted successfully.");
   }
-
   private void ValidateData()
   {
     // Ensure data integrity
@@ -282,11 +279,12 @@ public class GameDataManager : MonoBehaviour
     gameSessionData.currentLevel = Mathf.Max(1, gameSessionData.currentLevel);
     gameSessionData.currentSize = Mathf.Max(levelData.baseSize, gameSessionData.currentSize);
 
-    // Recalculate XP requirement if needed
-    if (gameSessionData.xpToNextLevel <= 0)
-    {
-      gameSessionData.xpToNextLevel = levelData.GetXPForLevel(gameSessionData.currentLevel + 1);
-    }
+    // Always sync XP requirements and size with LevelData (single source of truth)
+    gameSessionData.xpToNextLevel = levelData.GetXPForLevel(gameSessionData.currentLevel);
+    gameSessionData.currentSize = levelData.GetSizeForLevel(gameSessionData.currentLevel);
+
+    Debug.Log($"Validated data synced with LevelData: Level {gameSessionData.currentLevel}, " +
+              $"Size {gameSessionData.currentSize:F2}, XP to next: {gameSessionData.xpToNextLevel}");
   }
   #endregion
 
@@ -318,6 +316,41 @@ public class GameDataManager : MonoBehaviour
   {
     Debug.Log($"Player Stats - Level: {gameSessionData.currentLevel}, XP: {gameSessionData.currentXP}/{gameSessionData.xpToNextLevel}, " +
              $"Score: {gameSessionData.score}, Lives: {gameSessionData.lives}, Size: {gameSessionData.currentSize:F2}");
+  }
+  #endregion
+
+  #region Initialization
+  /// <summary>
+  /// Initialize GameSessionData from LevelData configuration
+  /// This makes LevelData the single source of truth for level progression
+  /// </summary>
+  private void InitializeSessionFromLevelData()
+  {
+    if (levelData == null)
+    {
+      Debug.LogWarning("LevelData is not assigned! Using default values.");
+      return;
+    }
+
+    // Initialize XP requirements from LevelData
+    gameSessionData.xpToNextLevel = levelData.GetXPForLevel(gameSessionData.currentLevel);
+
+    // Initialize size from LevelData
+    gameSessionData.currentSize = levelData.GetSizeForLevel(gameSessionData.currentLevel);
+
+    // Set maximum XP based on LevelData
+    gameSessionData.maximumXP = levelData.GetTotalXPForLevel(levelData.maxLevel - 1);
+  }
+
+  /// <summary>
+  /// Reset session data and reinitialize from LevelData
+  /// </summary>
+  public void ResetSessionData()
+  {
+    gameSessionData.ResetToDefaults();
+    InitializeSessionFromLevelData();
+    OnDataChanged?.Invoke(gameSessionData);
+    NotifyAllChanges();
   }
   #endregion
 }

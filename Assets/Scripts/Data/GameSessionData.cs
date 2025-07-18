@@ -37,6 +37,8 @@ public class GameSessionData
   public bool isInvincible = false;
   [Tooltip("Last known position of the player character.")]
   public Vector2 lastPosition = Vector2.zero;
+  public float totalXP = 0f; // Total XP accumulated in the session
+  public float maximumXP = 0f; // Maximum XP needed in the level
 
   // Constructor
   public GameSessionData()
@@ -62,6 +64,8 @@ public class GameSessionData
     isAlive = true;
     isInvincible = false;
     lastPosition = Vector2.zero;
+    totalXP = 0f;
+    maximumXP = 0f; // Reset maximum XP
   }
 
   // Create a copy for save/load systems
