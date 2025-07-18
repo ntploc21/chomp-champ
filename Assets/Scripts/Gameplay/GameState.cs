@@ -271,9 +271,7 @@ public class GameState : MonoBehaviour
         Time.timeScale = 0f;
 
         OnGamePause?.Invoke();
-    }
-
-    private void HandleGameOverState()
+    }    private void HandleGameOverState()
     {
         gameInProgress = false;
         isPaused = false;
@@ -284,13 +282,18 @@ public class GameState : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        // Show Game Over Canvas
+        // Show Game Over Canvas with game statistics
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowGameOverCanvas();
+        {
+            float score = playerCore != null ? playerCore.Score : 0f;
+            string gameTime = GetFormattedGameTime();
+            int enemiesEaten = playerCore != null ? playerCore.DataManager.SessionData.enemiesEaten : 0;
+            
+            UIManager.Instance.ShowGameOverCanvas(score, gameTime, enemiesEaten);
+        }
 
         OnGameOver?.Invoke();
-    }
-    private void HandleVictoryState()
+    }    private void HandleVictoryState()
     {
         gameInProgress = false;
         isPaused = false;
@@ -299,9 +302,17 @@ public class GameState : MonoBehaviour
         if (spawnManager != null)
             spawnManager.StopSpawning();
 
-        Time.timeScale = 1f;        // Show Victory Canvas
+        Time.timeScale = 1f;
+        
+        // Show Victory Canvas with game statistics
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowVictoryCanvas();
+        {
+            float score = playerCore != null ? playerCore.Score : 0f;
+            string gameTime = GetFormattedGameTime();
+            int enemiesEaten = playerCore != null ? playerCore.DataManager.SessionData.enemiesEaten : 0;
+            
+            UIManager.Instance.ShowVictoryCanvas(score, gameTime, enemiesEaten);
+        }
 
         OnVictory?.Invoke();
     }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 /// <summary>
 /// Singleton UI Manager that handles canvas references across multiple scenes
@@ -14,13 +15,11 @@ public class UIManager : MonoBehaviour
     #region Canvas References
     [SerializeField] private GameObject victoryCanvas;
     [SerializeField] private GameObject gameOverCanvas;
-    [SerializeField] private GameObject pauseMenuCanvas;
     #endregion
 
     #region Properties
     public GameObject VictoryCanvas => victoryCanvas;
     public GameObject GameOverCanvas => gameOverCanvas;
-    public GameObject PauseMenuCanvas => pauseMenuCanvas;
     #endregion
 
     #region Unity Lifecycle
@@ -67,26 +66,47 @@ public class UIManager : MonoBehaviour
     {
         victoryCanvas = FindCanvasInScenes("Canvas - Victory");
         gameOverCanvas = FindCanvasInScenes("Canvas - Game Over");
-        pauseMenuCanvas = FindCanvasInScenes("Canvas - Pause Menu");
         LogCanvasStatus();
     }
     #endregion
 
     #region Canvas Control
     /// <summary>
-    /// Show Victory Canvas
+    /// Show Victory Canvas with game statistics
     /// </summary>
-    public void ShowVictoryCanvas()
+    /// <param name="score">Final score achieved</param>
+    /// <param name="gameTime">Formatted game time string</param>
+    /// <param name="enemiesEaten">Number of enemies eaten</param>
+    public void ShowVictoryCanvas(float score = 0, string gameTime = "00:00", int enemiesEaten = 0)
     {
         if (victoryCanvas != null)
         {
             victoryCanvas.SetActive(true);
-            Debug.Log("Victory Canvas shown");
+
+            // Freeze the game (like pause menu does)
+            Time.timeScale = 0f;
+
+            // Enable cursor for UI interaction (like pause menu does)
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            // Update text elements with game statistics
+            UpdateCanvasText(victoryCanvas, score, gameTime, enemiesEaten);
+
+            Debug.Log($"Victory Canvas shown with stats - Score: {score}, Time: {gameTime}, Enemies: {enemiesEaten} (Game Frozen)");
         }
         else
         {
             Debug.LogWarning("Victory Canvas not found - cannot show");
         }
+    }
+
+    /// <summary>
+    /// Show Victory Canvas (backward compatibility - no statistics)
+    /// </summary>
+    public void ShowVictoryCanvas()
+    {
+        ShowVictoryCanvas(0f, "00:00", 0);
     }
 
     /// <summary>
@@ -97,19 +117,40 @@ public class UIManager : MonoBehaviour
         if (victoryCanvas != null)
         {
             victoryCanvas.SetActive(false);
-            Debug.Log("Victory Canvas hidden");
+
+            // Resume the game (like pause menu does)
+            Time.timeScale = 1f;
+
+            // Restore game cursor state (locked and hidden for gameplay)
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            Debug.Log("Victory Canvas hidden (Game Resumed)");
         }
     }
-
     /// <summary>
-    /// Show Game Over Canvas
+    /// Show Game Over Canvas with game statistics
     /// </summary>
-    public void ShowGameOverCanvas()
+    /// <param name="score">Final score achieved</param>
+    /// <param name="gameTime">Formatted game time string</param>
+    /// <param name="enemiesEaten">Number of enemies eaten</param>
+    public void ShowGameOverCanvas(float score = 0, string gameTime = "00:00", int enemiesEaten = 0)
     {
         if (gameOverCanvas != null)
         {
             gameOverCanvas.SetActive(true);
-            Debug.Log("Game Over Canvas shown");
+
+            // Freeze the game (like pause menu does)
+            Time.timeScale = 0f;
+
+            // Enable cursor for UI interaction (like pause menu does)
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            // Update text elements with game statistics
+            UpdateCanvasText(gameOverCanvas, score, gameTime, enemiesEaten);
+
+            Debug.Log($"Game Over Canvas shown with stats - Score: {score}, Time: {gameTime}, Enemies: {enemiesEaten} (Game Frozen)");
         }
         else
         {
@@ -118,6 +159,13 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Show Game Over Canvas (backward compatibility - no statistics)
+    /// </summary>
+    public void ShowGameOverCanvas()
+    {
+        ShowGameOverCanvas(0f, "00:00", 0);
+    }
+    /// <summary>
     /// Hide Game Over Canvas
     /// </summary>
     public void HideGameOverCanvas()
@@ -125,7 +173,15 @@ public class UIManager : MonoBehaviour
         if (gameOverCanvas != null)
         {
             gameOverCanvas.SetActive(false);
-            Debug.Log("Game Over Canvas hidden");
+
+            // Resume the game (like pause menu does)
+            Time.timeScale = 1f;
+
+            // Restore game cursor state (locked and hidden for gameplay)
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            Debug.Log("Game Over Canvas hidden (Game Resumed)");
         }
     }
 
@@ -222,8 +278,6 @@ public class UIManager : MonoBehaviour
                 return victoryCanvas != null;
             case "gameover":
                 return gameOverCanvas != null;
-            case "pause":
-                return pauseMenuCanvas != null;
             default:
                 return false;
         }
@@ -236,8 +290,74 @@ public class UIManager : MonoBehaviour
     {
         Debug.Log($"UIManager Canvas Status:" +
                   $"\nVictory Canvas: {(victoryCanvas != null ? "Found" : "Not Found")}" +
-                  $"\nGame Over Canvas: {(gameOverCanvas != null ? "Found" : "Not Found")}" +
-                  $"\nPause Menu Canvas: {(pauseMenuCanvas != null ? "Found" : "Not Found")}");
+                  $"\nGame Over Canvas: {(gameOverCanvas != null ? "Found" : "Not Found")}");
+    }
+
+    /// <summary>
+    /// Update text elements in a canvas with game statistics
+    /// </summary>
+    /// <param name="canvas">The canvas GameObject to update</param>
+    /// <param name="score">Final score achieved</param>
+    /// <param name="gameTime">Formatted game time string</param>
+    /// <param name="enemiesEaten">Number of enemies eaten</param>
+    private void UpdateCanvasText(GameObject canvas, float score, string gameTime, int enemiesEaten)
+    {
+        if (canvas == null) return;
+
+        // Get all TextMeshProUGUI components in the canvas
+        TextMeshProUGUI[] textComponents = canvas.GetComponentsInChildren<TextMeshProUGUI>(true);
+
+        foreach (TextMeshProUGUI textComp in textComponents)
+        {
+            if (textComp == null) continue;
+
+            string objectName = textComp.gameObject.name.ToLower();
+
+            // Update score text elements
+            if (objectName.Contains("score") && objectName.Contains("text"))
+            {
+                textComp.text = Mathf.RoundToInt(score).ToString();
+                Debug.Log($"Updated {textComp.gameObject.name} with score: {score}");
+            }
+            // Update timer/time text elements
+            else if ((objectName.Contains("timer") || objectName.Contains("time")) && objectName.Contains("text"))
+            {
+                textComp.text = gameTime;
+                Debug.Log($"Updated {textComp.gameObject.name} with time: {gameTime}");
+            }
+            // Update enemy text elements
+            else if (objectName.Contains("enemy") && objectName.Contains("text"))
+            {
+                textComp.text = enemiesEaten.ToString();
+                Debug.Log($"Updated {textComp.gameObject.name} with enemies eaten: {enemiesEaten}");
+            }
+            // Backup: Try to find text elements with common patterns
+            else if (objectName.Contains("final") && objectName.Contains("score"))
+            {
+                textComp.text = Mathf.RoundToInt(score).ToString();
+                Debug.Log($"Updated {textComp.gameObject.name} with final score: {score}");
+            }
+            else if (objectName.Contains("play") && objectName.Contains("time"))
+            {
+                textComp.text = gameTime;
+                Debug.Log($"Updated {textComp.gameObject.name} with play time: {gameTime}");
+            }
+            else if (objectName.Contains("kills") || objectName.Contains("defeated"))
+            {
+                textComp.text = enemiesEaten.ToString();
+                Debug.Log($"Updated {textComp.gameObject.name} with enemies defeated: {enemiesEaten}");
+            }
+        }
+
+        // If no specific text elements were found, log available components for debugging
+        if (textComponents.Length > 0)
+        {
+            Debug.Log($"Available text components in {canvas.name}:");
+            foreach (TextMeshProUGUI textComp in textComponents)
+            {
+                Debug.Log($"  - {textComp.gameObject.name}: '{textComp.text}'");
+            }
+        }
     }
     #endregion
 }
