@@ -6,9 +6,28 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Main Menu.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Mythril2D/Demo/Scenes/Main Menu.unity
+    guid: 9dde25d0c38555546ba1b5077c2f7f83
   - enabled: 1
-    path: Assets/Scenes/Story Mode.unity
-    guid: 1d3b29a2dd63aed4ea755734093e5aae
-  m_configObjects: {}
+    path: Assets/Mythril2D/Demo/Scenes/Gameplay.unity
+    guid: a14a76969b53f0545b8b78a785b450cd
+  - enabled: 1
+    path: Assets/Mythril2D/Demo/Scenes/Maps/Abandoned_House.unity
+    guid: 578443014e14e4a0b93ebc99cea543c6
+  - enabled: 1
+    path: Assets/Mythril2D/Demo/Scenes/Maps/Alphonse_General_Store.unity
+    guid: fb91aba575f5c485383ad813b57237e3
+  - enabled: 1
+    path: Assets/Mythril2D/Demo/Scenes/Maps/Drunk_Rat_Inn.unity
+    guid: 027f32a9c9e32564f86fa4e66a2b47ea
+  - enabled: 1
+    path: Assets/Mythril2D/Demo/Scenes/Maps/Eldham_Village.unity
+    guid: 8f36b9b25e67d3847a89c2093ee985ea
+  - enabled: 1
+    path: Assets/Mythril2D/Demo/Scenes/Maps/Ernest_House.unity
+    guid: 0665148ed10e34c16a6a998a9e2bbe59
+  - enabled: 1
+    path: Assets/Mythril2D/Demo/Scenes/Maps/King_Fred_House.unity
+    guid: 330c2d75e374945c9aa7d09eda197326
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 58b46bb59f19fa6489d514aa4d7bec82, type: 2}

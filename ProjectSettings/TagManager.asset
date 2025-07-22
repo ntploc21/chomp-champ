@@ -3,20 +3,21 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Collision Default
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Interaction
+  - Hitbox
+  - Projectile
+  - Collision A
+  - Collision B
+  - Collision C
   - 
   - 
   - 
@@ -38,6 +39,39 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 419497587
+    locked: 0
+  - name: A
+    uniqueID: 2112435969
+    locked: 0
+  - name: B
+    uniqueID: 1767517263
+    locked: 0
+  - name: C
+    uniqueID: 2847976193
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 3581332203
+    locked: 0
+  - name: Ground
+    uniqueID: 2659449649
+    locked: 0
+  - name: WalkInfront
+    uniqueID: 3558902761
+    locked: 0
+  - name: Collision
+    uniqueID: 1443390963
+    locked: 0
+  - name: Player
+    uniqueID: 2711021439
+    locked: 0
+  - name: WalkBehind
+    uniqueID: 1631424491
+    locked: 0
+  - name: Decor
+    uniqueID: 3190819243
     locked: 0
