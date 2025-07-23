@@ -11,6 +11,9 @@ public class EnemyEffect : MonoBehaviour
   private SpriteRenderer spriteRenderer;
   private Animator animator;
 
+  [Header("Debug Options")]
+  [SerializeField] private bool skipSpawnAnimation = false; // For debugging alpha issues
+
   [Header("Particle Effects")]
   private ParticleSystem deathParticles;
   private ParticleSystem spawnParticles;
@@ -21,6 +24,11 @@ public class EnemyEffect : MonoBehaviour
   private static readonly WaitForSeconds flashWait = new WaitForSeconds(0.1f);
   private UIManagerAudio audioManager;
   #endregion
+
+  #region Properties
+  public SpriteRenderer SpriteRenderer => spriteRenderer;
+  #endregion
+
   private void Awake()
   {
     spriteRenderer = GetComponent<SpriteRenderer>();
@@ -34,24 +42,27 @@ public class EnemyEffect : MonoBehaviour
     enemyCore = core;
     enemyData = core.Data;
 
+    // Get sprite renderer from children (since sprite library components are usually on child)
+    if (spriteRenderer == null)
+      spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+    // Get animator from children 
+    if (animator == null)
+      animator = GetComponentInChildren<Animator>();
+
     if (enemyData != null)
     {
-      // Set sprite
-      if (spriteRenderer != null && enemyData.enemySprite != null)
+      // Cache original color and scale from the sprite renderer
+      if (spriteRenderer != null)
       {
-        spriteRenderer.sprite = enemyData.enemySprite;
-        // Cache original color to avoid repeated access
-        originalColor = spriteRenderer.color;
-      }
+        // Ensure the sprite starts with full opacity
+        Color fullColor = spriteRenderer.color;
+        fullColor.a = 1f;
+        spriteRenderer.color = fullColor;
 
-      // Set animator
-      if (animator != null && enemyData.animatorController != null)
-      {
-        animator.runtimeAnimatorController = enemyData.animatorController;
+        originalColor = fullColor; // Cache the corrected color
+        originalScale = spriteRenderer.transform.localScale;
       }
-
-      // Cache original scale
-      originalScale = transform.localScale;
 
       // Initialize particle effects only if they don't exist
       if (deathParticles == null || spawnParticles == null)
@@ -104,10 +115,12 @@ public class EnemyEffect : MonoBehaviour
       spawnParticles.Play();
     }
 
-    // Spawn animation (fade in or scale up)
-    StartCoroutine(SpawnAnimation());
+    // Spawn animation (fade in or scale up) - can be skipped for debugging
+    if (!skipSpawnAnimation)
+    {
+      // StartCoroutine(SpawnAnimation());
+    }
   }
-
   public void PlayDeathEffect()
   {
     // Play death sound with cached reference
@@ -137,6 +150,12 @@ public class EnemyEffect : MonoBehaviour
   {
     if (spriteRenderer == null) yield break;
 
+    // Ensure originalColor has full alpha for safety
+    if (originalColor.a < 0.1f)
+    {
+      originalColor = new Color(originalColor.r, originalColor.g, originalColor.b, 1f);
+    }
+
     // Use cached original color instead of accessing it repeatedly
     Color startColor = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
     spriteRenderer.color = startColor;
@@ -153,6 +172,7 @@ public class EnemyEffect : MonoBehaviour
       yield return null;
     }
 
+    // Ensure final color is set correctly
     spriteRenderer.color = originalColor;
   }
   private System.Collections.IEnumerator DeathAnimation()

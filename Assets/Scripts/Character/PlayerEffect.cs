@@ -55,6 +55,11 @@ public class PlayerEffect : MonoBehaviour
   [SerializeField] private bool enableDebugLogs = false;
   #endregion
 
+  #region Properties
+  public SpriteRenderer SpriteRenderer => spriteRenderer;
+  public Animator Animator => animator;
+  #endregion
+
   #region Internal Data
   private PlayerCore playerCore;
   private Camera playerCamera;
@@ -135,7 +140,9 @@ public class PlayerEffect : MonoBehaviour
     if (eatParticles != null)
     {
       eatParticles.Play();
-    }    // Screen shake
+    }
+
+    // Screen shake
     if (enableScreenShake)
     {
       if (useAdvancedShake)

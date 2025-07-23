@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Big Big thingy 4
   m_EditorClassIdentifier: 
   enemyName: Predator
-  enemySprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
-  animatorController: {fileID: 0}
+  spriteLibrary: {fileID: 7108339969198208228, guid: e9000c0a49b88a144abcf3a44d408506, type: 3}
+  animatorController: {fileID: 9100000, guid: e3c1d4507170a794a8337129c5d4de0b, type: 2}
+  defaultSpriteCategory: Idle
+  defaultSpriteLabel: Normal
+  fallbackSprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
   level: 5
   size: 1.5
   baseSpeed: 2.5

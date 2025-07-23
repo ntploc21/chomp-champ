@@ -290,18 +290,22 @@ public class PlayerMovement : MonoBehaviour
 
     // Smooth acceleration/deceleration
     float lerpSpeed = inputVector.magnitude > 0.1f ? acceleration : deceleration;
-    currentVelocity = Vector2.Lerp(_rigidbody.velocity, targetVelocity, lerpSpeed * Time.fixedDeltaTime);
+    currentVelocity = Vector2.Lerp(_rigidbody.velocity, targetVelocity, lerpSpeed * Time.fixedDeltaTime);    _rigidbody.velocity = currentVelocity;
 
-    _rigidbody.velocity = currentVelocity;
+    // Update player animation with current movement
+    if (_playerCore != null)
+    {
+      _playerCore.SetMovementAnimation(currentVelocity.normalized);
+    }
 
     // Optional: Rotate the player towards the movement direction
-    if (rotationSpeed > 0f && currentVelocity.magnitude > 0.1f)
-    {
-      float targetAngle = Mathf.Atan2(currentVelocity.y, currentVelocity.x) * Mathf.Rad2Deg - 90f;
-      float currentAngle = transform.eulerAngles.z;
-      float newAngle = Mathf.LerpAngle(currentAngle, targetAngle, rotationSpeed * Time.fixedDeltaTime);
-      transform.rotation = Quaternion.Euler(0, 0, newAngle);
-    }
+    // if (rotationSpeed > 0f && currentVelocity.magnitude > 0.1f)
+    // {
+    //   float targetAngle = Mathf.Atan2(currentVelocity.y, currentVelocity.x) * Mathf.Rad2Deg - 90f;
+    //   float currentAngle = transform.eulerAngles.z;
+    //   float newAngle = Mathf.LerpAngle(currentAngle, targetAngle, rotationSpeed * Time.fixedDeltaTime);
+    //   transform.rotation = Quaternion.Euler(0, 0, newAngle);
+    // }
   }
 
   /// <summary>

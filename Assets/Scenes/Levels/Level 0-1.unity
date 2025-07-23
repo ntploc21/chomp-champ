@@ -286,6 +286,8 @@ GameObject:
   - component: {fileID: 206703366}
   - component: {fileID: 206703367}
   - component: {fileID: 206703368}
+  - component: {fileID: 206703370}
+  - component: {fileID: 206703369}
   m_Layer: 6
   m_Name: Square
   m_TagString: Player
@@ -349,7 +351,7 @@ SpriteRenderer:
   m_SortingLayerID: -1583945857
   m_SortingLayer: -3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: -589372785, guid: 3fd2f42dedce5914890fe278e6627ab4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -370,7 +372,7 @@ Animator:
   m_GameObject: {fileID: 206703365}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e3c1d4507170a794a8337129c5d4de0b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -381,6 +383,36 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &206703369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206703365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CategoryHash: 0.009161512
+  m_labelHash: 1.1037539e-22
+  m_SpriteKey: 0
+  m_SpriteHash: 559079218
+--- !u!114 &206703370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206703365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c29cff538c195c249b69c6f2236de67b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library: []
+  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 2c608c52e06a5434d983c520b1b41de2, type: 3}
 --- !u!1 &385681173
 GameObject:
   m_ObjectHideFlags: 0
@@ -23557,8 +23589,8 @@ MonoBehaviour:
   victoryDelay: 1
   allowPause: 1
   victoryLevel: 4
-  victoryScore: 1e+10
-  victoryTime: 1e+9
+  victoryScore: -1
+  victoryTime: -1
   OnStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -32725,6 +32757,16 @@ MonoBehaviour:
   OnPlayerEatEnemy:
     m_PersistentCalls:
       m_Calls: []
+  playerSpriteLibrary: {fileID: 7108339969198208228, guid: 2c608c52e06a5434d983c520b1b41de2, type: 3}
+  playerAnimatorController: {fileID: 9100000, guid: e3c1d4507170a794a8337129c5d4de0b, type: 2}
+  defaultSpriteCategory: Idle
+  defaultSpriteLabel: Player
+  hitAnimationParameter: hit
+  deathAnimationParameter: death
+  invincibleAnimationParameter: invincible
+  moveXAnimationParameter: moveX
+  moveYAnimationParameter: moveY
+  isMovingAnimationParameter: isMoving
 --- !u!114 &2002656655
 MonoBehaviour:
   m_ObjectHideFlags: 0

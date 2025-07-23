@@ -756,7 +756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingMode: 0
-  presetName: Standard (Countdown)
+  presetName: Standard (Quick)
   enableTrigger: 0
   onTriggerExit: 0
   loadWithTag: 0
@@ -773,7 +773,7 @@ MonoBehaviour:
   - {fileID: 8985211846813716763, guid: 2e032f973bfa7da4b95039db5496ee9a, type: 3}
   - {fileID: 8985211846813716763, guid: 4c00f7073bf769d488574c4718131411, type: 3}
   - {fileID: 8985211846813716763, guid: 8a64ef689de31784091e742137c1d8db, type: 3}
-  selectedLoadingIndex: 5
+  selectedLoadingIndex: 6
   selectedTagIndex: 0
   onLoadingStart:
     m_PersistentCalls:

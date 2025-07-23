@@ -139,10 +139,8 @@ public class EnemyBehaviour : MonoBehaviour
 
         // Calculate distance and direction to player
         Vector2 toPlayer = playerTransform.position - transform.position;
-        distanceToPlayer = toPlayer.magnitude;
-
-        // Vision check - requires line of sight
-        // playerInSight = CanSeePlayer(toPlayer);
+        distanceToPlayer = toPlayer.magnitude;        // Vision check - requires line of sight
+        playerInSight = CanSeePlayer(toPlayer);
 
         // Hearing check - simpler distance check
         playerInHearing = distanceToPlayer <= hearingRange;
@@ -349,7 +347,6 @@ public class EnemyBehaviour : MonoBehaviour
         movement.SetTarget(wanderTarget);
         movement.SetSpeed(1f); // Normal speed
     }
-
     private void UpdateWandering()
     {
         if (movement == null) return;
@@ -362,6 +359,16 @@ public class EnemyBehaviour : MonoBehaviour
             movement.SetTarget(newTarget);
             lastWanderDirectionChange = Time.time;
         }
+
+        // Update animation with current movement
+        if (core != null && core.Rigidbody != null)
+        {
+            Vector2 currentVelocity = core.Rigidbody.velocity;
+            if (currentVelocity.magnitude > 0.1f)
+            {
+                core.SetMovement(currentVelocity.normalized);
+            }
+        }
     }
 
     private void BeginChasing()
@@ -371,13 +378,22 @@ public class EnemyBehaviour : MonoBehaviour
         movement.SetTarget(playerTransform.position);
         movement.SetSpeed(core.Data.chaseSpeedMultiplier);
     }
-
     private void UpdateChasing()
     {
         if (movement == null || playerTransform == null) return;
 
         // Continuously update target to player position
         movement.SetTarget(playerTransform.position);
+
+        // Update animation with current movement
+        if (core != null && core.Rigidbody != null)
+        {
+            Vector2 currentVelocity = core.Rigidbody.velocity;
+            if (currentVelocity.magnitude > 0.1f)
+            {
+                core.SetMovement(currentVelocity.normalized);
+            }
+        }
     }
 
     private void BeginFleeing()
@@ -390,7 +406,6 @@ public class EnemyBehaviour : MonoBehaviour
         movement.SetTarget(fleeTarget);
         movement.SetSpeed(core.Data.fleeSpeedMultiplier);
     }
-
     private void UpdateFleeing()
     {
         if (movement == null || playerTransform == null) return;
@@ -400,6 +415,16 @@ public class EnemyBehaviour : MonoBehaviour
         Vector2 fleeTarget = (Vector2)transform.position + fleeDirection * core.Data.wanderRadius;
 
         movement.SetTarget(fleeTarget);
+
+        // Update animation with current movement
+        if (core != null && core.Rigidbody != null)
+        {
+            Vector2 currentVelocity = core.Rigidbody.velocity;
+            if (currentVelocity.magnitude > 0.1f)
+            {
+                core.SetMovement(currentVelocity.normalized);
+            }
+        }
     }
 
     private void BeginInvestigating()
@@ -412,6 +437,18 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void UpdateInvestigating()
     {
+        if (movement == null) return;
+
+        // Update animation with current movement
+        if (core != null && core.Rigidbody != null)
+        {
+            Vector2 currentVelocity = core.Rigidbody.velocity;
+            if (currentVelocity.magnitude > 0.1f)
+            {
+                core.SetMovement(currentVelocity.normalized);
+            }
+        }
+
         // Investigation continues until we reach the target or detect player again
         // State transition logic will handle moving to other states
     }

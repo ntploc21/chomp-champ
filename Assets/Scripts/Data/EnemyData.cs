@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.U2D.Animation;
 
 public enum EnemyType
 {
@@ -23,14 +23,31 @@ public enum EnemyType
 [CreateAssetMenu(fileName = "New Enemy Data", menuName = "Game/Enemy Data")]
 public class EnemyData : ScriptableObject
 {
-    #region Editor Data
-    [Header("Basic Info")]
+    #region Editor Data    [Header("Basic Info")]
     [Tooltip("Unique identifier for the enemy type.")]
     public string enemyName = "Enemy";     // Default name
-    [Tooltip("Sprite representing the enemy.")]
-    public Sprite enemySprite;             // Default sprite
+
+    [Header("Sprite System")]
+    [Tooltip("Sprite Library Asset containing organized sprites by category and label.")]
+    public SpriteLibraryAsset spriteLibrary;
+    [Tooltip("Default sprite category (e.g., 'Idle', 'Run', 'Attack').")]
+    public string defaultSpriteCategory = "Idle";
+    [Tooltip("Default sprite label (e.g., 'Small', 'Medium', 'Large').")]
+    public string defaultSpriteLabel = "Small";
+    [Tooltip("Fallback sprite for backward compatibility.")]
+    public Sprite fallbackSprite;
     [Tooltip("Animator controller for enemy animations.")]
     public RuntimeAnimatorController animatorController;  // Animator controller for enemy animations
+
+    [Header("Animation Parameters")]
+    [Tooltip("Animation parameter name for hit trigger.")]
+    public string hitAnimationParameter = "hit";
+    [Tooltip("Animation parameter name for death trigger.")]
+    public string deathAnimationParameter = "death";
+    [Tooltip("Animation parameter name for invincible state.")]
+    public string invincibleAnimationParameter = "invincible";
+    [Tooltip("Animation parameter name for movement state.")]
+    public string isMovingAnimationParameter = "isMoving";
 
     [Header("Size & Level")]
     [Tooltip("Level of the enemy, affects stats and difficulty.")]
