@@ -216,6 +216,14 @@ public class UIManager : MonoBehaviour
         }
 
         Debug.Log($"Replaying current level: {currentLevelScene}");
+
+        // Send reset data first
+        GameDataManager gameDataManager = FindObjectOfType<GameDataManager>();
+        if (gameDataManager != null)
+        {
+            gameDataManager.ResetSessionData();
+        }
+
         
         // Hide all UI canvases first
         HideAllCanvases();
