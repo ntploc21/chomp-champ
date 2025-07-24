@@ -4,6 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Wall
+  - Obstacle
+  - VictoryUI
   - Enemy
   layers:
   - Default
@@ -12,13 +15,13 @@ TagManager:
   - Collision Default
   - Water
   - UI
+  - PlayerLayer
+  - EnemyLayer
+  - PickupLayer
+  - WallLayer
   - Interaction
   - Hitbox
   - Projectile
-  - Collision A
-  - Collision B
-  - Collision C
-  - 
   - 
   - 
   - 
@@ -42,18 +45,6 @@ TagManager:
   - name: Background
     uniqueID: 419497587
     locked: 0
-  - name: A
-    uniqueID: 2112435969
-    locked: 0
-  - name: B
-    uniqueID: 1767517263
-    locked: 0
-  - name: C
-    uniqueID: 2847976193
-    locked: 0
-  - name: Default
-    uniqueID: 0
-    locked: 0
   - name: UI
     uniqueID: 3581332203
     locked: 0
@@ -74,4 +65,7 @@ TagManager:
     locked: 0
   - name: Decor
     uniqueID: 3190819243
+    locked: 0
+  - name: Default
+    uniqueID: 0
     locked: 0

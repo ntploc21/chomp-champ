@@ -182,10 +182,14 @@ namespace Michsky.UI.Reach
                 float uiValue = PlayerPrefs.GetFloat("Slider_" + UISlider.saveKey, 1f);
                 audioMixer.SetFloat("UI", Mathf.Log10(Mathf.Max(uiValue, 0.0001f)) * 20);
                 UISlider.mainSlider.onValueChanged.AddListener(SetUIVolume);
-            }
-        }
+            }        }
 
-        // Volume Controls (Audio Mixer)
+        #region Volume Controls (Audio Mixer)
+        
+        /// <summary>
+        /// Sets the master volume for all audio
+        /// </summary>
+        /// <param name="volume">Volume level (0-1)</param>
         public void SetMasterVolume(float volume)
         {
             masterVolume = Mathf.Clamp01(volume);
@@ -212,21 +216,25 @@ namespace Michsky.UI.Reach
             uiVolume = Mathf.Clamp01(volume);
             audioMixer.SetFloat("UI", Mathf.Log10(volume) * 20);
             UpdateAudioSources();
-        }
-
-        void UpdateAudioSources()
+        }        void UpdateAudioSources()
         {
             if (musicSource != null)
                 musicSource.volume = masterVolume * musicVolume;
 
             if (sfxSource != null)
-                sfxSource.volume = masterVolume * sfxVolume;
-
-            if (uiSource != null)
+                sfxSource.volume = masterVolume * sfxVolume;            if (uiSource != null)
                 uiSource.volume = masterVolume * uiVolume;
         }
 
-        // Music Controls
+        #endregion
+
+        #region Music Controls
+        
+        /// <summary>
+        /// Plays a music track with optional fade-in effect
+        /// </summary>
+        /// <param name="musicName">Name of the music track to play</param>
+        /// <param name="fadeIn">Whether to fade in the music</param>
         public void PlayMusic(string musicName, bool fadeIn = false)
         {
             if (musicClips.ContainsKey(musicName))
@@ -269,14 +277,19 @@ namespace Michsky.UI.Reach
         public void ResumeMusic()
         {
             musicSource.UnPause();
-        }
-
-        public string GetCurrentMusicTrack()
+        }        public string GetCurrentMusicTrack()
         {
             return currentMusicTrack;
         }
 
-        // Sound Effects
+        #endregion
+
+        #region Sound Effects (SFX)
+        
+        /// <summary>
+        /// Plays a sound effect using basic settings (legacy method for backward compatibility)
+        /// </summary>
+        /// <param name="soundName">Name of the sound effect to play</param>
         public void PlaySFX(string soundName)
         {
             if (soundClips.ContainsKey(soundName))
@@ -289,6 +302,186 @@ namespace Michsky.UI.Reach
             }
         }
 
+        /// <summary>
+        /// Plays a sound effect with all advanced settings from SFXLibrary (randomization, 3D audio, etc.)
+        /// </summary>
+        /// <param name="soundName">Name of the sound effect to play</param>
+        /// <param name="position">3D position for spatial audio (optional)</param>
+        public void PlaySFXWithSettings(string soundName, Vector3? position = null)
+        {
+            if (soundLibrary == null)
+            {
+                PlaySFX(soundName); // Fallback to basic method
+                return;
+            }
+
+            var sfxClip = soundLibrary.GetSFXClip(soundName);
+            if (sfxClip == null)
+            {
+                Debug.LogWarning($"Sound effect '{soundName}' not found in SFX library.");
+                return;
+            }
+
+            PlaySFXClipWithSettings(sfxClip, position);
+        }
+
+        /// <summary>
+        /// Plays an SFX clip with all its configured settings
+        /// </summary>
+        /// <param name="sfxClip">The SFX clip configuration to play</param>
+        /// <param name="position">3D position for spatial audio (optional)</param>
+        private void PlaySFXClipWithSettings(SFXLibrary.SFXClip sfxClip, Vector3? position = null)
+        {
+            if (sfxClip?.audioClip == null) return;
+
+            // Determine which audio source to use
+            AudioSource sourceToUse = sfxClip.use3D && position.HasValue ? 
+                CreateTemporary3DAudioSource(position.Value, sfxClip) : sfxSource;
+
+            // Calculate randomized volume
+            float finalVolume = sfxClip.defaultVolume;
+            if (sfxClip.useRandomVolume)
+            {
+                finalVolume = Random.Range(sfxClip.minVolume, sfxClip.maxVolume);
+            }
+
+            // Calculate randomized pitch
+            float finalPitch = sfxClip.defaultPitch;
+            if (sfxClip.useRandomPitch)
+            {
+                finalPitch = Random.Range(sfxClip.minPitch, sfxClip.maxPitch);
+            }
+
+            // Apply settings to audio source
+            if (!sfxClip.use3D)
+            {
+                // 2D audio
+                sourceToUse.pitch = finalPitch;
+                sourceToUse.PlayOneShot(sfxClip.audioClip, finalVolume * masterVolume * sfxVolume);
+            }
+            else
+            {
+                // 3D audio with temporary source
+                sourceToUse.clip = sfxClip.audioClip;
+                sourceToUse.volume = finalVolume * masterVolume * sfxVolume;
+                sourceToUse.pitch = finalPitch;
+                sourceToUse.loop = sfxClip.loopByDefault;
+                sourceToUse.Play();
+
+                // Clean up temporary source after clip finishes
+                if (!sfxClip.loopByDefault)
+                {
+                    StartCoroutine(CleanupTemporaryAudioSource(sourceToUse, sfxClip.audioClip.length / finalPitch));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates a temporary 3D audio source for spatial audio effects
+        /// </summary>
+        private AudioSource CreateTemporary3DAudioSource(Vector3 position, SFXLibrary.SFXClip sfxClip)
+        {
+            GameObject tempAudioObject = new GameObject($"TempAudio_{sfxClip.sfxName}");
+            tempAudioObject.transform.position = position;
+            
+            AudioSource tempSource = tempAudioObject.AddComponent<AudioSource>();
+            tempSource.spatialBlend = 1f; // Full 3D
+            tempSource.minDistance = sfxClip.minDistance;
+            tempSource.maxDistance = sfxClip.maxDistance;
+            tempSource.playOnAwake = false;
+            
+            // Apply audio mixer group if available
+            if (sfxSource.outputAudioMixerGroup != null)
+            {
+                tempSource.outputAudioMixerGroup = sfxSource.outputAudioMixerGroup;
+            }
+
+            return tempSource;
+        }
+
+        /// <summary>
+        /// Cleans up temporary audio sources after they finish playing
+        /// </summary>
+        private IEnumerator CleanupTemporaryAudioSource(AudioSource source, float delay)
+        {
+            yield return new WaitForSeconds(delay + 0.1f); // Small buffer
+            if (source != null && source.gameObject != null)
+            {
+                Destroy(source.gameObject);
+            }
+        }
+
+        /// <summary>
+        /// Plays a random SFX from a specific category
+        /// </summary>
+        /// <param name="category">The SFX category to choose from</param>
+        /// <param name="position">3D position for spatial audio (optional)</param>
+        public void PlayRandomSFXFromCategory(SFXLibrary.SFXCategory category, Vector3? position = null)
+        {
+            if (soundLibrary == null) return;
+
+            var randomSFX = soundLibrary.GetRandomSFXByCategory(category);
+            if (randomSFX != null)
+            {
+                PlaySFXClipWithSettings(randomSFX, position);
+            }
+        }
+
+        /// <summary>
+        /// Plays a random SFX from the entire library
+        /// </summary>
+        /// <param name="position">3D position for spatial audio (optional)</param>
+        public void PlayRandomSFX(Vector3? position = null)
+        {
+            if (soundLibrary == null) return;
+
+            var randomSFX = soundLibrary.GetRandomSFX();
+            if (randomSFX != null)
+            {
+                PlaySFXClipWithSettings(randomSFX, position);
+            }
+        }
+
+        // Convenience methods for common SFX categories
+        public void PlayWeaponSFX(string soundName = null, Vector3? position = null)
+        {
+            if (string.IsNullOrEmpty(soundName))
+                PlayRandomSFXFromCategory(SFXLibrary.SFXCategory.Weapon, position);
+            else
+                PlaySFXWithSettings(soundName, position);
+        }
+
+        public void PlayExplosionSFX(string soundName = null, Vector3? position = null)
+        {
+            if (string.IsNullOrEmpty(soundName))
+                PlayRandomSFXFromCategory(SFXLibrary.SFXCategory.Explosion, position);
+            else
+                PlaySFXWithSettings(soundName, position);
+        }
+
+        public void PlayImpactSFX(string soundName = null, Vector3? position = null)
+        {
+            if (string.IsNullOrEmpty(soundName))
+                PlayRandomSFXFromCategory(SFXLibrary.SFXCategory.Impact, position);
+            else
+                PlaySFXWithSettings(soundName, position);
+        }
+
+        public void PlayMovementSFX(string soundName = null, Vector3? position = null)
+        {
+            if (string.IsNullOrEmpty(soundName))
+                PlayRandomSFXFromCategory(SFXLibrary.SFXCategory.Movement, position);
+            else
+                PlaySFXWithSettings(soundName, position);        }
+
+        #endregion
+
+        #region UI Sound Effects
+        
+        /// <summary>
+        /// Plays a UI sound effect using basic settings (legacy method for backward compatibility)
+        /// </summary>
+        /// <param name="soundName">Name of the UI sound to play</param>
         public void PlayUISFX(string soundName)
         {
             if (uiClips.ContainsKey(soundName))
@@ -327,9 +520,7 @@ namespace Michsky.UI.Reach
             {
                 Debug.LogWarning("Click sound not found in UI library.");
             }
-        }
-
-        public void PlayNotificationSound()
+        }        public void PlayNotificationSound()
         {
             if (uiAudioLibrary.GetNotificationSound() != null)
             {
@@ -341,11 +532,17 @@ namespace Michsky.UI.Reach
             }
         }
 
+        #endregion
+
+        #region Volume Controls
+        
         // Volume Getters
         public float GetMasterVolume() { return masterVolume * 100f; }
         public float GetMusicVolume() { return musicVolume * 100f; }
         public float GetSFXVolume() { return sfxVolume * 100f; }
         public float GetUIVolume() { return uiVolume * 100f; }
+
+        #endregion
 
         #region Fade Effects
         // Fade Effects
@@ -378,49 +575,77 @@ namespace Michsky.UI.Reach
                 elapsed += Time.deltaTime;
                 musicSource.volume = Mathf.MoveTowards(musicSource.volume, 0f, (startVolume / duration) * Time.deltaTime);
                 yield return null;
-            }
-
-            musicSource.Stop();
+            }            musicSource.Stop();
             musicSource.volume = masterVolume * musicVolume;
             currentMusicTrack = null;
         }
+
         #endregion
 
-        // Library Management
+        #region Library Management
+        
+        /// <summary>
+        /// Reloads all audio libraries to refresh the cached clips
+        /// </summary>
         public void ReloadLibraries()
         {
             LoadAudioLibraries();
         }
 
+        /// <summary>
+        /// Gets a list of all available music track names
+        /// </summary>
         public List<string> GetMusicTrackNames()
         {
             return new List<string>(musicClips.Keys);
         }
 
+        /// <summary>
+        /// Gets a list of all available sound effect names
+        /// </summary>
         public List<string> GetSoundEffectNames()
         {
             return new List<string>(soundClips.Keys);
         }
 
+        /// <summary>
+        /// Gets a list of all available UI sound names
+        /// </summary>
         public List<string> GetUISoundNames()
         {
             return new List<string>(uiClips.Keys);
         }
 
-        // Audio Clip Getters
+        /// <summary>
+        /// Gets a music clip by name
+        /// </summary>
+        /// <param name="name">Name of the music track</param>
+        /// <returns>AudioClip if found, null otherwise</returns>
         public AudioClip GetMusicClip(string name)
         {
             return musicClips.ContainsKey(name) ? musicClips[name] : null;
         }
 
+        /// <summary>
+        /// Gets a sound effect clip by name
+        /// </summary>
+        /// <param name="name">Name of the sound effect</param>
+        /// <returns>AudioClip if found, null otherwise</returns>
         public AudioClip GetSoundClip(string name)
         {
             return soundClips.ContainsKey(name) ? soundClips[name] : null;
         }
 
+        /// <summary>
+        /// Gets a UI sound clip by name
+        /// </summary>
+        /// <param name="name">Name of the UI sound</param>
+        /// <returns>AudioClip if found, null otherwise</returns>
         public AudioClip GetUISoundClip(string name)
         {
             return uiClips.ContainsKey(name) ? uiClips[name] : null;
         }
+
+        #endregion
     }
 }

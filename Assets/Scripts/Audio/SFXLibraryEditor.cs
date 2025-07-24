@@ -25,11 +25,10 @@ namespace Michsky.UI.Reach
 
         public override void OnInspectorGUI()
         {
-            GUIContent[] toolbarTabs = new GUIContent[4];
+            GUIContent[] toolbarTabs = new GUIContent[3];
             toolbarTabs[0] = new GUIContent("Content");
             toolbarTabs[1] = new GUIContent("Library");
-            toolbarTabs[2] = new GUIContent("Settings");
-            toolbarTabs[3] = new GUIContent("Debug");
+            toolbarTabs[2] = new GUIContent("Debug");
 
             currentTab = ReachUIEditorHandler.DrawTabs(currentTab, toolbarTabs, customSkin);
 
@@ -37,10 +36,8 @@ namespace Michsky.UI.Reach
                 currentTab = 0;
             if (GUILayout.Button(new GUIContent("Library", "Library"), customSkin.FindStyle("Tab_Resources")))
                 currentTab = 1;
-            if (GUILayout.Button(new GUIContent("Settings", "Settings"), customSkin.FindStyle("Tab_Settings")))
-                currentTab = 2;
             if (GUILayout.Button(new GUIContent("Debug", "Debug"), customSkin.FindStyle("Tab_Content")))
-                currentTab = 3;
+                currentTab = 2;
 
             GUILayout.EndHorizontal();
 
@@ -116,11 +113,6 @@ namespace Michsky.UI.Reach
                     GUILayout.EndScrollView();
                     break;
                 case 2:
-                    ReachUIEditorHandler.DrawHeader(customSkin, "Header_Settings", 6);
-                    enableRandomization.boolValue = ReachUIEditorHandler.DrawToggle(enableRandomization.boolValue, customSkin, "Enable Randomization");
-                    ReachUIEditorHandler.DrawProperty(defaultSFX, customSkin, "Default SFX");
-                    break;
-                case 3:
                     ReachUIEditorHandler.DrawHeader(customSkin, "Header_Support", 6);
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     EditorGUILayout.LabelField(new GUIContent("Library Information"), customSkin.FindStyle("Text"));
