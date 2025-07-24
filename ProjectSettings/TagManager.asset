@@ -7,20 +7,21 @@ TagManager:
   - Wall
   - Obstacle
   - VictoryUI
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Collision Default
   - Water
   - UI
   - PlayerLayer
   - EnemyLayer
   - PickupLayer
   - WallLayer
-  - 
-  - 
-  - 
+  - Interaction
+  - Hitbox
+  - Projectile
   - 
   - 
   - 
@@ -41,24 +42,30 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
   - name: Background
-    uniqueID: 519101433
+    uniqueID: 419497587
+    locked: 0
+  - name: UI
+    uniqueID: 3581332203
     locked: 0
   - name: Ground
-    uniqueID: 1274193037
+    uniqueID: 2659449649
     locked: 0
-  - name: Decors
-    uniqueID: 2250798959
+  - name: WalkInfront
+    uniqueID: 3558902761
     locked: 0
-  - name: LowProps
-    uniqueID: 4252372445
+  - name: Collision
+    uniqueID: 1443390963
     locked: 0
-  - name: Character
-    uniqueID: 3760682697
+  - name: Player
+    uniqueID: 2711021439
     locked: 0
-  - name: HighProps
-    uniqueID: 299940209
+  - name: WalkBehind
+    uniqueID: 1631424491
+    locked: 0
+  - name: Decor
+    uniqueID: 3190819243
+    locked: 0
+  - name: Default
+    uniqueID: 0
     locked: 0
