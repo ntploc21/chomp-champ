@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 namespace Michsky.UI.Reach
 {
@@ -11,7 +12,6 @@ namespace Michsky.UI.Reach
         // Resources
         public GameObject HUDPanel;
         private CanvasGroup cg;
-        private GameDataManager gameDataManager;
 
         // Settings
         [Range(1, 20)] public float fadeSpeed = 8;
@@ -35,22 +35,6 @@ namespace Michsky.UI.Reach
 
         public enum DefaultBehaviour { Visible, Invisible }
 
-        void Start()
-        {
-            // Find the GameDataManager in any loaded scene
-            gameDataManager = FindObjectOfType<GameDataManager>();
-
-            if (gameDataManager != null)
-            {
-                // Subscribe to the GameSessionDataChanged event
-                SubscribeToEvents();
-            }
-            else
-            {
-                StartCoroutine(FindGameDataManagerWithDelay());
-            }
-        }
-
         void Awake()
         {
             Debug.Log("HUDManager Awake called.");
@@ -72,6 +56,11 @@ namespace Michsky.UI.Reach
             else if (defaultBehaviour == DefaultBehaviour.Invisible) { cg.alpha = 0; isOn = false; onSetInvisible.Invoke(); }
 
             Debug.Log("HUDManager Awake completed.");
+        }
+
+        void Start()
+        {
+            SubscribeToEvents();
         }
 
         void OnDestroy()
@@ -124,8 +113,9 @@ namespace Michsky.UI.Reach
             }
         }
 
-        private void SubscribeToEvents()
+        public void SubscribeToEvents()
         {
+            GameDataManager gameDataManager = GUIManager.Instance.GameDataManager;
             if (gameDataManager != null)
             {
                 gameDataManager.OnDataChanged.AddListener(OnDataChanged);
@@ -134,14 +124,15 @@ namespace Michsky.UI.Reach
             }
         }
 
-        private void UnsubscribeFromEvents()
+        public void UnsubscribeFromEvents()
         {
+            GameDataManager gameDataManager = GUIManager.Instance.GameDataManager;
             if (gameDataManager != null)
             {
                 gameDataManager.OnDataChanged.RemoveListener(OnDataChanged);
                 gameDataManager.OnScoreChanged.RemoveListener(OnScoreChanged);
                 gameDataManager.OnLivesChanged.RemoveListener(OnLivesChanged);
-            }
+            } 
         }
 
         public void SetVisible()
@@ -196,27 +187,6 @@ namespace Michsky.UI.Reach
             }
 
             cg.alpha = 0;
-        }
-
-        private System.Collections.IEnumerator FindGameDataManagerWithDelay()
-        {
-            float timeout = 5f; // Wait up to 5 seconds
-            float elapsed = 0f;
-
-            while (elapsed < timeout)
-            {
-                gameDataManager = FindObjectOfType<GameDataManager>();
-                if (gameDataManager != null)
-                {
-                    SubscribeToEvents();
-                    yield break;
-                }
-
-                yield return new WaitForSeconds(0.1f);
-                elapsed += 0.1f;
-            }
-
-            Debug.LogWarning("HUDManager: Could not find GameDataManager after timeout");
         }
     }
 }

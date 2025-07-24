@@ -38,6 +38,7 @@ public class GameDataManager : MonoBehaviour
   public GameSessionData SessionData => gameSessionData;
   public LevelData LevelConfig => levelData;
   #endregion
+  
   #region Unity Events
   private void Awake()
   {
@@ -141,6 +142,12 @@ public class GameDataManager : MonoBehaviour
   public void LoseLife()
   {
     gameSessionData.lives = Mathf.Max(0, gameSessionData.lives - 1);
+
+    if (gameSessionData.resetXPOnDeath)
+    {
+      gameSessionData.totalXP -= gameSessionData.currentXP; // Deduct current XP from total XP
+      gameSessionData.currentXP = 0f; // Reset XP to zero on death
+    }
 
     if (gameSessionData.lives <= 0)
     {

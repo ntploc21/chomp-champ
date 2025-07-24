@@ -23582,7 +23582,7 @@ MonoBehaviour:
   isPaused: 0
   gameInProgress: 0
   playerCore: {fileID: 2002656654}
-  spawnManager: {fileID: 0}
+  spawnManager: {fileID: 1385091527}
   gameCamera: {fileID: 519420031}
   pauseMenuManager: {fileID: 0}
   gameOverDelay: 1
@@ -23590,7 +23590,7 @@ MonoBehaviour:
   allowPause: 1
   victoryLevel: 4
   victoryScore: -1
-  victoryTime: -1
+  victoryTime: 10
   OnStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -32583,6 +32583,7 @@ MonoBehaviour:
     currentLevel: 1
     currentXP: 0
     xpToNextLevel: 100
+    resetXPOnDeath: 1
     isAlive: 1
     isInvincible: 0
     lastPosition: {x: 0, y: 0}

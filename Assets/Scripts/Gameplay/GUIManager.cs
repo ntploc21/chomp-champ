@@ -6,23 +6,30 @@ using TMPro;
 /// Singleton UI Manager that handles canvas references across multiple scenes
 /// Follows Single Responsibility Principle by focusing only on UI management
 /// </summary>
-public class UIManager : MonoBehaviour
+public class GUIManager : MonoBehaviour
 {
     #region Singleton
-    public static UIManager Instance { get; private set; }
+    public static GUIManager Instance { get; private set; }
     #endregion
 
     #region Canvas References
     [SerializeField] private GameObject victoryCanvas;
     [SerializeField] private GameObject gameOverCanvas;
-    
+
+    [SerializeField] private Michsky.UI.Reach.HUDManager hudManager; // Reference to HUDManager for updating UI elements
+
     // Current level tracking for replay functionality
     private string currentLevelScene = "";
+    #endregion
+
+    #region Internal Data
+    private GameDataManager gameDataManager;
     #endregion
 
     #region Properties
     public GameObject VictoryCanvas => victoryCanvas;
     public GameObject GameOverCanvas => gameOverCanvas;
+    public GameDataManager GameDataManager => gameDataManager;
     #endregion
 
     #region Unity Lifecycle
@@ -40,6 +47,11 @@ public class UIManager : MonoBehaviour
             Debug.LogWarning("Multiple UIManager instances detected. Destroying duplicate.");
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        FindGameDataManagerInScenes();
     }
 
     private void OnDestroy()
@@ -71,6 +83,24 @@ public class UIManager : MonoBehaviour
         gameOverCanvas = FindCanvasInScenes("Canvas - Game Over");
         LogCanvasStatus();
     }
+
+    /// <summary>
+    /// Find GameDataManager in any loaded scene
+    /// This is used to subscribe to game data changes
+    /// </summary>
+    public void FindGameDataManagerInScenes()
+    {
+        gameDataManager = FindObjectOfType<GameDataManager>();
+        if (gameDataManager != null)
+        {
+            Debug.Log("GameDataManager found in scene");
+            hudManager.SubscribeToEvents();
+        }
+        else
+        {
+            Debug.LogWarning("GameDataManager not found in any loaded scene");
+        }
+    }
     #endregion
 
     #region Canvas Control
@@ -92,14 +122,14 @@ public class UIManager : MonoBehaviour
             // Enable cursor for UI interaction (like pause menu does)
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            
+
             // Track current level for replay functionality
             TrackCurrentLevel();
 
             // Update text elements with game statistics
             UpdateCanvasText(victoryCanvas, score, gameTime, enemiesEaten);
 
-            Debug.Log($"Victory Canvas shown with stats - Score: {score}, Time: {gameTime}, Enemies: {enemiesEaten} (Game Frozen)");
+            // Debug.Log($"Victory Canvas shown with stats - Score: {score}, Time: {gameTime}, Enemies: {enemiesEaten} (Game Frozen)");
         }
         else
         {
@@ -152,7 +182,7 @@ public class UIManager : MonoBehaviour
             // Enable cursor for UI interaction (like pause menu does)
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            
+
             // Track current level for replay functionality
             TrackCurrentLevel();
 
@@ -202,7 +232,7 @@ public class UIManager : MonoBehaviour
         HideVictoryCanvas();
         HideGameOverCanvas();
     }
-    
+
     /// <summary>
     /// Replay/Restart the current level
     /// Unloads current level scene and reloads it additively to Persistent Game Scene
@@ -218,19 +248,14 @@ public class UIManager : MonoBehaviour
         Debug.Log($"Replaying current level: {currentLevelScene}");
 
         // Send reset data first
-        GameDataManager gameDataManager = FindObjectOfType<GameDataManager>();
-        if (gameDataManager != null)
-        {
-            gameDataManager.ResetSessionData();
-        }
+        gameDataManager.ResetSessionData();
 
-        
         // Hide all UI canvases first
         HideAllCanvases();
-        
+
         // Reset time scale before scene transition
         Time.timeScale = 1f;
-        
+
         // Try multiple scene loading approaches based on what's available
         if (TryReplayWithReachUISceneManager())
         {
@@ -246,6 +271,9 @@ public class UIManager : MonoBehaviour
             ReplayWithUnitySceneManager();
             Debug.Log("Replay initiated using Unity Scene Manager fallback");
         }
+
+        // Reset the game data manager reference after replay
+        gameDataManager = null;
     }
     #endregion
 
@@ -371,47 +399,47 @@ public class UIManager : MonoBehaviour
             if (objectName.Contains("score") && objectName.Contains("text"))
             {
                 textComp.text = Mathf.RoundToInt(score).ToString();
-                Debug.Log($"Updated {textComp.gameObject.name} with score: {score}");
+                // Debug.Log($"Updated {textComp.gameObject.name} with score: {score}");
             }
             // Update timer/time text elements
             else if ((objectName.Contains("timer") || objectName.Contains("time")) && objectName.Contains("text"))
             {
                 textComp.text = gameTime;
-                Debug.Log($"Updated {textComp.gameObject.name} with time: {gameTime}");
+                // Debug.Log($"Updated {textComp.gameObject.name} with time: {gameTime}");
             }
             // Update enemy text elements
             else if (objectName.Contains("enemy") && objectName.Contains("text"))
             {
                 textComp.text = enemiesEaten.ToString();
-                Debug.Log($"Updated {textComp.gameObject.name} with enemies eaten: {enemiesEaten}");
+                // Debug.Log($"Updated {textComp.gameObject.name} with enemies eaten: {enemiesEaten}");
             }
             // Backup: Try to find text elements with common patterns
             else if (objectName.Contains("final") && objectName.Contains("score"))
             {
                 textComp.text = Mathf.RoundToInt(score).ToString();
-                Debug.Log($"Updated {textComp.gameObject.name} with final score: {score}");
+                // Debug.Log($"Updated {textComp.gameObject.name} with final score: {score}");
             }
             else if (objectName.Contains("play") && objectName.Contains("time"))
             {
                 textComp.text = gameTime;
-                Debug.Log($"Updated {textComp.gameObject.name} with play time: {gameTime}");
+                // Debug.Log($"Updated {textComp.gameObject.name} with play time: {gameTime}");
             }
             else if (objectName.Contains("kills") || objectName.Contains("defeated"))
             {
                 textComp.text = enemiesEaten.ToString();
-                Debug.Log($"Updated {textComp.gameObject.name} with enemies defeated: {enemiesEaten}");
+                // Debug.Log($"Updated {textComp.gameObject.name} with enemies defeated: {enemiesEaten}");
             }
         }
 
         // If no specific text elements were found, log available components for debugging
-        if (textComponents.Length > 0)
-        {
-            Debug.Log($"Available text components in {canvas.name}:");
-            foreach (TextMeshProUGUI textComp in textComponents)
-            {
-                Debug.Log($"  - {textComp.gameObject.name}: '{textComp.text}'");
-            }
-        }
+        // if (textComponents.Length > 0)
+        // {
+        //     Debug.Log($"Available text components in {canvas.name}:");
+        //     foreach (TextMeshProUGUI textComp in textComponents)
+        //     {
+        //         Debug.Log($"  - {textComp.gameObject.name}: '{textComp.text}'");
+        //     }
+        // }
     }
     #endregion
 
@@ -426,7 +454,7 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {
             Scene scene = SceneManager.GetSceneAt(i);
-            
+
             // Skip the persistent scene, look for level scenes
             if (scene.name != "Persistent Game State" && scene.name.Contains("Level"))
             {
@@ -435,12 +463,12 @@ public class UIManager : MonoBehaviour
                 return;
             }
         }
-        
+
         // Fallback: use active scene if no specific level scene found
         currentLevelScene = SceneManager.GetActiveScene().name;
         Debug.Log($"Fallback: Tracked active scene for replay: {currentLevelScene}");
     }
-    
+
     /// <summary>
     /// Try to replay using Reach UI Scene Manager
     /// </summary>
@@ -448,7 +476,7 @@ public class UIManager : MonoBehaviour
     {
         // Look for Reach UI Scene Manager
         Michsky.UI.Reach.SceneManager reachSceneManager = FindObjectOfType<Michsky.UI.Reach.SceneManager>();
-        
+
         if (reachSceneManager != null)
         {            // Try to find the current level in the scene manager's list
             for (int i = 0; i < reachSceneManager.scenes.Count; i++)
@@ -457,25 +485,26 @@ public class UIManager : MonoBehaviour
                 {
                     Debug.Log($"Found level in Reach UI Scene Manager, reloading index {i}");
                     reachSceneManager.LoadSceneByIndex(i);
-                    
+
                     // Delay refresh of SpawnManager to allow scene to load
                     StartCoroutine(DelayedSpawnManagerRefresh());
+
                     return true;
                 }
             }
-            
+
             // If not found in list, try direct scene name loading
             Debug.Log($"Level not found in Reach UI Scene Manager list, trying direct load");
             reachSceneManager.LoadSceneByName(currentLevelScene);
-            
+
             // Delay refresh of SpawnManager to allow scene to load
             StartCoroutine(DelayedSpawnManagerRefresh());
             return true;
         }
-        
+
         return false;
     }
-    
+
     /// <summary>
     /// Try to replay using Loading Screen Studio Manager
     /// </summary>
@@ -483,20 +512,20 @@ public class UIManager : MonoBehaviour
     {
         // Look for LSS Manager
         Michsky.LSS.LSS_Manager lssManager = FindObjectOfType<Michsky.LSS.LSS_Manager>();
-        
+
         if (lssManager != null)
         {
             Debug.Log($"Found LSS Manager, reloading level: {currentLevelScene}");
-            
+
             // For additive loading (maintaining Persistent Game Scene)
             // First unload the current level, then load it again
             StartCoroutine(ReplayWithLSSCoroutine(lssManager));
             return true;
         }
-        
+
         return false;
     }
-    
+
     /// <summary>
     /// Coroutine to handle LSS replay with proper scene unloading/loading
     /// </summary>
@@ -505,20 +534,23 @@ public class UIManager : MonoBehaviour
         // Unload current level scene
         AsyncOperation unloadOp = SceneManager.UnloadSceneAsync(currentLevelScene);
         yield return unloadOp;
-        
+
         // Small delay to ensure clean unload
-        yield return new WaitForSecondsRealtime(0.1f);
-        
+        yield return new WaitForSecondsRealtime(0.5f);
+
         // Load the level scene additively
         lssManager.LoadSceneAdditive(currentLevelScene);
-        
+
         // Wait a frame for scene to fully load
         yield return new WaitForEndOfFrame();
-        
+
         // Refresh SpawnManager's level scene reference
         RefreshSpawnManagerLevelScene();
+
+        // Also refresh GameDataManager after loading
+        FindGameDataManagerInScenes();
     }
-    
+
     /// <summary>
     /// Fallback replay using Unity's SceneManager directly
     /// </summary>
@@ -526,36 +558,36 @@ public class UIManager : MonoBehaviour
     {
         StartCoroutine(ReplayWithUnityCoroutine());
     }
-    
+
     /// <summary>
     /// Coroutine to handle Unity SceneManager replay
     /// </summary>
     private System.Collections.IEnumerator ReplayWithUnityCoroutine()
     {
         Debug.Log($"Unloading current level: {currentLevelScene}");
-        
+
         // Unload current level scene
         AsyncOperation unloadOp = SceneManager.UnloadSceneAsync(currentLevelScene);
         yield return unloadOp;
-        
+
         // Small delay to ensure clean unload
         yield return new WaitForSecondsRealtime(0.1f);
-        
+
         Debug.Log($"Reloading level additively: {currentLevelScene}");
-        
+
         // Load the level scene additively to maintain Persistent Game Scene
         AsyncOperation loadOp = SceneManager.LoadSceneAsync(currentLevelScene, LoadSceneMode.Additive);
         yield return loadOp;
-        
+
         // Wait a frame for scene to fully load
         yield return new WaitForEndOfFrame();
-        
+
         Debug.Log($"Level {currentLevelScene} reloaded successfully");
-        
+
         // Refresh SpawnManager's level scene reference
-        RefreshSpawnManagerLevelScene();
+        StartCoroutine(DelayedSpawnManagerRefresh());
     }
-    
+
     /// <summary>
     /// Get the current level scene name (for external use)
     /// </summary>
@@ -563,7 +595,7 @@ public class UIManager : MonoBehaviour
     {
         return currentLevelScene;
     }
-    
+
     /// <summary>
     /// Manually set the current level scene (for external use)
     /// </summary>
@@ -599,11 +631,17 @@ public class UIManager : MonoBehaviour
     /// </summary>
     private System.Collections.IEnumerator DelayedSpawnManagerRefresh()
     {
-        // Wait for scene to fully load and initialize
-        yield return new WaitForSecondsRealtime(0.5f);
-        
-        // Refresh SpawnManager's level scene reference
-        RefreshSpawnManagerLevelScene();
+        var tries = 0;
+        var maxTries = 5;
+
+        while (tries < maxTries)
+        {
+            // Try to find SpawnManager in the scene
+            RefreshSpawnManagerLevelScene();
+
+            tries++;
+            yield return new WaitForSecondsRealtime(2f);
+        }
     }
     #endregion
 }

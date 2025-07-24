@@ -54160,6 +54160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a8d350b32d3074a97a4660d9f47d36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiManagerComponent: {fileID: 1309030722}
   HUDPanel: {fileID: 1384546200}
   fadeSpeed: 8
   defaultBehaviour: 0

@@ -31,6 +31,9 @@ public class GameSessionData
   public float xpToNextLevel = 100f;
 
   [Header("Game State")]
+  [Tooltip("Reset XP to zero when the player dies?")]
+  public bool resetXPOnDeath = true; // I.e., if the player at level 2 and die, he still at level 2 but currentXP is 0
+
   [Tooltip("Is the player currently alive?")]
   public bool isAlive = true;
   [Tooltip("Is the player currently invincible?")]
