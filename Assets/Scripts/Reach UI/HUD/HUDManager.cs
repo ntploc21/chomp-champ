@@ -47,7 +47,7 @@ namespace Michsky.UI.Reach
             }
             else
             {
-                Debug.LogWarning("GameDataManager not found in the scene.");
+                StartCoroutine(FindGameDataManagerWithDelay());
             }
         }
 
@@ -196,6 +196,27 @@ namespace Michsky.UI.Reach
             }
 
             cg.alpha = 0;
+        }
+
+        private System.Collections.IEnumerator FindGameDataManagerWithDelay()
+        {
+            float timeout = 5f; // Wait up to 5 seconds
+            float elapsed = 0f;
+
+            while (elapsed < timeout)
+            {
+                gameDataManager = FindObjectOfType<GameDataManager>();
+                if (gameDataManager != null)
+                {
+                    SubscribeToEvents();
+                    yield break;
+                }
+
+                yield return new WaitForSeconds(0.1f);
+                elapsed += 0.1f;
+            }
+
+            Debug.LogWarning("HUDManager: Could not find GameDataManager after timeout");
         }
     }
 }
