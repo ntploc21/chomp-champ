@@ -59,6 +59,8 @@ public class GameDataManager : MonoBehaviour
   private void Start()
   {
     lastAutoSaveTime = Time.time;
+
+    GUIManager.Instance.FindGameDataManagerInScenes();
   }
 
   private void Update()
