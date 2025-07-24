@@ -23590,7 +23590,7 @@ MonoBehaviour:
   allowPause: 1
   victoryLevel: 4
   victoryScore: -1
-  victoryTime: 10
+  victoryTime: -1
   OnStateChanged:
     m_PersistentCalls:
       m_Calls: []
