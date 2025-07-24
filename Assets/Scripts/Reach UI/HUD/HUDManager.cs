@@ -11,6 +11,7 @@ namespace Michsky.UI.Reach
         // Resources
         public GameObject HUDPanel;
         private CanvasGroup cg;
+        private GameDataManager gameDataManager;
 
         // Settings
         [Range(1, 20)] public float fadeSpeed = 8;
@@ -33,6 +34,50 @@ namespace Michsky.UI.Reach
         private Image imageLevel2_2;
 
         public enum DefaultBehaviour { Visible, Invisible }
+
+        void Start()
+        {
+            // Find the GameDataManager in any loaded scene
+            gameDataManager = FindObjectOfType<GameDataManager>();
+
+            if (gameDataManager != null)
+            {
+                // Subscribe to the GameSessionDataChanged event
+                SubscribeToEvents();
+            }
+            else
+            {
+                Debug.LogWarning("GameDataManager not found in the scene.");
+            }
+        }
+
+        void Awake()
+        {
+            Debug.Log("HUDManager Awake called.");
+
+            if (HUDPanel == null)
+                return;
+
+            cg = HUDPanel.AddComponent<CanvasGroup>();
+
+            progressBar = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("ProgressBar")?.Find("Background")?.Find("Bar");
+            scoreText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Score")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
+            livesText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Lives")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
+            imageLevel1 = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("Level1")?.Find("Image")?.GetComponent<Image>();
+            imageLevel1_2 = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("Level1")?.Find("Image2")?.GetComponent<Image>();
+            imageLevel2 = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("Level2")?.Find("Image")?.GetComponent<Image>();
+            imageLevel2_2 = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("Level2")?.Find("Image2")?.GetComponent<Image>();
+
+            if (defaultBehaviour == DefaultBehaviour.Visible) { cg.alpha = 1; isOn = true; onSetVisible.Invoke(); }
+            else if (defaultBehaviour == DefaultBehaviour.Invisible) { cg.alpha = 0; isOn = false; onSetInvisible.Invoke(); }
+
+            Debug.Log("HUDManager Awake completed.");
+        }
+
+        void OnDestroy()
+        {
+            UnsubscribeFromEvents();
+        }
 
         public void OnDataChanged(GameSessionData gameSessionData)
         {
@@ -79,27 +124,24 @@ namespace Michsky.UI.Reach
             }
         }
 
-        void Awake()
+        private void SubscribeToEvents()
         {
-            Debug.Log("HUDManager Awake called.");
+            if (gameDataManager != null)
+            {
+                gameDataManager.OnDataChanged.AddListener(OnDataChanged);
+                gameDataManager.OnScoreChanged.AddListener(OnScoreChanged);
+                gameDataManager.OnLivesChanged.AddListener(OnLivesChanged);
+            }
+        }
 
-            if (HUDPanel == null)
-                return;
-
-            cg = HUDPanel.AddComponent<CanvasGroup>();
-
-            progressBar = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("ProgressBar")?.Find("Background")?.Find("Bar");
-            scoreText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Score")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
-            livesText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Lives")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
-            imageLevel1 = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("Level1")?.Find("Image")?.GetComponent<Image>();
-            imageLevel1_2 = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("Level1")?.Find("Image2")?.GetComponent<Image>();
-            imageLevel2 = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("Level2")?.Find("Image")?.GetComponent<Image>();
-            imageLevel2_2 = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("Level2")?.Find("Image2")?.GetComponent<Image>();
-
-            if (defaultBehaviour == DefaultBehaviour.Visible) { cg.alpha = 1; isOn = true; onSetVisible.Invoke(); }
-                else if (defaultBehaviour == DefaultBehaviour.Invisible) { cg.alpha = 0; isOn = false; onSetInvisible.Invoke(); }
-
-            Debug.Log("HUDManager Awake completed.");
+        private void UnsubscribeFromEvents()
+        {
+            if (gameDataManager != null)
+            {
+                gameDataManager.OnDataChanged.RemoveListener(OnDataChanged);
+                gameDataManager.OnScoreChanged.RemoveListener(OnScoreChanged);
+                gameDataManager.OnLivesChanged.RemoveListener(OnLivesChanged);
+            }
         }
 
         public void SetVisible()
