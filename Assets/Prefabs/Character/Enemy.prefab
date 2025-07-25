@@ -97,7 +97,7 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.5}
   serializedVersion: 2
   m_Radius: 0.5
 --- !u!114 &3471395467810495185
@@ -270,8 +270,8 @@ SortingGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289249766163330978}
   m_Enabled: 1
-  m_SortingLayerID: -534284599
-  m_SortingLayer: 5
+  m_SortingLayerID: -1583945857
+  m_SortingLayer: -3
   m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!95 &7170029614084274689

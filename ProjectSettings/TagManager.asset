@@ -19,10 +19,10 @@ TagManager:
   - EnemyLayer
   - PickupLayer
   - WallLayer
+  - GroundLayer
   - Interaction
   - Hitbox
   - Projectile
-  - 
   - 
   - 
   - 
