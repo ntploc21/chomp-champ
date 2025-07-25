@@ -65,7 +65,7 @@ namespace Michsky.UI.Reach
 
         void OnDestroy()
         {
-            UnsubscribeFromEvents();
+            // UnsubscribeFromEvents();
         }
 
         public void OnDataChanged(GameSessionData gameSessionData)
