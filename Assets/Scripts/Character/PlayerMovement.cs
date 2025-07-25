@@ -310,11 +310,19 @@ public class PlayerMovement : MonoBehaviour
     // flip sprite to left or right based on movement direction
     if (currentVelocity.x < 0)
     {
-      transform.localScale = new Vector3(-1, 1, 1); // Flip to left
+      transform.localScale = new Vector3(
+        transform.localScale.x * (transform.localScale.x < 0 ? 1 : -1),
+        transform.localScale.y,
+        transform.localScale.z);
+      //transform.localScale = new Vector3(-1, 1, 1); // Flip to left
     }
     else if (currentVelocity.x > 0)
     {
-      transform.localScale = new Vector3(1, 1, 1); // Flip to right
+      transform.localScale = new Vector3(
+        transform.localScale.x * (transform.localScale.x < 0 ? -1 : 1),
+        transform.localScale.y,
+        transform.localScale.z);
+      // transform.localScale = new Vector3(1, 1, 1); // Flip to right
     }
   }
 
