@@ -133,7 +133,7 @@ public class PlayerEffect : MonoBehaviour
     // Play eat sound
     if (UIManagerAudio.instance != null)
     {
-      UIManagerAudio.instance.PlaySFX("EatSound");
+      // UIManagerAudio.instance.PlaySFX("EatSound");
     }
 
     // Play eat particles
