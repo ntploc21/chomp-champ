@@ -82,12 +82,26 @@ namespace Michsky.UI.Reach
                     if (imageLevel1_2 != null)
                         imageLevel1_2.color = new Color(1, 1, 1, 1);
                 }
+                else
+                {
+                    if (imageLevel1 != null)
+                        imageLevel1.color = new Color(0, 0, 0, 1);
+                    if (imageLevel1_2 != null)
+                        imageLevel1_2.color = new Color(0, 0, 0, 1);
+                }
                 if (progress >= 2f / 3f - 1e-9)
                 {
                     if (imageLevel2 != null)
                         imageLevel2.color = new Color(1, 1, 1, 1);
                     if (imageLevel2_2 != null)
                         imageLevel2_2.color = new Color(1, 1, 1, 1);
+                }
+                else
+                {
+                    if (imageLevel2 != null)
+                        imageLevel2.color = new Color(0, 0, 0, 1);
+                    if (imageLevel2_2 != null)
+                        imageLevel2_2.color = new Color(0, 0, 0, 1);
                 }
                 // Debug.Log($"ProgressBar scale set to: {progressBar.localScale}");
             }

@@ -123,6 +123,24 @@ MonoBehaviour:
     use3D: 0
     minDistance: 1
     maxDistance: 500
+  - sfxName: GrowthSound
+    displayName: GrowthSound
+    audioClip: {fileID: 8300000, guid: 28a2e08dc623a4a4c9e0093368d02d00, type: 3}
+    defaultVolume: 1
+    defaultPitch: 1
+    spatialBlend: 0
+    loopByDefault: 0
+    category: 9
+    customCategory: 
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    use3D: 0
+    minDistance: 1
+    maxDistance: 500
   defaultSFX:
     sfxName: 
     displayName: 
