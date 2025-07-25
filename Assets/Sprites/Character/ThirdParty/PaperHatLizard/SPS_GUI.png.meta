@@ -3,7 +3,7 @@ guid: fd2aecd1af34986489ae2b6e9c2501b8
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -2017,95 +2023,94 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      GUI_Spritesheet-export_18: 491126712
-      GUI_Spritesheet-export_10: -558914811
-      GUI_Spritesheet-export_27: -487891604
-      GUI_Spritesheet-export_66: -1645157334
-      GUI_Spritesheet-export_58: 1095870427
-      GUI_Spritesheet-export_31: 1683676608
-      GUI_Spritesheet-export_56: -508120607
-      GUI_Spritesheet-export_34: 836996620
-      GUI_Spritesheet-export_49: -87856419
-      SPS_GUI_16: -1772095805
-      GUI_Spritesheet-export_67: -811945282
-      GUI_Spritesheet-export_8: 1181205086
-      GUI_Spritesheet-export_61: 1610620854
-      GUI_Spritesheet-export_63: -1022707892
-      GUI_Spritesheet-export_53: -491117512
-      GUI_Spritesheet-export_37: -2102531967
-      GUI_Spritesheet-export_26: 1266597498
-      SPS_GUI_15: 419123229
-      GUI_Spritesheet-export_44: -117338440
-      GUI_Spritesheet-export_71: -744002093
-      GUI_Spritesheet-export_32: 1325921675
-      GUI_Spritesheet-export_41: -357658173
-      GUI_Spritesheet-export_51: -1442231693
-      SPS_GUI_3: 1676790061
-      GUI_Spritesheet-export_2: 2061705485
-      GUI_Spritesheet-export_23: -1308124546
-      GUI_Spritesheet-export_29: -1745254287
-      GUI_Spritesheet-export_19: -92269721
-      GUI_Spritesheet-export_59: -1882347854
-      SPS_GUI_13: -824464324
-      GUI_Spritesheet-export_65: 987083187
-      SPS_GUI_12: 2007578060
-      GUI_Spritesheet-export_38: 396310537
-      SPS_GUI_8: -248674585
-      GUI_Spritesheet-export_22: -646921389
-      GUI_Spritesheet-export_30: 496052811
-      GUI_Spritesheet-export_47: -827782456
-      GUI_Spritesheet-export_15: -742943463
-      GUI_Spritesheet-export_64: 1274501863
-      GUI_Spritesheet-export_48: 2054828684
-      GUI_Spritesheet-export_57: 1269947344
-      GUI_Spritesheet-export_5: 910661684
-      GUI_Spritesheet-export_45: 811364011
-      GUI_Spritesheet-export_17: -46983152
-      GUI_Spritesheet-export_11: 381409632
-      GUI_Spritesheet-export_72: 1755141318
-      SPS_GUI_9: -125337985
-      GUI_Spritesheet-export_14: -2009603198
-      GUI_Spritesheet-export_16: -509038110
-      SPS_GUI_11: -426851186
-      SPS_GUI_10: 885781763
-      GUI_Spritesheet-export_39: 673042448
-      SPS_GUI_2: 932748639
-      GUI_Spritesheet-export_62: 652434640
-      SPS_GUI_1: -971926965
-      GUI_Spritesheet-export_52: 448240938
-      GUI_Spritesheet-export_6: 776234968
-      GUI_Spritesheet-export_36: 548018584
-      GUI_Spritesheet-export_28: 1789068792
-      SPS_GUI_4: -587139417
-      GUI_Spritesheet-export_43: 567610833
-      GUI_Spritesheet-export_12: -1331648943
-      GUI_Spritesheet-export_33: 1581307299
-      GUI_Spritesheet-export_40: -934060436
-      SPS_GUI_0: -1164569808
-      GUI_Spritesheet-export_50: 783625353
-      GUI_Spritesheet-export_24: 709714545
-      SPS_GUI_5: -485231403
-      GUI_Spritesheet-export_54: 2059989182
-      SPS_GUI_6: -1039793918
-      SPS_GUI_14: -467190130
-      GUI_Spritesheet-export_46: 416732651
-      GUI_Spritesheet-export_13: -70053312
-      GUI_Spritesheet-export_35: 1664750454
-      GUI_Spritesheet-export_1: -1407974532
-      GUI_Spritesheet-export_69: -2007288576
-      GUI_Spritesheet-export_9: -1371641372
       GUI_Spritesheet-export_0: 1499172189
-      SPS_GUI_7: 711159806
-      GUI_Spritesheet-export_68: -979122462
+      GUI_Spritesheet-export_1: -1407974532
+      GUI_Spritesheet-export_10: -558914811
+      GUI_Spritesheet-export_11: 381409632
+      GUI_Spritesheet-export_12: -1331648943
+      GUI_Spritesheet-export_13: -70053312
+      GUI_Spritesheet-export_14: -2009603198
+      GUI_Spritesheet-export_15: -742943463
+      GUI_Spritesheet-export_16: -509038110
+      GUI_Spritesheet-export_17: -46983152
+      GUI_Spritesheet-export_18: 491126712
+      GUI_Spritesheet-export_19: -92269721
+      GUI_Spritesheet-export_2: 2061705485
       GUI_Spritesheet-export_20: 502081567
-      GUI_Spritesheet-export_3: -50776871
-      GUI_Spritesheet-export_55: -637868742
-      GUI_Spritesheet-export_25: 550069796
       GUI_Spritesheet-export_21: 366804271
+      GUI_Spritesheet-export_22: -646921389
+      GUI_Spritesheet-export_23: -1308124546
+      GUI_Spritesheet-export_24: 709714545
+      GUI_Spritesheet-export_25: 550069796
+      GUI_Spritesheet-export_26: 1266597498
+      GUI_Spritesheet-export_27: -487891604
+      GUI_Spritesheet-export_28: 1789068792
+      GUI_Spritesheet-export_29: -1745254287
+      GUI_Spritesheet-export_3: -50776871
+      GUI_Spritesheet-export_30: 496052811
+      GUI_Spritesheet-export_31: 1683676608
+      GUI_Spritesheet-export_32: 1325921675
+      GUI_Spritesheet-export_33: 1581307299
+      GUI_Spritesheet-export_34: 836996620
+      GUI_Spritesheet-export_35: 1664750454
+      GUI_Spritesheet-export_36: 548018584
+      GUI_Spritesheet-export_37: -2102531967
+      GUI_Spritesheet-export_38: 396310537
+      GUI_Spritesheet-export_39: 673042448
+      GUI_Spritesheet-export_40: -934060436
+      GUI_Spritesheet-export_41: -357658173
       GUI_Spritesheet-export_42: 1726937278
-  spritePackingTag: 
+      GUI_Spritesheet-export_43: 567610833
+      GUI_Spritesheet-export_44: -117338440
+      GUI_Spritesheet-export_45: 811364011
+      GUI_Spritesheet-export_46: 416732651
+      GUI_Spritesheet-export_47: -827782456
+      GUI_Spritesheet-export_48: 2054828684
+      GUI_Spritesheet-export_49: -87856419
+      GUI_Spritesheet-export_5: 910661684
+      GUI_Spritesheet-export_50: 783625353
+      GUI_Spritesheet-export_51: -1442231693
+      GUI_Spritesheet-export_52: 448240938
+      GUI_Spritesheet-export_53: -491117512
+      GUI_Spritesheet-export_54: 2059989182
+      GUI_Spritesheet-export_55: -637868742
+      GUI_Spritesheet-export_56: -508120607
+      GUI_Spritesheet-export_57: 1269947344
+      GUI_Spritesheet-export_58: 1095870427
+      GUI_Spritesheet-export_59: -1882347854
+      GUI_Spritesheet-export_6: 776234968
+      GUI_Spritesheet-export_61: 1610620854
+      GUI_Spritesheet-export_62: 652434640
+      GUI_Spritesheet-export_63: -1022707892
+      GUI_Spritesheet-export_64: 1274501863
+      GUI_Spritesheet-export_65: 987083187
+      GUI_Spritesheet-export_66: -1645157334
+      GUI_Spritesheet-export_67: -811945282
+      GUI_Spritesheet-export_68: -979122462
+      GUI_Spritesheet-export_69: -2007288576
+      GUI_Spritesheet-export_71: -744002093
+      GUI_Spritesheet-export_72: 1755141318
+      GUI_Spritesheet-export_8: 1181205086
+      GUI_Spritesheet-export_9: -1371641372
+      SPS_GUI_0: -1164569808
+      SPS_GUI_1: -971926965
+      SPS_GUI_10: 885781763
+      SPS_GUI_11: -426851186
+      SPS_GUI_12: 2007578060
+      SPS_GUI_13: -824464324
+      SPS_GUI_14: -467190130
+      SPS_GUI_15: 419123229
+      SPS_GUI_16: -1772095805
+      SPS_GUI_2: 932748639
+      SPS_GUI_3: 1676790061
+      SPS_GUI_4: -587139417
+      SPS_GUI_5: -485231403
+      SPS_GUI_6: -1039793918
+      SPS_GUI_7: 711159806
+      SPS_GUI_8: -248674585
+      SPS_GUI_9: -125337985
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

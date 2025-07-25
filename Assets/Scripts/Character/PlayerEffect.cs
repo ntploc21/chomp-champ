@@ -271,6 +271,10 @@ public class PlayerEffect : MonoBehaviour
 
   public void PlayRespawnEffect()
   {
+    if (UIManagerAudio.instance != null)
+    {
+      UIManagerAudio.instance.PlaySFX("SpawnSound");
+    }
     // Similar to spawn but with different timing
     StartCoroutine(RespawnAnimation());
 

@@ -3,7 +3,7 @@ guid: f078a031ebd7b8e479fb8268104431ff
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1115,55 +1121,54 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       hole_0: -442099173
-      hole_3: 1402615754
-      hole_15: 819861672
-      hole_37: 451088538
-      hole_40: -381006642
-      hole_38: -104430461
-      hole_13: -819998105
-      hole_26: -607960491
       hole_1: 979803084
-      hole_27: -829611309
-      hole_11: -156604866
-      hole_46: -132805283
-      hole_8: -1959695787
-      hole_32: 1502585611
-      hole_12: -626487238
-      hole_21: -1610204290
-      hole_4: -1025410611
-      hole_18: -1112348855
-      hole_23: -1205835261
-      hole_44: -81243030
-      hole_33: 1435981071
-      hole_20: -1417452406
-      hole_29: 1512744370
-      hole_41: -1458838817
-      hole_5: 1714687485
-      hole_43: -630522442
-      hole_24: 159796582
-      hole_35: -477671722
-      hole_45: 1247134401
-      hole_36: -544972757
-      hole_34: -895398485
-      hole_42: -1937694932
-      hole_19: -498070804
-      hole_31: -2034350481
-      hole_17: 53692837
-      hole_22: -1058637436
-      hole_39: -1919602508
-      hole_7: -574836174
-      hole_9: -945349222
-      hole_14: 532198802
-      hole_2: -1732126492
       hole_10: 1508791353
-      hole_28: -1735988014
-      hole_30: -722328064
-      hole_6: 952943508
-      hole_25: -257982395
+      hole_11: -156604866
+      hole_12: -626487238
+      hole_13: -819998105
+      hole_14: 532198802
+      hole_15: 819861672
       hole_16: -1106439057
-  spritePackingTag: 
+      hole_17: 53692837
+      hole_18: -1112348855
+      hole_19: -498070804
+      hole_2: -1732126492
+      hole_20: -1417452406
+      hole_21: -1610204290
+      hole_22: -1058637436
+      hole_23: -1205835261
+      hole_24: 159796582
+      hole_25: -257982395
+      hole_26: -607960491
+      hole_27: -829611309
+      hole_28: -1735988014
+      hole_29: 1512744370
+      hole_3: 1402615754
+      hole_30: -722328064
+      hole_31: -2034350481
+      hole_32: 1502585611
+      hole_33: 1435981071
+      hole_34: -895398485
+      hole_35: -477671722
+      hole_36: -544972757
+      hole_37: 451088538
+      hole_38: -104430461
+      hole_39: -1919602508
+      hole_4: -1025410611
+      hole_40: -381006642
+      hole_41: -1458838817
+      hole_42: -1937694932
+      hole_43: -630522442
+      hole_44: -81243030
+      hole_45: 1247134401
+      hole_46: -132805283
+      hole_5: 1714687485
+      hole_6: 952943508
+      hole_7: -574836174
+      hole_8: -1959695787
+      hole_9: -945349222
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -3,7 +3,7 @@ guid: 07142d72c51c7af4fbefbd28a58550b0
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -811,72 +817,71 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      villageObjects_44: 633398454
-      villageObjects_60: -1822878455
-      villageObjects_26: 1040007248
-      villageObjects_22: 743080079
-      villageObjects_55: 45409489
-      villageObjects_28: 353585437
-      villageObjects_47: 186709084
-      villageObjects_35: -569106781
-      villageObjects_50: -626581665
-      villageObjects_6: 1994688291
-      villageObjects_49: -1438890378
-      villageObjects_42: 2069446588
-      villageObjects_32: -1114644986
-      villageObjects_16: -1720088332
-      villageObjects_3: 1591632115
-      villageObjects_56: 252240430
-      villageObjects_41: 1913776183
-      villageObjects_39: 1963101832
-      villageObjects_34: -1562333523
-      villageObjects_10: 1905999281
-      villageObjects_23: -466088977
-      villageObjects_30: 414094824
-      villageObjects_45: -1575154042
-      villageObjects_40: 338964939
-      villageObjects_8: -2113004742
-      villageObjects_25: -1173593394
-      villageObjects_20: -234842919
-      villageObjects_54: -2082234150
-      villageObjects_24: -1562620064
-      villageObjects_13: -106031652
-      villageObjects_7: 739687524
-      villageObjects_37: -251051571
-      villageObjects_61: 1418153452
-      villageObjects_29: -191457185
-      villageObjects_19: 1495843389
-      villageObjects_33: -490449550
-      villageObjects_58: -78010514
-      villageObjects_18: -1600403823
-      villageObjects_2: -773822397
-      villageObjects_43: -1309149107
-      villageObjects_48: -1762088066
-      villageObjects_27: -1282673201
       villageObjects_0: -757169996
-      villageObjects_5: -1139852396
-      villageObjects_11: -113563924
-      villageObjects_36: 1797665971
-      villageObjects_53: -2079486809
-      villageObjects_62: -1013255406
-      villageObjects_17: 288572062
-      villageObjects_4: 1484569841
-      villageObjects_57: -1023838803
-      villageObjects_46: 764067648
-      villageObjects_38: -33730720
-      villageObjects_21: -46293410
-      villageObjects_15: 1077919757
-      villageObjects_52: -2048804976
-      villageObjects_51: -1200221977
-      villageObjects_59: -1122870296
-      villageObjects_12: -1643095536
-      villageObjects_9: 988501423
-      villageObjects_14: -624059867
       villageObjects_1: 373445697
+      villageObjects_10: 1905999281
+      villageObjects_11: -113563924
+      villageObjects_12: -1643095536
+      villageObjects_13: -106031652
+      villageObjects_14: -624059867
+      villageObjects_15: 1077919757
+      villageObjects_16: -1720088332
+      villageObjects_17: 288572062
+      villageObjects_18: -1600403823
+      villageObjects_19: 1495843389
+      villageObjects_2: -773822397
+      villageObjects_20: -234842919
+      villageObjects_21: -46293410
+      villageObjects_22: 743080079
+      villageObjects_23: -466088977
+      villageObjects_24: -1562620064
+      villageObjects_25: -1173593394
+      villageObjects_26: 1040007248
+      villageObjects_27: -1282673201
+      villageObjects_28: 353585437
+      villageObjects_29: -191457185
+      villageObjects_3: 1591632115
+      villageObjects_30: 414094824
       villageObjects_31: 2110364443
-  spritePackingTag: 
+      villageObjects_32: -1114644986
+      villageObjects_33: -490449550
+      villageObjects_34: -1562333523
+      villageObjects_35: -569106781
+      villageObjects_36: 1797665971
+      villageObjects_37: -251051571
+      villageObjects_38: -33730720
+      villageObjects_39: 1963101832
+      villageObjects_4: 1484569841
+      villageObjects_40: 338964939
+      villageObjects_41: 1913776183
+      villageObjects_42: 2069446588
+      villageObjects_43: -1309149107
+      villageObjects_44: 633398454
+      villageObjects_45: -1575154042
+      villageObjects_46: 764067648
+      villageObjects_47: 186709084
+      villageObjects_48: -1762088066
+      villageObjects_49: -1438890378
+      villageObjects_5: -1139852396
+      villageObjects_50: -626581665
+      villageObjects_51: -1200221977
+      villageObjects_52: -2048804976
+      villageObjects_53: -2079486809
+      villageObjects_54: -2082234150
+      villageObjects_55: 45409489
+      villageObjects_56: 252240430
+      villageObjects_57: -1023838803
+      villageObjects_58: -78010514
+      villageObjects_59: -1122870296
+      villageObjects_6: 1994688291
+      villageObjects_60: -1822878455
+      villageObjects_61: 1418153452
+      villageObjects_62: -1013255406
+      villageObjects_7: 739687524
+      villageObjects_8: -2113004742
+      villageObjects_9: 988501423
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

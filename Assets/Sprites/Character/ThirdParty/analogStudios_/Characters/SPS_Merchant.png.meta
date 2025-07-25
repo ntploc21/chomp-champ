@@ -3,7 +3,7 @@ guid: 64368642fd934c14391e3d2acf8cdfef
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -463,25 +469,24 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      SPS_Merchant_0: -2119980231
+      SPS_Merchant_1: 1763200315
+      SPS_Merchant_10: 1214019046
+      SPS_Merchant_11: 1138211227
+      SPS_Merchant_12: -1910156287
+      SPS_Merchant_13: 1587595104
+      SPS_Merchant_14: 868086386
+      SPS_Merchant_15: -462425373
+      SPS_Merchant_2: 132945265
+      SPS_Merchant_3: -490375027
       SPS_Merchant_4: -1525328232
+      SPS_Merchant_5: -794177755
+      SPS_Merchant_6: 248157866
+      SPS_Merchant_7: -383963387
       SPS_Merchant_8: 1035473338
       SPS_Merchant_9: 5976463
-      SPS_Merchant_11: 1138211227
-      SPS_Merchant_13: 1587595104
-      SPS_Merchant_5: -794177755
-      SPS_Merchant_14: 868086386
-      SPS_Merchant_1: 1763200315
-      SPS_Merchant_0: -2119980231
-      SPS_Merchant_6: 248157866
-      SPS_Merchant_2: 132945265
-      SPS_Merchant_15: -462425373
-      SPS_Merchant_3: -490375027
-      SPS_Merchant_10: 1214019046
-      SPS_Merchant_12: -1910156287
-      SPS_Merchant_7: -383963387
-  spritePackingTag: 
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

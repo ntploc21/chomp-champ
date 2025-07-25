@@ -3,7 +3,7 @@ guid: 7a02ff954ed09f14ab48e27a020498be
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1114,56 +1120,55 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      path_14: -1260696904
-      path_11: 792139264
-      path_40: 796690833
-      path_34: -748795054
-      path_42: -1334354903
-      path_44: 295529097
-      path_27: -122801727
-      path_3: -388678946
-      path_9: -1466572802
-      path_7: 1764500344
-      path_10: -1512605527
-      path_19: -1998381112
-      path_31: 1385686241
-      path_22: 534042625
-      path_23: 503704183
-      path_37: 1037537726
-      path_46: 1446233446
-      path_36: -1950325047
-      path_8: -1270597035
-      path_35: -1946091694
-      path_39: -1417524195
-      path_4: -337360322
-      path_24: 1464012326
-      path_43: 1177959737
-      path_2: -876427143
-      path_28: -1063729404
-      path_1: -1056570962
       path_0: 451916704
+      path_1: -1056570962
+      path_10: -1512605527
+      path_11: 792139264
       path_12: 422055246
-      path_32: -41142922
-      path_38: -1226456713
       path_13: -480841809
-      path_20: -1082922687
-      path_30: 2067050951
-      path_5: 1858988395
-      path_29: 1794891163
-      path_21: -1815384051
-      path_33: 2106252872
-      path_45: -1476776550
-      path_17: -1230559494
-      path_25: -730134030
-      path_6: 357559430
-      path_18: -1001165999
-      path_26: -1578164303
-      path_41: -531103303
+      path_14: -1260696904
       path_15: 153944601
       path_16: 1274526948
-  spritePackingTag: 
+      path_17: -1230559494
+      path_18: -1001165999
+      path_19: -1998381112
+      path_2: -876427143
+      path_20: -1082922687
+      path_21: -1815384051
+      path_22: 534042625
+      path_23: 503704183
+      path_24: 1464012326
+      path_25: -730134030
+      path_26: -1578164303
+      path_27: -122801727
+      path_28: -1063729404
+      path_29: 1794891163
+      path_3: -388678946
+      path_30: 2067050951
+      path_31: 1385686241
+      path_32: -41142922
+      path_33: 2106252872
+      path_34: -748795054
+      path_35: -1946091694
+      path_36: -1950325047
+      path_37: 1037537726
+      path_38: -1226456713
+      path_39: -1417524195
+      path_4: -337360322
+      path_40: 796690833
+      path_41: -531103303
+      path_42: -1334354903
+      path_43: 1177959737
+      path_44: 295529097
+      path_45: -1476776550
+      path_46: 1446233446
+      path_5: 1858988395
+      path_6: 357559430
+      path_7: 1764500344
+      path_8: -1270597035
+      path_9: -1466572802
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

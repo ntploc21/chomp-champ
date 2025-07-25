@@ -3,7 +3,7 @@ guid: b2aa333e2a0687c499a8b4ecb8625997
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -883,45 +889,44 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      bottles_24: 1146055244
-      bottles_2: 473464009
+      bottles_0: -1333810164
+      bottles_1: -716874563
+      bottles_10: -1432437438
+      bottles_11: -6129245
+      bottles_12: -1227757721
+      bottles_13: 279730506
+      bottles_14: -1839679319
+      bottles_15: -1206442312
+      bottles_16: 1465428613
       bottles_17: 543205411
       bottles_18: 2072186761
-      bottles_14: -1839679319
-      bottles_28: 1388510490
-      bottles_11: -6129245
-      bottles_7: 2103877094
-      bottles_15: -1206442312
-      bottles_5: -2008808052
-      bottles_23: 1856230541
-      bottles_29: -473330107
-      bottles_16: 1465428613
       bottles_19: 609153257
-      bottles_0: -1333810164
-      bottles_30: 2130427682
-      bottles_32: -191834117
-      bottles_34: -350157195
+      bottles_2: 473464009
+      bottles_20: 1257703560
       bottles_21: -1495362694
+      bottles_22: 1252759456
+      bottles_23: 1856230541
+      bottles_24: 1146055244
+      bottles_25: 322811196
+      bottles_26: -483646924
+      bottles_27: -1950637210
+      bottles_28: 1388510490
+      bottles_29: -473330107
+      bottles_3: -975824108
+      bottles_30: 2130427682
+      bottles_31: 934160122
+      bottles_32: -191834117
+      bottles_33: 1595268532
+      bottles_34: -350157195
+      bottles_35: -67391279
+      bottles_4: 1985709315
+      bottles_5: -2008808052
+      bottles_6: -1979765053
+      bottles_7: 2103877094
       bottles_8: 1110923219
       bottles_9: 1843083737
-      bottles_31: 934160122
-      bottles_22: 1252759456
-      bottles_20: 1257703560
-      bottles_1: -716874563
-      bottles_4: 1985709315
-      bottles_3: -975824108
-      bottles_13: 279730506
-      bottles_26: -483646924
-      bottles_6: -1979765053
-      bottles_25: 322811196
-      bottles_33: 1595268532
-      bottles_12: -1227757721
-      bottles_27: -1950637210
-      bottles_35: -67391279
-      bottles_10: -1432437438
-  spritePackingTag: 
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

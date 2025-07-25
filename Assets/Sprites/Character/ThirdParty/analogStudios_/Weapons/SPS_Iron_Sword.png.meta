@@ -3,7 +3,7 @@ guid: 8356f7e016ecbfd45b1115c2ff958c43
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -400,22 +406,21 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      SPS_Iron_Sword_9: -116350204
+      SPS_Iron_Sword_0: 227403753
+      SPS_Iron_Sword_1: -1260222583
       SPS_Iron_Sword_10: -258764453
+      SPS_Iron_Sword_11: -1645331052
       SPS_Iron_Sword_12: -850206916
       SPS_Iron_Sword_2: -678244347
-      SPS_Iron_Sword_4: -367878595
-      SPS_Iron_Sword_6: -177264492
-      SPS_Iron_Sword_0: 227403753
       SPS_Iron_Sword_3: 496270731
-      SPS_Iron_Sword_8: -514300048
-      SPS_Iron_Sword_11: -1645331052
+      SPS_Iron_Sword_4: -367878595
       SPS_Iron_Sword_5: -1530455641
-      SPS_Iron_Sword_1: -1260222583
+      SPS_Iron_Sword_6: -177264492
       SPS_Iron_Sword_7: 534168319
-  spritePackingTag: 
+      SPS_Iron_Sword_8: -514300048
+      SPS_Iron_Sword_9: -116350204
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

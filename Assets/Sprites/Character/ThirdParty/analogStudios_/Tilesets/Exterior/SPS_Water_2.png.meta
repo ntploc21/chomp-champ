@@ -3,7 +3,7 @@ guid: 39d52f6e01ce74c4c989cd1a0f015409
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1114,56 +1120,55 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      water_1_5: -117313930
-      water_1_18: 923775548
+      water_1_0: 487650993
+      water_1_1: 1174073181
+      water_1_10: 108855312
       water_1_11: 1192002284
-      water_1_21: 551495036
-      water_1_33: 1621346275
-      water_1_39: 1792251254
-      water_1_2: -1738537789
-      water_1_38: -1764996730
-      water_1_6: -149812897
-      water_1_45: -838006559
-      water_1_7: -265589435
+      water_1_12: 1692171499
+      water_1_13: 115450655
       water_1_14: -809240285
-      water_1_31: 877045463
       water_1_15: -1901920829
       water_1_16: -802558013
-      water_1_32: 860977992
-      water_1_4: 1319785021
-      water_1_1: 1174073181
-      water_1_8: -1360830929
-      water_1_40: 613991450
-      water_1_35: -1381420022
       water_1_17: 1937389507
-      water_1_41: 1221291748
-      water_1_22: -458752328
-      water_1_36: 1986935338
-      water_1_10: 108855312
-      water_1_27: -761015597
-      water_1_25: 1126721135
-      water_1_23: 458475219
+      water_1_18: 923775548
       water_1_19: -141842442
-      water_1_29: 1273609144
-      water_1_0: 487650993
-      water_1_34: 720218765
-      water_1_24: 1310334080
-      water_1_12: 1692171499
-      water_1_28: -583491701
-      water_1_3: 864873908
-      water_1_26: 1278646031
-      water_1_13: 115450655
-      water_1_37: -1360691440
-      water_1_42: 1989414097
-      water_1_30: -463298466
-      water_1_44: -1146277456
+      water_1_2: -1738537789
       water_1_20: -1877051274
-      water_1_46: 324119195
-      water_1_9: -535856916
+      water_1_21: 551495036
+      water_1_22: -458752328
+      water_1_23: 458475219
+      water_1_24: 1310334080
+      water_1_25: 1126721135
+      water_1_26: 1278646031
+      water_1_27: -761015597
+      water_1_28: -583491701
+      water_1_29: 1273609144
+      water_1_3: 864873908
+      water_1_30: -463298466
+      water_1_31: 877045463
+      water_1_32: 860977992
+      water_1_33: 1621346275
+      water_1_34: 720218765
+      water_1_35: -1381420022
+      water_1_36: 1986935338
+      water_1_37: -1360691440
+      water_1_38: -1764996730
+      water_1_39: 1792251254
+      water_1_4: 1319785021
+      water_1_40: 613991450
+      water_1_41: 1221291748
+      water_1_42: 1989414097
       water_1_43: -1133919586
-  spritePackingTag: 
+      water_1_44: -1146277456
+      water_1_45: -838006559
+      water_1_46: 324119195
+      water_1_5: -117313930
+      water_1_6: -149812897
+      water_1_7: -265589435
+      water_1_8: -1360830929
+      water_1_9: -535856916
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

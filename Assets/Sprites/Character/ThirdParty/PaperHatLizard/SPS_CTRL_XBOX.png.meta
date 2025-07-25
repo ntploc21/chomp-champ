@@ -3,7 +3,7 @@ guid: 4113596ae75d746b4a3729da2aa23630
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -904,46 +910,45 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      SPS_CTRL_XBOX_4: 1825556727
-      SPS_CTRL_XBOX_28: -846418254
-      SPS_CTRL_XBOX_36: -1098292886
-      SPS_CTRL_XBOX_3: 1017342706
-      SPS_CTRL_XBOX_19: -2112087812
-      SPS_CTRL_XBOX_20: -590675293
-      SPS_CTRL_XBOX_7: -374959230
-      SPS_CTRL_XBOX_15: 858891773
-      SPS_CTRL_XBOX_33: -1175135284
-      SPS_CTRL_XBOX_5: 1716175001
-      SPS_CTRL_XBOX_21: 1109082186
-      SPS_CTRL_XBOX_10: -1388389681
-      SPS_CTRL_XBOX_17: 289739460
-      SPS_CTRL_XBOX_26: -521743118
-      SPS_CTRL_XBOX_24: -752333248
-      SPS_CTRL_XBOX_27: -1264074552
-      SPS_CTRL_XBOX_31: 1499297249
-      SPS_CTRL_XBOX_29: 441915161
-      SPS_CTRL_XBOX_30: -1318950800
-      SPS_CTRL_XBOX_34: -434612057
-      SPS_CTRL_XBOX_12: 1349302841
-      SPS_CTRL_XBOX_9: 43219989
-      SPS_CTRL_XBOX_2: -1929888557
-      SPS_CTRL_XBOX_23: 12167757
-      SPS_CTRL_XBOX_16: -1060916952
-      SPS_CTRL_XBOX_6: 1945988028
-      SPS_CTRL_XBOX_25: 182087023
-      SPS_CTRL_XBOX_8: -1357779179
-      SPS_CTRL_XBOX_18: 1107790164
       SPS_CTRL_XBOX_0: -1049186584
-      SPS_CTRL_XBOX_11: -496784725
-      SPS_CTRL_XBOX_13: -121094792
-      SPS_CTRL_XBOX_22: 1049171713
-      SPS_CTRL_XBOX_35: 49996593
-      SPS_CTRL_XBOX_32: 1499268031
       SPS_CTRL_XBOX_1: -2086194844
+      SPS_CTRL_XBOX_10: -1388389681
+      SPS_CTRL_XBOX_11: -496784725
+      SPS_CTRL_XBOX_12: 1349302841
+      SPS_CTRL_XBOX_13: -121094792
       SPS_CTRL_XBOX_14: -1570256092
-  spritePackingTag: 
+      SPS_CTRL_XBOX_15: 858891773
+      SPS_CTRL_XBOX_16: -1060916952
+      SPS_CTRL_XBOX_17: 289739460
+      SPS_CTRL_XBOX_18: 1107790164
+      SPS_CTRL_XBOX_19: -2112087812
+      SPS_CTRL_XBOX_2: -1929888557
+      SPS_CTRL_XBOX_20: -590675293
+      SPS_CTRL_XBOX_21: 1109082186
+      SPS_CTRL_XBOX_22: 1049171713
+      SPS_CTRL_XBOX_23: 12167757
+      SPS_CTRL_XBOX_24: -752333248
+      SPS_CTRL_XBOX_25: 182087023
+      SPS_CTRL_XBOX_26: -521743118
+      SPS_CTRL_XBOX_27: -1264074552
+      SPS_CTRL_XBOX_28: -846418254
+      SPS_CTRL_XBOX_29: 441915161
+      SPS_CTRL_XBOX_3: 1017342706
+      SPS_CTRL_XBOX_30: -1318950800
+      SPS_CTRL_XBOX_31: 1499297249
+      SPS_CTRL_XBOX_32: 1499268031
+      SPS_CTRL_XBOX_33: -1175135284
+      SPS_CTRL_XBOX_34: -434612057
+      SPS_CTRL_XBOX_35: 49996593
+      SPS_CTRL_XBOX_36: -1098292886
+      SPS_CTRL_XBOX_4: 1825556727
+      SPS_CTRL_XBOX_5: 1716175001
+      SPS_CTRL_XBOX_6: 1945988028
+      SPS_CTRL_XBOX_7: -374959230
+      SPS_CTRL_XBOX_8: -1357779179
+      SPS_CTRL_XBOX_9: 43219989
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

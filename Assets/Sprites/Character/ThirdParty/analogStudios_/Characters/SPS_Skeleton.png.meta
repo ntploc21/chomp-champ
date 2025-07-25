@@ -3,7 +3,7 @@ guid: ee939c325b9cdf94599fb59f5aa357f6
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -463,25 +469,24 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Skeleton_Spritesheet_15: -196257763
-      Skeleton_Spritesheet_6: -423072649
-      Skeleton_Spritesheet_4: 1196572450
       Skeleton_Spritesheet_0: 1686297355
       Skeleton_Spritesheet_1: -355573278
-      Skeleton_Spritesheet_8: 541482296
-      Skeleton_Spritesheet_13: -438698559
-      Skeleton_Spritesheet_14: -1097216495
-      Skeleton_Spritesheet_2: -1902432671
-      Skeleton_Spritesheet_9: 1452553451
       Skeleton_Spritesheet_10: 1324082466
-      Skeleton_Spritesheet_5: 1341489324
-      Skeleton_Spritesheet_3: 1250272378
-      Skeleton_Spritesheet_7: 484231089
       Skeleton_Spritesheet_11: 626012672
       Skeleton_Spritesheet_12: 666954575
-  spritePackingTag: 
+      Skeleton_Spritesheet_13: -438698559
+      Skeleton_Spritesheet_14: -1097216495
+      Skeleton_Spritesheet_15: -196257763
+      Skeleton_Spritesheet_2: -1902432671
+      Skeleton_Spritesheet_3: 1250272378
+      Skeleton_Spritesheet_4: 1196572450
+      Skeleton_Spritesheet_5: 1341489324
+      Skeleton_Spritesheet_6: -423072649
+      Skeleton_Spritesheet_7: 484231089
+      Skeleton_Spritesheet_8: 541482296
+      Skeleton_Spritesheet_9: 1452553451
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

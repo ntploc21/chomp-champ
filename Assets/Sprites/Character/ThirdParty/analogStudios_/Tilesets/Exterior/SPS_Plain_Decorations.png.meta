@@ -3,7 +3,7 @@ guid: 55aba4fd19d93e04088c05b1042159fb
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1371,77 +1377,76 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      plainDecorations_13: -283697127
-      plainDecorations_12: -1033157138
-      plainDecorations_36: -172697970
-      plainDecorations_43: -608446792
-      plainDecorations_53: 276286224
-      plainDecorations_8: -211560397
-      plainDecorations_10: -461659193
-      plainDecorations_56: 878245762
-      plainDecorations_49: 1928775824
-      plainDecorations_39: -1301154582
       plainDecorations_0: -1682446895
-      plainDecorations_57: -1872014693
-      plainDecorations_18: 326267616
-      plainDecorations_14: 1342199349
-      plainDecorations_34: -679472071
-      plainDecorations_48: -2124496141
       plainDecorations_1: 1110091598
-      plainDecorations_64: 1518197300
-      plainDecorations_16: 1757023428
-      plainDecorations_6: -1776164073
-      plainDecorations_21: 1637036390
-      plainDecorations_23: 1562368815
-      plainDecorations_47: 821147230
-      plainDecorations_30: -1755741534
-      plainDecorations_52: 1662088738
-      plainDecorations_35: -1364589986
-      plainDecorations_37: 389366049
-      plainDecorations_32: 1161802496
-      plainDecorations_20: 1817410681
+      plainDecorations_10: -461659193
       plainDecorations_11: -265765274
-      plainDecorations_33: 757699180
-      plainDecorations_9: -1780141657
-      plainDecorations_44: -1622615591
-      plainDecorations_4: 1676979189
-      plainDecorations_22: -157783122
-      plainDecorations_38: 1243068409
-      plainDecorations_40: 1543988962
-      plainDecorations_66: 343442498
-      plainDecorations_51: 504880589
-      plainDecorations_65: 421531085
-      plainDecorations_19: -100643196
-      plainDecorations_55: 1214101911
-      plainDecorations_58: -1812065237
-      plainDecorations_50: 1423233181
-      plainDecorations_41: -1428808676
-      plainDecorations_54: 623934324
-      plainDecorations_62: -428865316
-      plainDecorations_46: -658708925
-      plainDecorations_59: 277908177
-      plainDecorations_17: -310348086
-      plainDecorations_24: 72017562
-      plainDecorations_2: -852207364
-      plainDecorations_26: -716658470
-      plainDecorations_25: -1276509871
-      plainDecorations_61: 476061963
-      plainDecorations_67: -961430304
-      plainDecorations_5: -1996441649
-      plainDecorations_29: 870456091
-      plainDecorations_42: 714653437
-      plainDecorations_7: -702596079
-      plainDecorations_27: 1130571065
-      plainDecorations_63: 44820903
-      plainDecorations_31: 1617008164
-      plainDecorations_45: 263009879
-      plainDecorations_28: -85375469
-      plainDecorations_3: 437726693
-      plainDecorations_60: 231620736
+      plainDecorations_12: -1033157138
+      plainDecorations_13: -283697127
+      plainDecorations_14: 1342199349
       plainDecorations_15: -1859113909
-  spritePackingTag: 
+      plainDecorations_16: 1757023428
+      plainDecorations_17: -310348086
+      plainDecorations_18: 326267616
+      plainDecorations_19: -100643196
+      plainDecorations_2: -852207364
+      plainDecorations_20: 1817410681
+      plainDecorations_21: 1637036390
+      plainDecorations_22: -157783122
+      plainDecorations_23: 1562368815
+      plainDecorations_24: 72017562
+      plainDecorations_25: -1276509871
+      plainDecorations_26: -716658470
+      plainDecorations_27: 1130571065
+      plainDecorations_28: -85375469
+      plainDecorations_29: 870456091
+      plainDecorations_3: 437726693
+      plainDecorations_30: -1755741534
+      plainDecorations_31: 1617008164
+      plainDecorations_32: 1161802496
+      plainDecorations_33: 757699180
+      plainDecorations_34: -679472071
+      plainDecorations_35: -1364589986
+      plainDecorations_36: -172697970
+      plainDecorations_37: 389366049
+      plainDecorations_38: 1243068409
+      plainDecorations_39: -1301154582
+      plainDecorations_4: 1676979189
+      plainDecorations_40: 1543988962
+      plainDecorations_41: -1428808676
+      plainDecorations_42: 714653437
+      plainDecorations_43: -608446792
+      plainDecorations_44: -1622615591
+      plainDecorations_45: 263009879
+      plainDecorations_46: -658708925
+      plainDecorations_47: 821147230
+      plainDecorations_48: -2124496141
+      plainDecorations_49: 1928775824
+      plainDecorations_5: -1996441649
+      plainDecorations_50: 1423233181
+      plainDecorations_51: 504880589
+      plainDecorations_52: 1662088738
+      plainDecorations_53: 276286224
+      plainDecorations_54: 623934324
+      plainDecorations_55: 1214101911
+      plainDecorations_56: 878245762
+      plainDecorations_57: -1872014693
+      plainDecorations_58: -1812065237
+      plainDecorations_59: 277908177
+      plainDecorations_6: -1776164073
+      plainDecorations_60: 231620736
+      plainDecorations_61: 476061963
+      plainDecorations_62: -428865316
+      plainDecorations_63: 44820903
+      plainDecorations_64: 1518197300
+      plainDecorations_65: 421531085
+      plainDecorations_66: 343442498
+      plainDecorations_67: -961430304
+      plainDecorations_7: -702596079
+      plainDecorations_8: -211560397
+      plainDecorations_9: -1780141657
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

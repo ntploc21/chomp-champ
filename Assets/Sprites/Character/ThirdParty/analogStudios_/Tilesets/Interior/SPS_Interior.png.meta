@@ -3,7 +3,7 @@ guid: de4145849b6e44342a77c8ca791c8c83
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -2526,112 +2532,111 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      interior_86: -594534837
-      interior_34: 1024529637
+      interior_0: 1025711576
+      interior_1: -87691430
+      interior_10: -2095106736
+      interior_100: 1324239227
       interior_101: 85612030
+      interior_102: 1514185339
+      interior_11: -1860722278
+      interior_12: -725929845
+      interior_13: 1410199770
+      interior_14: -797482748
+      interior_15: 1915573822
+      interior_16: 1898552538
+      interior_17: 1439605350
+      interior_18: -563320182
+      interior_19: 1244976565
+      interior_2: -1636942601
       interior_20: 1119792645
+      interior_21: 1713471908
+      interior_22: -1756340122
+      interior_23: 894474276
+      interior_24: 515960393
+      interior_25: -1477573438
+      interior_26: -39734655
+      interior_27: 1179282575
+      interior_28: 1276042667
+      interior_29: 666370927
+      interior_3: -930235660
+      interior_30: -1640016345
+      interior_31: 869029208
+      interior_32: 687193777
+      interior_33: 2050085781
+      interior_34: 1024529637
+      interior_35: -1124856692
+      interior_36: -973263180
+      interior_37: -1546394403
+      interior_38: 1225767284
+      interior_39: -1134460987
+      interior_4: -1172263552
+      interior_40: 1058132301
+      interior_41: 608102691
+      interior_42: -1193941666
+      interior_43: -1906310459
+      interior_44: -109956936
+      interior_45: -164462481
+      interior_46: -920490693
+      interior_47: -1177614966
+      interior_48: -1391382824
+      interior_49: 1744455284
+      interior_5: 347988803
+      interior_50: -1867517281
+      interior_51: -198940281
+      interior_52: -1719294706
+      interior_53: -917077446
+      interior_54: 853963675
+      interior_55: 1247478576
+      interior_56: -938093845
+      interior_57: 2145284619
+      interior_58: -1945259329
+      interior_59: 1311714127
+      interior_6: 1665690841
+      interior_60: 2038232617
+      interior_61: -624463724
+      interior_62: 1995849536
+      interior_63: 827600675
+      interior_64: 1854312114
+      interior_65: 1930915174
+      interior_66: 1526813607
+      interior_67: 2092714244
+      interior_68: 1855821162
+      interior_69: -1492367558
+      interior_7: -1915238583
+      interior_70: 464629081
+      interior_71: -792504411
+      interior_72: 1701381595
+      interior_73: 390136030
+      interior_74: 2126579562
+      interior_75: 74318261
+      interior_76: 1705911257
+      interior_77: -577832575
+      interior_78: -1180381762
+      interior_79: -827456570
+      interior_8: 964064646
+      interior_80: -785255931
+      interior_81: -869687998
+      interior_82: -307732108
+      interior_83: -1204391485
+      interior_84: 2101135147
+      interior_85: 267244640
+      interior_86: -594534837
+      interior_87: 1652411011
+      interior_88: 194970438
+      interior_89: 184797179
       interior_9: -30744662
       interior_90: 534838794
-      interior_67: 2092714244
-      interior_37: -1546394403
-      interior_24: 515960393
-      interior_79: -827456570
-      interior_31: 869029208
-      interior_30: -1640016345
-      interior_6: 1665690841
-      interior_63: 827600675
-      interior_54: 853963675
-      interior_74: 2126579562
-      interior_10: -2095106736
-      interior_59: 1311714127
-      interior_78: -1180381762
-      interior_49: 1744455284
-      interior_81: -869687998
-      interior_29: 666370927
-      interior_69: -1492367558
-      interior_13: 1410199770
-      interior_27: 1179282575
-      interior_66: 1526813607
-      interior_96: -205672777
-      interior_39: -1134460987
-      interior_15: 1915573822
-      interior_0: 1025711576
-      interior_57: 2145284619
-      interior_56: -938093845
-      interior_21: 1713471908
-      interior_92: -590032206
-      interior_4: -1172263552
-      interior_43: -1906310459
-      interior_36: -973263180
-      interior_58: -1945259329
-      interior_52: -1719294706
-      interior_84: 2101135147
-      interior_93: 2012888416
-      interior_77: -577832575
-      interior_68: 1855821162
-      interior_97: -399411719
-      interior_80: -785255931
-      interior_5: 347988803
-      interior_7: -1915238583
-      interior_83: -1204391485
-      interior_60: 2038232617
-      interior_55: 1247478576
-      interior_41: 608102691
-      interior_48: -1391382824
-      interior_87: 1652411011
-      interior_73: 390136030
-      interior_35: -1124856692
-      interior_23: 894474276
-      interior_99: -325898531
-      interior_71: -792504411
-      interior_95: 473767006
-      interior_25: -1477573438
-      interior_102: 1514185339
-      interior_19: 1244976565
-      interior_51: -198940281
-      interior_11: -1860722278
-      interior_61: -624463724
-      interior_12: -725929845
-      interior_72: 1701381595
-      interior_18: -563320182
-      interior_62: 1995849536
-      interior_50: -1867517281
-      interior_42: -1193941666
       interior_91: -1178959856
-      interior_98: 1489990262
-      interior_38: 1225767284
-      interior_2: -1636942601
-      interior_76: 1705911257
-      interior_82: -307732108
-      interior_8: 964064646
-      interior_44: -109956936
-      interior_32: 687193777
-      interior_75: 74318261
-      interior_17: 1439605350
-      interior_22: -1756340122
-      interior_85: 267244640
-      interior_33: 2050085781
-      interior_16: 1898552538
-      interior_88: 194970438
-      interior_14: -797482748
-      interior_65: 1930915174
-      interior_28: 1276042667
-      interior_40: 1058132301
-      interior_64: 1854312114
-      interior_26: -39734655
-      interior_70: 464629081
+      interior_92: -590032206
+      interior_93: 2012888416
       interior_94: -1038508285
-      interior_47: -1177614966
-      interior_89: 184797179
-      interior_100: 1324239227
-      interior_1: -87691430
-      interior_46: -920490693
-      interior_3: -930235660
-      interior_45: -164462481
-      interior_53: -917077446
-  spritePackingTag: 
+      interior_95: 473767006
+      interior_96: -205672777
+      interior_97: -399411719
+      interior_98: 1489990262
+      interior_99: -325898531
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -3,7 +3,7 @@ guid: f2255a048424f9f40bc010ab8ea7a445
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -463,25 +469,24 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Necromancer_Spritesheet_12: 1717467123
-      Necromancer_Spritesheet_6: 1061370489
-      Necromancer_Spritesheet_13: -1634800490
-      Necromancer_Spritesheet_9: -343868877
-      Necromancer_Spritesheet_5: -777415456
-      Necromancer_Spritesheet_10: 1139326353
-      Necromancer_Spritesheet_3: 979281976
       Necromancer_Spritesheet_0: -1470460216
-      Necromancer_Spritesheet_14: 651699504
-      Necromancer_Spritesheet_8: -248914826
-      Necromancer_Spritesheet_2: 73235636
-      Necromancer_Spritesheet_11: -1816367569
       Necromancer_Spritesheet_1: -1460472458
+      Necromancer_Spritesheet_10: 1139326353
+      Necromancer_Spritesheet_11: -1816367569
+      Necromancer_Spritesheet_12: 1717467123
+      Necromancer_Spritesheet_13: -1634800490
+      Necromancer_Spritesheet_14: 651699504
       Necromancer_Spritesheet_15: -582662325
+      Necromancer_Spritesheet_2: 73235636
+      Necromancer_Spritesheet_3: 979281976
       Necromancer_Spritesheet_4: -1390362001
+      Necromancer_Spritesheet_5: -777415456
+      Necromancer_Spritesheet_6: 1061370489
       Necromancer_Spritesheet_7: -538124476
-  spritePackingTag: 
+      Necromancer_Spritesheet_8: -248914826
+      Necromancer_Spritesheet_9: -343868877
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

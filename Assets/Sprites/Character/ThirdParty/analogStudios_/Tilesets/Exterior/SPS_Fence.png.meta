@@ -3,7 +3,7 @@ guid: d11e0aef7a513764b97f70cf196385cf
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -559,25 +565,24 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      fence_12: 440130114
       fence_0: -904298347
-      fence_6: -298594312
-      fence_8: 541451049
-      fence_5: -400546353
-      fence_3: 1966293377
-      fence_15: 994806286
-      fence_14: 1339730706
-      fence_9: 1859917625
       fence_1: 1802712122
-      fence_4: 1562061639
-      fence_7: 1496845256
-      fence_2: -1452755479
       fence_10: 1234619932
-      fence_13: -1775906519
       fence_11: -1295497192
-  spritePackingTag: 
+      fence_12: 440130114
+      fence_13: -1775906519
+      fence_14: 1339730706
+      fence_15: 994806286
+      fence_2: -1452755479
+      fence_3: 1966293377
+      fence_4: 1562061639
+      fence_5: -400546353
+      fence_6: -298594312
+      fence_7: 1496845256
+      fence_8: 541451049
+      fence_9: 1859917625
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

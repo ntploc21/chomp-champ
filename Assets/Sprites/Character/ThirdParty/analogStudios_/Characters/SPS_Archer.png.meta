@@ -3,7 +3,7 @@ guid: 62b952a097156be4ab4c9015a09ae8f1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -463,25 +469,24 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      SPS_Archer_8: 374998224
-      SPS_Archer_15: 1895240098
-      SPS_Archer_1: 744156269
-      SPS_Archer_5: -495039215
-      SPS_Archer_13: 1776127749
-      SPS_Archer_11: -1775949805
       SPS_Archer_0: 1144451620
-      SPS_Archer_4: -2047003180
-      SPS_Archer_3: 307796664
+      SPS_Archer_1: 744156269
       SPS_Archer_10: 2039199785
+      SPS_Archer_11: -1775949805
+      SPS_Archer_12: 1487214714
+      SPS_Archer_13: 1776127749
+      SPS_Archer_14: -1314367761
+      SPS_Archer_15: 1895240098
+      SPS_Archer_2: 555746513
+      SPS_Archer_3: 307796664
+      SPS_Archer_4: -2047003180
+      SPS_Archer_5: -495039215
       SPS_Archer_6: -5703539
       SPS_Archer_7: -1919551941
-      SPS_Archer_14: -1314367761
-      SPS_Archer_12: 1487214714
+      SPS_Archer_8: 374998224
       SPS_Archer_9: 390965654
-      SPS_Archer_2: 555746513
-  spritePackingTag: 
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

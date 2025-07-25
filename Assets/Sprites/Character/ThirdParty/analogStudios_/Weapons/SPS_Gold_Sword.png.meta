@@ -3,7 +3,7 @@ guid: 96e2afe6799b46644ae6e702309b8280
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -400,22 +406,21 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      SPS_Gold_Sword_12: 1162547508
-      SPS_Gold_Sword_11: 506626156
-      SPS_Gold_Sword_9: 201634798
-      SPS_Gold_Sword_10: 1630933884
-      SPS_Gold_Sword_7: 1851028247
-      SPS_Gold_Sword_6: -1168104301
       SPS_Gold_Sword_0: 630744494
       SPS_Gold_Sword_1: 505041896
-      SPS_Gold_Sword_8: -1247924910
+      SPS_Gold_Sword_10: 1630933884
+      SPS_Gold_Sword_11: 506626156
+      SPS_Gold_Sword_12: 1162547508
       SPS_Gold_Sword_2: 1229426410
       SPS_Gold_Sword_3: -1144972065
       SPS_Gold_Sword_4: -1225308168
       SPS_Gold_Sword_5: 133831607
-  spritePackingTag: 
+      SPS_Gold_Sword_6: -1168104301
+      SPS_Gold_Sword_7: 1851028247
+      SPS_Gold_Sword_8: -1247924910
+      SPS_Gold_Sword_9: 201634798
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

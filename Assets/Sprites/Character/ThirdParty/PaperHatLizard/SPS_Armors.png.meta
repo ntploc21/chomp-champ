@@ -3,7 +3,7 @@ guid: 8ace1fb331206454aa908061100d1519
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1303,65 +1309,64 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      armor_32: -701943542
       armor_0: -1445937408
-      armor_2: 689571119
-      armor_29: -1016095610
-      armor_17: -1581729886
-      armor_22: -2016916077
-      armor_42: -1279500106
-      armor_10: 423894364
-      armor_24: -1114154291
-      armor_44: -308648154
-      armor_55: -1998121769
-      armor_45: -1559742918
-      armor_9: -653272490
-      armor_53: 743038684
-      armor_30: 447332867
-      armor_6: 1003766242
-      armor_47: 779660801
-      armor_33: -1890707560
-      armor_23: -790654071
-      armor_51: -1753624660
-      armor_15: 495758389
-      armor_20: -190087268
-      armor_54: 530635353
-      armor_21: -490976884
-      armor_50: -2049128473
-      armor_38: 1449606024
-      armor_5: 1328140537
-      armor_46: 981812128
       armor_1: -1625745348
-      armor_16: -1050390021
-      armor_25: 1297661249
-      armor_18: -1421301311
-      armor_35: 1471923200
-      armor_14: -1369692998
-      armor_48: -598757657
-      armor_8: 1483530355
+      armor_10: 423894364
       armor_11: 2130522552
-      armor_28: -1925064246
-      armor_37: 1411861338
-      armor_34: 1133706221
-      armor_43: 52771907
       armor_12: 1806960797
       armor_13: -106448770
+      armor_14: -1369692998
+      armor_15: 495758389
+      armor_16: -1050390021
+      armor_17: -1581729886
+      armor_18: -1421301311
       armor_19: -1732446864
-      armor_36: -58416839
+      armor_2: 689571119
+      armor_20: -190087268
+      armor_21: -490976884
+      armor_22: -2016916077
+      armor_23: -790654071
+      armor_24: -1114154291
+      armor_25: 1297661249
       armor_26: -1026073836
-      armor_39: -1683193400
-      armor_31: 2053020900
       armor_27: -1051812487
-      armor_49: -1420385998
-      armor_7: 1482184718
+      armor_28: -1925064246
+      armor_29: -1016095610
       armor_3: -1869029442
+      armor_30: 447332867
+      armor_31: 2053020900
+      armor_32: -701943542
+      armor_33: -1890707560
+      armor_34: 1133706221
+      armor_35: 1471923200
+      armor_36: -58416839
+      armor_37: 1411861338
+      armor_38: 1449606024
+      armor_39: -1683193400
       armor_4: 1803383848
-      armor_41: 1990434423
       armor_40: 991302681
+      armor_41: 1990434423
+      armor_42: -1279500106
+      armor_43: 52771907
+      armor_44: -308648154
+      armor_45: -1559742918
+      armor_46: 981812128
+      armor_47: 779660801
+      armor_48: -598757657
+      armor_49: -1420385998
+      armor_5: 1328140537
+      armor_50: -2049128473
+      armor_51: -1753624660
       armor_52: -1971645223
-  spritePackingTag: 
+      armor_53: 743038684
+      armor_54: 530635353
+      armor_55: -1998121769
+      armor_6: 1003766242
+      armor_7: 1482184718
+      armor_8: 1483530355
+      armor_9: -653272490
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

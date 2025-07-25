@@ -3,7 +3,7 @@ guid: 2bce3f279b3e7f240b759d22cae23314
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1471,73 +1477,72 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Items_15: 348262783
-      Items_32: -756975242
-      Items_54: -1172178252
-      Items_4: 1092293801
-      Items_26: 1328435570
-      Items_11: -785433760
-      Items_29: 1627029591
-      Items_33: 1099911302
       Items_0: -1601483090
-      Items_27: 1648684344
-      Items_43: -1410953070
-      Items_41: -407036640
-      Items_60: 530295699
-      Items_13: 1564410236
-      Items_8: -106128243
-      Items_46: -519612973
-      Items_58: 1198107528
-      Items_45: -197640443
-      Items_31: 1508786634
-      Items_17: 390182007
-      Items_5: 1943489649
       Items_1: 1507482394
-      Items_42: 1672301763
-      Items_25: 853253341
-      Items_48: -498193100
-      Items_37: -2070548124
-      Items_52: -2011640351
-      Items_55: -1087162528
-      Items_57: 235288141
-      Items_9: -690050698
-      Items_63: -1772260728
-      Items_12: 1583210592
-      Items_18: -457307324
-      Items_22: 672407026
-      Items_16: 919040852
-      Items_49: -905540962
-      Items_62: 756836477
-      Items_44: -26046573
-      Items_7: -1976148678
-      Items_21: -744885201
-      Items_19: 1447688299
       Items_10: -62225368
-      Items_40: 1467881589
-      Items_20: -1868073902
-      Items_34: -1230430132
-      Items_24: 984255214
-      Items_6: -1977057963
-      Items_36: 1719128967
-      Items_59: -1477944767
-      Items_23: 1872030396
-      Items_51: 1197452100
-      Items_3: -1857799032
-      Items_61: -415256359
-      Items_39: 400545959
-      Items_35: 2111002971
-      Items_53: 212680669
-      Items_47: 2109382850
-      Items_2: -199245482
-      Items_38: -544171497
-      Items_30: 1681895298
-      Items_50: -451143458
-      Items_56: 405807373
+      Items_11: -785433760
+      Items_12: 1583210592
+      Items_13: 1564410236
       Items_14: -1354599400
+      Items_15: 348262783
+      Items_16: 919040852
+      Items_17: 390182007
+      Items_18: -457307324
+      Items_19: 1447688299
+      Items_2: -199245482
+      Items_20: -1868073902
+      Items_21: -744885201
+      Items_22: 672407026
+      Items_23: 1872030396
+      Items_24: 984255214
+      Items_25: 853253341
+      Items_26: 1328435570
+      Items_27: 1648684344
       Items_28: 911122999
-  spritePackingTag: 
+      Items_29: 1627029591
+      Items_3: -1857799032
+      Items_30: 1681895298
+      Items_31: 1508786634
+      Items_32: -756975242
+      Items_33: 1099911302
+      Items_34: -1230430132
+      Items_35: 2111002971
+      Items_36: 1719128967
+      Items_37: -2070548124
+      Items_38: -544171497
+      Items_39: 400545959
+      Items_4: 1092293801
+      Items_40: 1467881589
+      Items_41: -407036640
+      Items_42: 1672301763
+      Items_43: -1410953070
+      Items_44: -26046573
+      Items_45: -197640443
+      Items_46: -519612973
+      Items_47: 2109382850
+      Items_48: -498193100
+      Items_49: -905540962
+      Items_5: 1943489649
+      Items_50: -451143458
+      Items_51: 1197452100
+      Items_52: -2011640351
+      Items_53: 212680669
+      Items_54: -1172178252
+      Items_55: -1087162528
+      Items_56: 405807373
+      Items_57: 235288141
+      Items_58: 1198107528
+      Items_59: -1477944767
+      Items_6: -1977057963
+      Items_60: 530295699
+      Items_61: -415256359
+      Items_62: 756836477
+      Items_63: -1772260728
+      Items_7: -1976148678
+      Items_8: -106128243
+      Items_9: -690050698
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

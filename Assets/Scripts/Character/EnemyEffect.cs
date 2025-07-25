@@ -126,7 +126,7 @@ public class EnemyEffect : MonoBehaviour
     // Play death sound with cached reference
     if (audioManager != null)
     {
-      audioManager.PlaySFX("DeathSound");
+      audioManager.PlaySFX($"DeathSound{enemyCore.CurrentLevel}");
     }
 
     // Play death particles
