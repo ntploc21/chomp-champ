@@ -2043,7 +2043,6 @@ GameObject:
   m_Component:
   - component: {fileID: 35148888}
   - component: {fileID: 35148890}
-  - component: {fileID: 35148889}
   m_Layer: 0
   m_Name: Player Save Manager
   m_TagString: Untagged
@@ -2066,33 +2065,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 556351431}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &35148889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 35148887}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46cf3a34a9b45a24191abec1c3aa8eb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnPlayerDataLoaded:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPlayerDataSaved:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPlayerDataDeleted:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPlayerDataChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  autoInitialize: 1
-  autoSaveOnFocusLoss: 1
-  enableDebugLogging: 0
 --- !u!114 &35148890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2106,9 +2078,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameDataManager: {fileID: 0}
-  playerDataHelper: {fileID: 35148889}
-  autoSaveEnabled: 1
-  autoSaveInterval: 30
+  playerDataHelper: {fileID: 0}
+  autoSaveEnabled: 0
+  autoSaveInterval: 15
 --- !u!1 &41626025
 GameObject:
   m_ObjectHideFlags: 0

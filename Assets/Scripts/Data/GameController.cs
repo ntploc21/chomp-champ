@@ -17,7 +17,6 @@ public class GameController : MonoBehaviour
   #endregion
 
   #region Private Fields
-  private bool gameInProgress = false;
   private float gameStartTime = 0f;
   private float lastAutoSave = 0f;
   private int sessionStartFishCount = 0;
@@ -62,7 +61,7 @@ public class GameController : MonoBehaviour
   private void Update()
   {
     // Auto-save during gameplay
-    if (gameInProgress && autoSaveEnabled && Time.time - lastAutoSave >= autoSaveInterval)
+    if (autoSaveEnabled && Time.time - lastAutoSave >= autoSaveInterval)
     {
       UpdateProgressivePlayerData();
       lastAutoSave = Time.time;
@@ -75,15 +74,12 @@ public class GameController : MonoBehaviour
     PlayerDataManager.OnPlayerDataLoaded -= OnPlayerDataLoaded;
 
     // Save on destroy
-    if (gameInProgress)
-    {
-      EndGame(false); // End without completing level
-    }
+    // EndGame(false); // End without completing level
   }
 
   private void OnApplicationPause(bool pauseStatus)
   {
-    if (pauseStatus && gameInProgress)
+    if (pauseStatus)
     {
       UpdateProgressivePlayerData();
     }
@@ -91,7 +87,7 @@ public class GameController : MonoBehaviour
 
   private void OnApplicationFocus(bool hasFocus)
   {
-    if (!hasFocus && gameInProgress)
+    if (!hasFocus)
     {
       UpdateProgressivePlayerData();
     }
@@ -104,13 +100,6 @@ public class GameController : MonoBehaviour
   /// </summary>
   public void StartGame()
   {
-    if (gameInProgress)
-    {
-      Debug.LogWarning("Game already in progress!");
-      return;
-    }
-
-    gameInProgress = true;
     gameStartTime = Time.time;
     lastAutoSave = Time.time;
     sessionStartFishCount = PlayerDataManager.CurrentPlayerData.totalFishEaten;
@@ -133,10 +122,10 @@ public class GameController : MonoBehaviour
   /// <param name="levelCompleted">Whether the level was completed successfully.</param>
   public void EndGame(bool levelCompleted = false)
   {
-    if (!gameInProgress) return;
-
-    gameInProgress = false;
     float sessionDuration = Time.time - gameStartTime;
+
+    // Update the player data progressive last time to ensure all changes are saved
+    UpdateProgressivePlayerData();
 
     // Update player data with session results
     UpdateFinalPlayerData(sessionDuration, levelCompleted);
@@ -149,8 +138,6 @@ public class GameController : MonoBehaviour
   /// </summary>
   public void OnLevelCompleted()
   {
-    if (!gameInProgress) return;
-
     // Mark level as completed
     PlayerDataManager.CompleteLevel(CurrentLevelName);
 
@@ -179,7 +166,7 @@ public class GameController : MonoBehaviour
   /// <summary>
   /// Called when the player dies.
   /// </summary>
-  public void OnPlayerDied()
+  public void OnPlayerDied(bool isGameOver = false)
   {
     PlayerDataManager.IncrementDeaths();
 
@@ -190,18 +177,9 @@ public class GameController : MonoBehaviour
 
     Debug.Log($"Player died. Total deaths: {PlayerDataManager.CurrentPlayerData.totalDeaths}");
 
-    // End the game
-    EndGame(false);
-  }
-
-  /// <summary>
-  /// Called when the player reaches a new level.
-  /// </summary>
-  /// <param name="newLevel">The new level reached.</param>
-  public void OnPlayerLevelUp(int newLevel)
-  {
-    PlayerDataManager.UpdateHighestLevel(newLevel);
-    Debug.Log($"Player reached level {newLevel}!");
+    // End the game if the player has no lives left
+    if (gameDataManager.SessionData.lives <= 0 || isGameOver)
+      EndGame(false);
   }
 
   /// <summary>
@@ -248,11 +226,13 @@ public class GameController : MonoBehaviour
       data.totalPlayTime += sessionTime;
 
       // Update session-based stats
+      if (!data.bestScore.ContainsKey(CurrentLevelName))
+      {
+        data.bestScore[CurrentLevelName] = 0f; // Initialize if not exists
+      }
+
       if (sessionData.score > data.bestScore[CurrentLevelName])
         data.bestScore[CurrentLevelName] = sessionData.score;
-
-      if (sessionData.currentLevel > data.highestLevelReached)
-        data.highestLevelReached = sessionData.currentLevel;
 
       // Update fish count
       int sessionFish = sessionData.enemiesEaten;
@@ -379,10 +359,7 @@ public class GameController : MonoBehaviour
   /// </summary>
   public void SaveGame()
   {
-    if (gameInProgress)
-    {
-      UpdateProgressivePlayerData();
-    }
+    UpdateProgressivePlayerData();
     PlayerDataManager.SavePlayerData();
     Debug.Log("Game saved manually");
   }
@@ -416,7 +393,7 @@ public class GameController : MonoBehaviour
   private void DebugPrintStats()
   {
     var data = PlayerDataManager.CurrentPlayerData;
-    Debug.Log($"Player: {data.playerName}, Level: {data.highestLevelReached}, Score: {data.bestScore:N0}, " +
+    Debug.Log($"Player: {data.playerName}, Level: {data.currentLevel}, Score: {data.bestScore:N0}, " +
              $"Fish: {data.totalFishEaten}, Games: {data.gamesPlayed}, Deaths: {data.totalDeaths}");
   }
   #endregion
