@@ -55,6 +55,11 @@ public class PlayerEffect : MonoBehaviour
   [SerializeField] private bool enableDebugLogs = false;
   #endregion
 
+  #region Properties
+  public SpriteRenderer SpriteRenderer => spriteRenderer;
+  public Animator Animator => animator;
+  #endregion
+
   #region Internal Data
   private PlayerCore playerCore;
   private Camera playerCamera;
@@ -128,14 +133,16 @@ public class PlayerEffect : MonoBehaviour
     // Play eat sound
     if (UIManagerAudio.instance != null)
     {
-      UIManagerAudio.instance.PlaySFX("EatSound");
+      // UIManagerAudio.instance.PlaySFX("EatSound");
     }
 
     // Play eat particles
     if (eatParticles != null)
     {
       eatParticles.Play();
-    }    // Screen shake
+    }
+
+    // Screen shake
     if (enableScreenShake)
     {
       if (useAdvancedShake)
@@ -264,6 +271,10 @@ public class PlayerEffect : MonoBehaviour
 
   public void PlayRespawnEffect()
   {
+    if (UIManagerAudio.instance != null)
+    {
+      UIManagerAudio.instance.PlaySFX("SpawnSound");
+    }
     // Similar to spawn but with different timing
     StartCoroutine(RespawnAnimation());
 

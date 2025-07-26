@@ -27,9 +27,9 @@ MonoBehaviour:
     fadeIn: 0
     fadeOut: 0
     fadeSpeed: 0
-  - trackName: New Track
-    displayName: New Track
-    audioClip: {fileID: 0}
+  - trackName: BGM_Track4
+    displayName: BGM_Track4
+    audioClip: {fileID: 8300000, guid: 45c597703b8e34fcc8d1b32cd16f312d, type: 3}
     artist: 
     album: 
     defaultVolume: 1

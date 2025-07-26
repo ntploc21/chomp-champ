@@ -97,7 +97,7 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.5}
   serializedVersion: 2
   m_Radius: 0.5
 --- !u!114 &3471395467810495185
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1386de970aedf0d42a60030bbacf00a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyData: {fileID: 11400000, guid: 61c456dc09bc5f845b5fa439a867078a, type: 2}
+  enemyData: {fileID: 11400000, guid: 3e2618b134d565d43aafb9ccb4908918, type: 2}
   enemyBehaviour: {fileID: 8629618451345955163}
   enemyEffect: {fileID: 6135464484432424022}
   isActive: 1
@@ -155,6 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7581a1bcf80accd4294621cb9991d6f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skipSpawnAnimation: 0
 --- !u!114 &7331134824525793962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,9 +186,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7834610701300955531}
   - component: {fileID: 8069831759800578496}
-  - component: {fileID: 7860143017907434086}
+  - component: {fileID: 4532633027531724541}
+  - component: {fileID: 7170029614084274689}
   m_Layer: 7
-  m_Name: Circle
+  m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -259,8 +261,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!95 &7860143017907434086
+  m_SpriteSortPoint: 1
+--- !u!210 &4532633027531724541
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289249766163330978}
+  m_Enabled: 1
+  m_SortingLayerID: -1583945857
+  m_SortingLayer: -3
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+--- !u!95 &7170029614084274689
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -268,7 +282,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289249766163330978}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 0}
   m_CullingMode: 0

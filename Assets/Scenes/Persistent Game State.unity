@@ -756,7 +756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingMode: 0
-  presetName: Standard (Countdown)
+  presetName: Standard (Quick)
   enableTrigger: 0
   onTriggerExit: 0
   loadWithTag: 0
@@ -773,7 +773,7 @@ MonoBehaviour:
   - {fileID: 8985211846813716763, guid: 2e032f973bfa7da4b95039db5496ee9a, type: 3}
   - {fileID: 8985211846813716763, guid: 4c00f7073bf769d488574c4718131411, type: 3}
   - {fileID: 8985211846813716763, guid: 8a64ef689de31784091e742137c1d8db, type: 3}
-  selectedLoadingIndex: 5
+  selectedLoadingIndex: 6
   selectedTagIndex: 0
   onLoadingStart:
     m_PersistentCalls:
@@ -28283,7 +28283,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIManagerAsset: {fileID: 11400000, guid: 98972d851a944df4a9402eac62a896e7, type: 2}
   colorType: 0
-  useCustomColor: 0
+  useCustomColor: 1
   useCustomAlpha: 1
 --- !u!114 &988517501
 MonoBehaviour:
@@ -28298,7 +28298,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.72356266, b: 0, a: 0.09803922}
+  m_Color: {r: 0.7955427, g: 0, b: 1, a: 0.29411766}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -31288,7 +31288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7254902, b: 0, a: 1}
+  m_Color: {r: 0.9208026, g: 0, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -33177,7 +33177,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 733328f41cc77eb44a04dd6402c4b2b5, type: 3}
+  m_Sprite: {fileID: 1144451620, guid: 62b952a097156be4ab4c9015a09ae8f1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -33268,7 +33268,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 75, y: 0}
+  m_AnchoredPosition: {x: 75, y: 20}
   m_SizeDelta: {x: 150, y: 450}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1125193797
@@ -33291,7 +33291,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 01b3079c2f955c249ac56478b939ed7e, type: 3}
+  m_Sprite: {fileID: -22313979, guid: 40f6567dd1764264f85ab20944149aec, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -38359,6 +38359,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   victoryCanvas: {fileID: 1499522679}
   gameOverCanvas: {fileID: 1006391647}
+  hudManager: {fileID: 1681289624}
 --- !u!1 &1309230943
 GameObject:
   m_ObjectHideFlags: 0
@@ -67908,7 +67909,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fb23008e8cc0b434a970f05d07e09174, type: 3}
+  m_Sprite: {fileID: -714866815, guid: 7dc5e1c866cc5486fb4b1fe18f4691b0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

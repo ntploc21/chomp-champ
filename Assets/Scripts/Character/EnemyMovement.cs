@@ -226,7 +226,7 @@ public class EnemyMovement : MonoBehaviour
     rb.velocity = velocity;
 
     // Update rotation to face movement direction
-    UpdateRotation();
+    // UpdateRotation();
 
     // Check if we should generate a new wander target before stopping
     if (HasReachedTarget(1f)) // Larger threshold for smoother transitions

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.U2D.Animation;
 
 /// <summary>
 /// Updated PlayerCore that uses the separated PlayerDataManager
@@ -18,14 +19,31 @@ public class PlayerCore : MonoBehaviour
 
     [Header("Gameplay Settings")]
     [Tooltip("Duration of invincibility after respawn or eaten by an enemy.")]
-    [SerializeField] private float invincibilityDuration = 2f;
-    [Tooltip("Delay before respawning after death.")]
+    [SerializeField] private float invincibilityDuration = 2f; [Tooltip("Delay before respawning after death.")]
     [SerializeField] private float respawnDelay = 2f;
 
     [Header("Events")]
     public UnityEvent<PlayerCore> OnPlayerSpawn = null;
     public UnityEvent<PlayerCore> OnPlayerDeath = null;
     public UnityEvent<PlayerCore, EnemyCore> OnPlayerEatEnemy = null;
+
+    [Header("Player Animation System")]
+    [Tooltip("Sprite Library Asset for player animations.")]
+    [SerializeField] private SpriteLibraryAsset playerSpriteLibrary;
+    [Tooltip("Player animator controller.")]
+    [SerializeField] private RuntimeAnimatorController playerAnimatorController;
+    [Tooltip("Default sprite category for player.")]
+    [SerializeField] private string defaultSpriteCategory = "Idle";
+    [Tooltip("Default sprite label for player.")]
+    [SerializeField] private string defaultSpriteLabel = "Player";
+
+    [Header("Animation Parameters")]
+    [SerializeField] private string hitAnimationParameter = "hit";
+    [SerializeField] private string deathAnimationParameter = "death";
+    [SerializeField] private string invincibleAnimationParameter = "invincible";
+    [SerializeField] private string moveXAnimationParameter = "moveX";
+    [SerializeField] private string moveYAnimationParameter = "moveY";
+    [SerializeField] private string isMovingAnimationParameter = "isMoving";
     #endregion
 
     #region Properties
@@ -39,8 +57,7 @@ public class PlayerCore : MonoBehaviour
     public int Level => dataManager.SessionData.currentLevel;
     public Vector2 LastPosition => dataManager.SessionData.lastPosition;
 
-    // Component references
-    public PlayerMovement Movement => playerMovement;
+    // Component references    public PlayerMovement Movement => playerMovement;
     public PlayerGrowth Growth => playerGrowth;
     public PlayerEffect Effect => playerEffect;
     public GameDataManager DataManager => dataManager;
@@ -49,6 +66,17 @@ public class PlayerCore : MonoBehaviour
     #region Internal Data
     // Coroutine for invincibility effect
     private Coroutine invincibilityCoroutine;
+
+    // Animation system components
+    private Animator _animator;
+    private SpriteLibrary _spriteLibrary;
+    private SpriteResolver _spriteResolver;
+
+    // Cached animation parameter hashes for performance
+    private int hitHash;
+    private int deathHash;
+    private int invincibleHash;
+    private int isMovingHash;
     #endregion
 
     #region Unity Events
@@ -91,9 +119,11 @@ public class PlayerCore : MonoBehaviour
 
         if (playerEffect == null)
             playerEffect = GetComponent<PlayerEffect>();
-
         if (dataManager == null)
             dataManager = GetComponent<GameDataManager>();
+
+        // Initialize sprite library system
+        InitializePlayerSpriteLibrarySystem();
 
         // Initialize components with this core reference
         playerMovement?.Initialize(this);
@@ -156,15 +186,16 @@ public class PlayerCore : MonoBehaviour
 
         // Fire events
         OnPlayerEatEnemy?.Invoke(this, enemy);
-    }
-
-    /// <summary>
-    /// Handles the logic when the player is eaten by an enemy.
-    /// This method reduces the player's lives, handles respawn, and plays death effects.
-    /// </summary>
+    }    /// <summary>
+         /// Handles the logic when the player is eaten by an enemy.
+         /// This method reduces the player's lives, handles respawn, and plays death effects.
+         /// </summary>
     public void OnEaten()
     {
         if (!IsAlive || IsInvincible) return;
+
+        // Trigger hit animation
+        TriggerHit();
 
         // Handle life loss through data manager
         dataManager.LoseLife();
@@ -177,14 +208,15 @@ public class PlayerCore : MonoBehaviour
         {
             StartCoroutine(RespawnCoroutine(respawnDelay));
         }
-    }
-
-    /// <summary>
-    /// Handles the player's death logic.
-    /// This method disables movement, plays death effects, and fires the death event.
-    /// </summary>
+    }    /// <summary>
+         /// Handles the player's death logic.
+         /// This method disables movement, plays death effects, and fires the death event.
+         /// </summary>
     private void OnDeath()
     {
+        // Trigger death animation
+        TriggerDeath();
+
         // Disable movement
         if (playerMovement != null)
             playerMovement.SetCanMove(false);
@@ -240,10 +272,12 @@ public class PlayerCore : MonoBehaviour
 
         invincibilityCoroutine = StartCoroutine(InvincibilityCoroutine(duration));
     }
-
     private System.Collections.IEnumerator InvincibilityCoroutine(float duration)
     {
         dataManager.SetInvincible(true);
+
+        // Set invincible animation state
+        SetInvincibleAnimation(true);
 
         // Visual feedback for invincibility
         if (playerEffect != null)
@@ -253,8 +287,104 @@ public class PlayerCore : MonoBehaviour
 
         dataManager.SetInvincible(false);
 
+        // Clear invincible animation state
+        SetInvincibleAnimation(false);
+
         if (playerEffect != null)
             playerEffect.SetFlicker(false);
+    }
+    #endregion
+
+    #region Player Animation Control
+    /// <summary>
+    /// Triggers the hit animation for the player
+    /// </summary>
+    public void TriggerHit()
+    {
+        if (_animator != null)
+        {
+            _animator.SetTrigger(hitHash);
+        }
+    }
+
+    /// <summary>
+    /// Triggers the death animation for the player
+    /// </summary>
+    public void TriggerDeath()
+    {
+        if (_animator != null)
+        {
+            _animator.SetTrigger(deathHash);
+        }
+    }
+
+    /// <summary>
+    /// Sets the invincible state in the animator
+    /// </summary>
+    /// <param name="isInvincible">Whether the player is invincible</param>
+    public void SetInvincibleAnimation(bool isInvincible)
+    {
+        if (_animator != null)
+        {
+            _animator.SetBool(invincibleHash, isInvincible);
+        }
+    }
+
+    /// <summary>
+    /// Updates movement-related animation parameters
+    /// </summary>
+    /// <param name="movement">Movement vector</param>
+    public void SetMovementAnimation(Vector2 movement)
+    {
+        if (_animator != null)
+        {
+            _animator.SetBool("isMoving", movement.magnitude > 0.1f);
+
+            // Check if player is moving left/right to flip sprite
+            if (movement.x != 0f)
+            {
+                playerEffect.SpriteRenderer.flipX = movement.x < 0f;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Sets a specific sprite category for the player
+    /// </summary>
+    /// <param name="category">The sprite category to use</param>
+    public void SetSpriteCategory(string category)
+    {
+        if (_spriteResolver != null && !string.IsNullOrEmpty(category))
+        {
+            string currentLabel = _spriteResolver.GetLabel();
+            _spriteResolver.SetCategoryAndLabel(category, currentLabel);
+        }
+    }
+
+    /// <summary>
+    /// Sets a specific sprite variant for the player
+    /// </summary>
+    /// <param name="label">The sprite label/variant to use</param>
+    public void SetSpriteVariant(string label)
+    {
+        if (_spriteResolver != null && !string.IsNullOrEmpty(label))
+        {
+            string currentCategory = _spriteResolver.GetCategory();
+            _spriteResolver.SetCategoryAndLabel(currentCategory, label);
+        }
+    }
+
+    /// <summary>
+    /// Sets both sprite category and variant at once
+    /// </summary>
+    /// <param name="category">The sprite category</param>
+    /// <param name="label">The sprite label/variant</param>
+    public void SetSprite(string category, string label)
+    {
+        if (_spriteResolver != null && !string.IsNullOrEmpty(category) && !string.IsNullOrEmpty(label))
+        {
+            _spriteResolver.SetCategoryAndLabel(category, label);
+        }
     }
     #endregion
 
@@ -349,6 +479,71 @@ public class PlayerCore : MonoBehaviour
     public void DebugPlayerState()
     {
         dataManager.PrintDebugData();
+    }
+    #endregion
+
+    #region Sprite Library System
+    /// <summary>
+    /// Initializes the player sprite library system by setting up required components
+    /// </summary>
+    private void InitializePlayerSpriteLibrarySystem()
+    {
+        // Get or add Animator component
+        _animator = GetComponent<Animator>();
+        if (_animator == null)
+        {
+            _animator = gameObject.AddComponent<Animator>();
+        }
+
+        // Set animator controller if specified
+        if (playerAnimatorController != null)
+        {
+            _animator.runtimeAnimatorController = playerAnimatorController;
+        }
+
+        // Get or add SpriteLibrary component
+        _spriteLibrary = GetComponent<SpriteLibrary>();
+        if (_spriteLibrary == null)
+        {
+            _spriteLibrary = gameObject.AddComponent<SpriteLibrary>();
+        }
+
+        // Set sprite library asset if specified
+        if (playerSpriteLibrary != null)
+        {
+            _spriteLibrary.spriteLibraryAsset = playerSpriteLibrary;
+        }
+
+        // Get or add SpriteResolver component
+        _spriteResolver = GetComponent<SpriteResolver>();
+        if (_spriteResolver == null)
+        {
+            _spriteResolver = gameObject.AddComponent<SpriteResolver>();
+        }
+
+        // Set default sprite if specified
+        if (!string.IsNullOrEmpty(defaultSpriteCategory) && !string.IsNullOrEmpty(defaultSpriteLabel))
+        {
+            _spriteResolver.SetCategoryAndLabel(defaultSpriteCategory, defaultSpriteLabel);
+        }
+
+        // Cache animation parameters for performance
+        CacheAnimationParameters();
+
+        Debug.Log("Player Sprite Library System initialized successfully.");
+    }
+
+    /// <summary>
+    /// Caches animation parameter hashes for performance optimization
+    /// </summary>
+    private void CacheAnimationParameters()
+    {
+        if (_animator == null) return;
+
+        hitHash = Animator.StringToHash(hitAnimationParameter);
+        deathHash = Animator.StringToHash(deathAnimationParameter);
+        invincibleHash = Animator.StringToHash(invincibleAnimationParameter);
+        isMovingHash = Animator.StringToHash(isMovingAnimationParameter);
     }
     #endregion
 }

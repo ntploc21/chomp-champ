@@ -747,6 +747,7 @@ public class SpawnManager : MonoBehaviour
     if (enemyCore != null)
     {
       enemyCore.isActive = true;
+      enemyCore.ResetAnimatorAlpha();
     }
   }
 
@@ -981,6 +982,7 @@ public class SpawnManager : MonoBehaviour
       enemyCore.SetEnemyData(enemyData);
       enemyCore.SetLevel(level);
       enemyCore.isActive = true;
+      enemyCore.ResetAnimatorAlpha();
     }
 
     if (enableDebugLogs)

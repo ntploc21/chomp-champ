@@ -66,7 +66,7 @@ public class PlayerGrowth : MonoBehaviour
 
   public void SetSize(float newSize, bool isImmediate = true)
   {
-    transform.localScale = new Vector3(newSize, newSize, 1f);
+    transform.localScale = new Vector3(newSize * (transform.localScale.x < 0 ? -1 : 1), newSize, 1f);
   }
 
   public void ResetGrowth()
