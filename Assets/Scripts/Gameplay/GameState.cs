@@ -61,6 +61,10 @@ public class GameState : MonoBehaviour
     public UnityEvent<float> OnGameTimerUpdate;
     #endregion
 
+    #region Internal Data
+    private GameController gameController; // Reference to GameController for game management
+    #endregion
+
     // Properties
     public GameStateType CurrentState => currentState;
     public GameStateType PreviousState => previousState;
@@ -95,6 +99,7 @@ public class GameState : MonoBehaviour
     }
     private void Start()
     {
+        InitializeGameController();
         InitializeGameState();
         SubscribeToEvents();
 
@@ -149,12 +154,23 @@ public class GameState : MonoBehaviour
         // For in-game scenes, start directly in Playing state
         if (isInGameScene && startInPlayingState)
         {
+            gameController?.StartGame();
             ChangeState(GameStateType.Playing);
         }
         else
         {
             // Set initial state for non-game scenes
             ChangeState(GameStateType.MainMenu);
+        }
+    }
+
+    private void InitializeGameController()
+    {
+        // Find GameController in the scene
+        gameController = FindObjectOfType<GameController>();
+        if (gameController == null)
+        {
+            Debug.LogError("GameState: GameController not found in the scene!");
         }
     }
 
@@ -293,6 +309,10 @@ public class GameState : MonoBehaviour
             GUIManager.Instance.ShowGameOverCanvas(score, gameTime, enemiesEaten);
         }
 
+        // GameController game over handling
+        if (gameController != null)
+            gameController.OnPlayerDied(true);
+
         OnGameOver?.Invoke();
     }
     private void HandleVictoryState()
@@ -314,6 +334,12 @@ public class GameState : MonoBehaviour
             int enemiesEaten = playerCore != null ? playerCore.DataManager.SessionData.enemiesEaten : 0;
 
             GUIManager.Instance.ShowVictoryCanvas(score, gameTime, enemiesEaten);
+        }
+
+        // GameController victory handling
+        if (gameController != null)
+        {
+            gameController.OnLevelCompleted();
         }
 
         OnVictory?.Invoke();
@@ -382,14 +408,12 @@ public class GameState : MonoBehaviour
     {
         if (currentState == GameStateType.GameOver) return;
 
-        Debug.Log("Game Over!");
         StartCoroutine(GameOverCoroutine());
     }
     public void Victory()
     {
         if (currentState == GameStateType.Victory) return;
 
-        Debug.Log("Victory!");
         StartCoroutine(VictoryCoroutine());
     }
 
@@ -424,6 +448,12 @@ public class GameState : MonoBehaviour
     private void CheckVictoryConditions()
     {
         if (playerCore == null) return;
+
+        // Don't check victory conditions if it in Victory
+        if (currentState == GameStateType.Victory || currentState == GameStateType.GameOver)
+        {
+            return;
+        }
 
         // Check level-based victory, disabled by setting victoryLevel to 0
         if (victoryLevel > 0 && playerCore.CurrentLevel >= victoryLevel)
