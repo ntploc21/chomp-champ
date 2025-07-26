@@ -1348,7 +1348,7 @@ MonoBehaviour:
       content. You can also use any TMP-supported rich text. You can use the 'Chapter
       Manager' component to make any changes to the chapter panel. Don't worry, it's
       really easy to use!
-    defaultState: 3
+    defaultState: 1
     titleKey: Chapter2Title
     descriptionKey: Chapter2Description
     onContinue:
@@ -1356,7 +1356,31 @@ MonoBehaviour:
         m_Calls: []
     onPlay:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1591274547}
+          m_TargetAssemblyTypeName: Michsky.LSS.LSS_Manager, Assembly-CSharp-firstpass
+          m_MethodName: LoadScene
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Persistent Game State
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 1591274547}
+          m_TargetAssemblyTypeName: Michsky.LSS.LSS_Manager, Assembly-CSharp-firstpass
+          m_MethodName: LoadSceneAdditive
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: C1L2
+            m_BoolArgument: 0
+          m_CallState: 2
     onReplay:
       m_PersistentCalls:
         m_Calls: []
@@ -1368,7 +1392,7 @@ MonoBehaviour:
       content. You can also use any TMP-supported rich text. You can use the 'Chapter
       Manager' component to make any changes to the chapter panel. Don't worry, it's
       really easy to use!
-    defaultState: 0
+    defaultState: 1
     titleKey: Chapter3Title
     descriptionKey: Chapter3Description
     onContinue:
@@ -1376,7 +1400,31 @@ MonoBehaviour:
         m_Calls: []
     onPlay:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1591274547}
+          m_TargetAssemblyTypeName: Michsky.LSS.LSS_Manager, Assembly-CSharp-firstpass
+          m_MethodName: LoadScene
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Persistent Game State
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 1591274547}
+          m_TargetAssemblyTypeName: Michsky.LSS.LSS_Manager, Assembly-CSharp-firstpass
+          m_MethodName: LoadSceneAdditive
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: C1L3
+            m_BoolArgument: 0
+          m_CallState: 2
     onReplay:
       m_PersistentCalls:
         m_Calls: []
@@ -1388,7 +1436,7 @@ MonoBehaviour:
       content. You can also use any TMP-supported rich text. You can use the 'Chapter
       Manager' component to make any changes to the chapter panel. Don't worry, it's
       really easy to use!
-    defaultState: 0
+    defaultState: 1
     titleKey: Chapter4Title
     descriptionKey: Chapter4Description
     onContinue:
@@ -1396,7 +1444,31 @@ MonoBehaviour:
         m_Calls: []
     onPlay:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1591274547}
+          m_TargetAssemblyTypeName: Michsky.LSS.LSS_Manager, Assembly-CSharp-firstpass
+          m_MethodName: LoadScene
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Persistent Game State
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 1591274547}
+          m_TargetAssemblyTypeName: Michsky.LSS.LSS_Manager, Assembly-CSharp-firstpass
+          m_MethodName: LoadSceneAdditive
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: C1L4
+            m_BoolArgument: 0
+          m_CallState: 2
     onReplay:
       m_PersistentCalls:
         m_Calls: []
@@ -5139,7 +5211,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5042148382741975237, guid: 2da758493bb9a96409448335d0c59538, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 142.08
       objectReference: {fileID: 0}
     - target: {fileID: 5042148382741975237, guid: 2da758493bb9a96409448335d0c59538, type: 3}
       propertyPath: m_SizeDelta.y
@@ -5647,7 +5719,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5042148382741975237, guid: 2da758493bb9a96409448335d0c59538, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 142.08
       objectReference: {fileID: 0}
     - target: {fileID: 5042148382741975237, guid: 2da758493bb9a96409448335d0c59538, type: 3}
       propertyPath: m_SizeDelta.y
@@ -7209,7 +7281,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5042148382741975237, guid: 2da758493bb9a96409448335d0c59538, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 142.08
       objectReference: {fileID: 0}
     - target: {fileID: 5042148382741975237, guid: 2da758493bb9a96409448335d0c59538, type: 3}
       propertyPath: m_SizeDelta.y
@@ -9023,7 +9095,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6494165354426828754, guid: 55e125313b5307545b68991fd6372f4d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -319.65503
+      value: -319.65515
       objectReference: {fileID: 0}
     - target: {fileID: 6574213234265489768, guid: 55e125313b5307545b68991fd6372f4d, type: 3}
       propertyPath: m_Color.b
@@ -11405,7 +11477,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6494165354426828754, guid: 55e125313b5307545b68991fd6372f4d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -319.65503
+      value: -319.65515
       objectReference: {fileID: 0}
     - target: {fileID: 6574213234265489768, guid: 55e125313b5307545b68991fd6372f4d, type: 3}
       propertyPath: m_Color.b
@@ -13617,7 +13689,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6494165354426828754, guid: 55e125313b5307545b68991fd6372f4d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -319.65503
+      value: -319.65515
       objectReference: {fileID: 0}
     - target: {fileID: 6574213234265489768, guid: 55e125313b5307545b68991fd6372f4d, type: 3}
       propertyPath: m_Color.b
