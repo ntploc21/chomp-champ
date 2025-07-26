@@ -24,12 +24,15 @@ public class GUIManager : MonoBehaviour
 
     #region Internal Data
     private GameDataManager gameDataManager;
+    private SpawnManager spawnManager;
     #endregion
 
     #region Properties
     public GameObject VictoryCanvas => victoryCanvas;
     public GameObject GameOverCanvas => gameOverCanvas;
+
     public GameDataManager GameDataManager => gameDataManager;
+    public SpawnManager SpawnManager => spawnManager;
     #endregion
 
     #region Unity Lifecycle
@@ -47,11 +50,6 @@ public class GUIManager : MonoBehaviour
             Debug.LogWarning("Multiple UIManager instances detected. Destroying duplicate.");
             Destroy(gameObject);
         }
-    }
-
-    private void Start()
-    {
-        FindGameDataManagerInScenes();
     }
 
     private void OnDestroy()
@@ -99,6 +97,24 @@ public class GUIManager : MonoBehaviour
         else
         {
             Debug.LogWarning("GameDataManager not found in any loaded scene");
+        }
+    }
+
+    /// <summary>
+    /// Find SpawnManager in any loaded scene
+    /// This is used to refresh level scene references
+    /// </summary>
+    public void FindSpawnManagerInScenes()
+    {
+        spawnManager = FindObjectOfType<SpawnManager>();
+        if (spawnManager != null)
+        {
+            Debug.Log("SpawnManager found in scene");
+            spawnManager.RefreshLevelScene();
+        }
+        else
+        {
+            Debug.LogWarning("SpawnManager not found in any loaded scene");
         }
     }
     #endregion
@@ -456,7 +472,9 @@ public class GUIManager : MonoBehaviour
             Scene scene = SceneManager.GetSceneAt(i);
 
             // Skip the persistent scene, look for level scenes
-            if (scene.name != "Persistent Game State" && scene.name.Contains("Level"))
+            if (scene.name != "Persistent Game State" &&
+                (scene.name.StartsWith("C") || scene.name.Contains("Level"))
+            )
             {
                 currentLevelScene = scene.name;
                 Debug.Log($"Tracked current level for replay: {currentLevelScene}");
@@ -486,9 +504,6 @@ public class GUIManager : MonoBehaviour
                     Debug.Log($"Found level in Reach UI Scene Manager, reloading index {i}");
                     reachSceneManager.LoadSceneByIndex(i);
 
-                    // Delay refresh of SpawnManager to allow scene to load
-                    StartCoroutine(DelayedSpawnManagerRefresh());
-
                     return true;
                 }
             }
@@ -497,8 +512,6 @@ public class GUIManager : MonoBehaviour
             Debug.Log($"Level not found in Reach UI Scene Manager list, trying direct load");
             reachSceneManager.LoadSceneByName(currentLevelScene);
 
-            // Delay refresh of SpawnManager to allow scene to load
-            StartCoroutine(DelayedSpawnManagerRefresh());
             return true;
         }
 
@@ -583,9 +596,6 @@ public class GUIManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         Debug.Log($"Level {currentLevelScene} reloaded successfully");
-
-        // Refresh SpawnManager's level scene reference
-        StartCoroutine(DelayedSpawnManagerRefresh());
     }
 
     /// <summary>
@@ -621,26 +631,6 @@ public class GUIManager : MonoBehaviour
         else
         {
             Debug.LogWarning("UIManager: Could not find SpawnManager to refresh level scene");
-        }
-    }
-    #endregion
-
-    #region Delayed Refresh
-    /// <summary>
-    /// Coroutine to delay SpawnManager refresh after Reach UI scene loading
-    /// </summary>
-    private System.Collections.IEnumerator DelayedSpawnManagerRefresh()
-    {
-        var tries = 0;
-        var maxTries = 5;
-
-        while (tries < maxTries)
-        {
-            // Try to find SpawnManager in the scene
-            RefreshSpawnManagerLevelScene();
-
-            tries++;
-            yield return new WaitForSecondsRealtime(2f);
         }
     }
     #endregion
