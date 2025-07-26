@@ -11,6 +11,10 @@ using System;
 public class LevelData : ScriptableObject
 {
     #region Editor Data
+    [Header("Level Info")]
+    [Tooltip("Name of the level.")]
+    public string levelName = "C0L1";
+
     [Header("Basic Growth Settings")]
     [Tooltip("Growth factor for player size per level.")]
     public float growthFactor = 1.1f;

@@ -140,7 +140,12 @@ public class GUIManager : MonoBehaviour
             Cursor.visible = true;
 
             // Track current level for replay functionality
-            TrackCurrentLevel();
+            // TrackCurrentLevel();
+            currentLevelScene = gameDataManager?.LevelConfig?.levelName ?? "";
+            if (string.IsNullOrEmpty(currentLevelScene))
+            {
+                Debug.LogWarning("Current level scene is empty, cannot track for replay.");
+            }
 
             // Update text elements with game statistics
             UpdateCanvasText(victoryCanvas, score, gameTime, enemiesEaten);
@@ -200,7 +205,12 @@ public class GUIManager : MonoBehaviour
             Cursor.visible = true;
 
             // Track current level for replay functionality
-            TrackCurrentLevel();
+            // TrackCurrentLevel();
+            currentLevelScene = gameDataManager?.LevelConfig?.levelName ?? "";
+            if (string.IsNullOrEmpty(currentLevelScene))
+            {
+                Debug.LogWarning("Current level scene is empty, cannot track for replay.");
+            }
 
             // Update text elements with game statistics
             UpdateCanvasText(gameOverCanvas, score, gameTime, enemiesEaten);
