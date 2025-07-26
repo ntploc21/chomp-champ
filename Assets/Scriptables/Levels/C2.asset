@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4416768e9e5481d4da660e9fef5a2f89, type: 3}
-  m_Name: C2L4
+  m_Name: C2
   m_EditorClassIdentifier: 
   growthFactor: 1.25
-  baseSize: 1
+  baseSize: 1.5
   maxSize: 10
   initialXPToNextLevel: 50
   xpGrowthFactor: 1
