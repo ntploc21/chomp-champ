@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Skeleton-C1L4
   m_EditorClassIdentifier: 
   enemyName: Predator
-  spriteLibrary: {fileID: 7108339969198208228, guid: fbacf118182c00d429815b909e55f69a, type: 3}
+  spriteLibrary: {fileID: 7108339969198208228, guid: 5262a17078d7e644a8e8f758c028afab, type: 3}
   defaultSpriteCategory: Idle
   defaultSpriteLabel: Normal
   fallbackSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
