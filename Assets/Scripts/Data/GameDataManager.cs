@@ -121,7 +121,7 @@ public class GameDataManager : MonoBehaviour
     gameSessionData.totalXP += amount; // Track total XP gained in the session
 
     // Check for level up
-    if (gameSessionData.currentXP >= gameSessionData.xpToNextLevel && !IsMaxLevel())
+    while (gameSessionData.currentXP >= gameSessionData.xpToNextLevel && !IsMaxLevel())
     {
       LevelUp();
     }
