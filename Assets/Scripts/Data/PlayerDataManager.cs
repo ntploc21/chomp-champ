@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 /// <summary>
 /// Static manager for handling persistent player data operations.
@@ -122,7 +123,7 @@ public static class PlayerDataManager
         saveTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
       };
 
-      string jsonData = JsonUtility.ToJson(saveWrapper, true);
+      string jsonData = JsonConvert.SerializeObject(saveWrapper, Formatting.Indented);
 
       // Save to file
       File.WriteAllText(_saveFilePath, jsonData);
@@ -158,17 +159,17 @@ public static class PlayerDataManager
         jsonData = File.ReadAllText(_saveFilePath);
         Debug.Log("Loading player data from file...");
       }
-      // Fallback to PlayerPrefs
-      else if (HasPlayerPrefsData())
-      {
-        jsonData = PlayerPrefs.GetString(SAVE_KEY);
-        Debug.Log("Loading player data from PlayerPrefs...");
-      }
+      // Fallback to PlayerPrefs (optional, but not recommended)
+      // else if (HasPlayerPrefsData())
+      // {
+      //   jsonData = PlayerPrefs.GetString(SAVE_KEY);
+      //   Debug.Log("Loading player data from PlayerPrefs...");
+      // }
 
       // If we have data to load
       if (!string.IsNullOrEmpty(jsonData))
       {
-        SaveDataWrapper saveWrapper = JsonUtility.FromJson<SaveDataWrapper>(jsonData);
+        SaveDataWrapper saveWrapper = JsonConvert.DeserializeObject<SaveDataWrapper>(jsonData);
 
         if (saveWrapper != null && saveWrapper.playerData != null)
         {

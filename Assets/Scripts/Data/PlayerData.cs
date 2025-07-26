@@ -35,6 +35,8 @@ public class PlayerData
   public int gamesPlayed = 0;
   [Tooltip("Total number of deaths.")]
   public int totalDeaths = 0;
+  [Tooltip("Total score across all sessions.")]
+  public float totalScore = 0f;
   
   [Header("Level Progression")]
   [Tooltip("Array of level names that have been unlocked.")]
@@ -95,7 +97,7 @@ public class PlayerData
     totalDeaths = 0;
 
     // Reset level progression
-    unlockedLevels = new string[] { "C0L1" };
+    unlockedLevels = new string[] { "C0L1", "C1L1", "C2L1", "C3L1" }; // Start with first levels of each chapter unlocked
     completedLevels = new string[0];
 
     // Reset Achievements

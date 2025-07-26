@@ -264,6 +264,16 @@ public class GameController : MonoBehaviour
 
       // Add any remaining XP if tracking cross-session XP
       data.totalExperienceEarned += sessionData.totalXP;
+
+      // Add total score during this session
+      data.totalScore += sessionData.score;
+
+      // Add currency balance
+      if (levelCompleted)
+      {
+        int currencyEarned = (int)sessionData.score / 100;
+        data.currencyBalance += currencyEarned;
+      }
     });
 
     // Notify PlayerDataHelper with final stats
