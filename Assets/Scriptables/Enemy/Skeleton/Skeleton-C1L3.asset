@@ -13,11 +13,15 @@ MonoBehaviour:
   m_Name: Skeleton-C1L3
   m_EditorClassIdentifier: 
   enemyName: Predator
-  spriteLibrary: {fileID: 7108339969198208228, guid: fbacf118182c00d429815b909e55f69a, type: 3}
-  animatorController: {fileID: 9100000, guid: e3c1d4507170a794a8337129c5d4de0b, type: 2}
+  spriteLibrary: {fileID: 7108339969198208228, guid: 5262a17078d7e644a8e8f758c028afab, type: 3}
   defaultSpriteCategory: Idle
   defaultSpriteLabel: Normal
   fallbackSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  animatorController: {fileID: 9100000, guid: e3c1d4507170a794a8337129c5d4de0b, type: 2}
+  hitAnimationParameter: hit
+  deathAnimationParameter: death
+  invincibleAnimationParameter: invincible
+  isMovingAnimationParameter: isMoving
   level: 3
   size: 1.5
   baseSpeed: 2.5
