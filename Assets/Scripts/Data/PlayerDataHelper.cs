@@ -214,7 +214,6 @@ public class PlayerDataHelper : MonoBehaviour
     PlayerDataManager.UpdateBestScore(levelName, score);
     PlayerDataManager.AddFishEaten(fishEaten);
     PlayerDataManager.AddPlayTime(playTime);
-    PlayerDataManager.UpdateHighestLevel(level);
 
     if (enableDebugLogging)
       Debug.Log($"PlayerDataHelper: Game ended. Score: {score}, Fish: {fishEaten}, Time: {playTime:F1}s");
@@ -327,7 +326,7 @@ public class PlayerDataHelper : MonoBehaviour
     var data = CurrentPlayerData;
     Debug.Log($"Player Stats:\n" +
              $"Name: {data.playerName}\n" +
-             $"Highest Level: {data.highestLevelReached}\n" +
+             $"Current Level: {data.currentLevel}\n" +
              $"Best Score: {data.bestScore:N0}\n" +
              $"Total XP: {data.totalExperienceEarned:N0}\n" +
              $"Play Time: {GetFormattedPlayTime()}\n" +

@@ -278,6 +278,11 @@ public static class PlayerDataManager
   {
     UpdatePlayerData(data =>
     {
+      if (!data.bestScore.ContainsKey(levelName))
+      {
+        data.bestScore[levelName] = 0f; // Initialize if not exists
+      }
+
       if (score > data.bestScore[levelName])
       {
         data.bestScore[levelName] = score;
@@ -286,17 +291,11 @@ public static class PlayerDataManager
   }
 
   /// <summary>
-  /// Updates the highest level reached if the new level is higher.
+  /// Increments the current level.
   /// </summary>
-  public static void UpdateHighestLevel(int level)
+  public static void IncrementCurrentLevel()
   {
-    UpdatePlayerData(data =>
-    {
-      if (level > data.highestLevelReached)
-      {
-        data.highestLevelReached = level;
-      }
-    });
+    UpdatePlayerData(data => data.currentLevel++);
   }
 
   /// <summary>
@@ -443,7 +442,7 @@ public static class PlayerDataManager
     if (_cachedPlayerData == null) return;
 
     // Ensure values are non-negative
-    _cachedPlayerData.highestLevelReached = Mathf.Max(1, _cachedPlayerData.highestLevelReached);
+    _cachedPlayerData.currentLevel = Mathf.Max(1, _cachedPlayerData.currentLevel);
     _cachedPlayerData.totalExperienceEarned = Mathf.Max(0f, _cachedPlayerData.totalExperienceEarned);
     _cachedPlayerData.totalPlayTime = Mathf.Max(0f, _cachedPlayerData.totalPlayTime);
     _cachedPlayerData.totalFishEaten = Mathf.Max(0, _cachedPlayerData.totalFishEaten);
@@ -488,7 +487,7 @@ public static class PlayerDataManager
            $"Has PlayerPrefs Data: {HasPlayerPrefsData()}\n" +
            $"Save Path: {_saveFilePath}\n" +
            $"Player Name: {_cachedPlayerData?.playerName}\n" +
-           $"Highest Level: {_cachedPlayerData?.highestLevelReached}\n" +
+           $"Current Level: {_cachedPlayerData?.currentLevel}\n" +
            $"Best Score: {_cachedPlayerData?.bestScore}\n" +
            $"Total Play Time: {_cachedPlayerData?.totalPlayTime:F1}s";
   }

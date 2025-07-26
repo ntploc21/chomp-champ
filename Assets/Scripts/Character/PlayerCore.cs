@@ -44,8 +44,6 @@ public class PlayerCore : MonoBehaviour
     [SerializeField] private string hitAnimationParameter = "hit";
     [SerializeField] private string deathAnimationParameter = "death";
     [SerializeField] private string invincibleAnimationParameter = "invincible";
-    [SerializeField] private string moveXAnimationParameter = "moveX";
-    [SerializeField] private string moveYAnimationParameter = "moveY";
     [SerializeField] private string isMovingAnimationParameter = "isMoving";
     #endregion
 

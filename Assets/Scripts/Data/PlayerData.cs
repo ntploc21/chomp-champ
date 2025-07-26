@@ -16,8 +16,8 @@ public class PlayerData
   public string playerName = "Player";
   
   [Header("Game Progression")]
-  [Tooltip("Highest level reached by the player.")]
-  public int highestLevelReached = 1;
+  [Tooltip("Player level across gameplay.")]
+  public int currentLevel = 1;
   [Tooltip("Total experience points accumulated across all sessions.")]
   public float totalExperienceEarned = 0f;
   [Tooltip("Best (highest) score achieved.")]
@@ -70,11 +70,22 @@ public class PlayerData
     playerName = "Player";
 
     // Reset game progression
-    highestLevelReached = 1;
+    currentLevel = 1;
     totalExperienceEarned = 0f;
     bestScore = new Dictionary<string, float>
     {
-      { "C0L1", 0f }
+      { "C0L1", 0f },
+      { "C0L2", 0f },
+      { "C0L3", 0f },
+      { "C1L1", 0f },
+      { "C1L2", 0f },
+      { "C1L3", 0f },
+      { "C2L1", 0f },
+      { "C2L2", 0f },
+      { "C2L3", 0f },
+      { "C3L1", 0f },
+      { "C3L2", 0f },
+      { "C3L3", 0f }
     };
 
     // Reset statistics
