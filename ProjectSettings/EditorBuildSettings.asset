@@ -20,4 +20,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Chapters/Chapter1-Slime/C1L1.unity
     guid: 5199c2a45b236484185bb72d08228367
+  - enabled: 1
+    path: Assets/Scenes/Chapters/Chapter1-Slime/C1L2.unity
+    guid: 9cb155ae6d053404587f7f997118a1e7
+  - enabled: 1
+    path: Assets/Scenes/Chapters/Chapter1-Slime/C1L3.unity
+    guid: d08dd5caf6a7c6d4e880ce4bd133e37c
+  - enabled: 1
+    path: Assets/Scenes/Chapters/Chapter1-Slime/C1L4.unity
+    guid: 752a2bdd3fa28b3419be3346bedf384c
   m_configObjects: {}
