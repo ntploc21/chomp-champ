@@ -50,9 +50,6 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -96,7 +93,6 @@ PolygonCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5165711096306083629}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -120,8 +116,7 @@ PolygonCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -135,13 +130,14 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: 1.4486561, y: 0.68688744}
-      - {x: 0.5231617, y: 0.7906969}
-      - {x: -0.34140795, y: 0.75806636}
-      - {x: -1.210303, y: 0.74224216}
+      - {x: 1.230904, y: 0.8972962}
+      - {x: 0.5130454, y: 1.1144172}
+      - {x: -0.27565226, y: 1.1020191}
+      - {x: -1.1647798, y: 0.89904416}
       - {x: -1.4380317, y: 0.6298027}
       - {x: -1.3845689, y: 0.49090067}
       - {x: -1.041969, y: 0.41187185}
-      - {x: -0.4880857, y: -0.0037408173}
+      - {x: -0.4880857, y: -0.0037407875}
       - {x: 0.59524554, y: -0.02075398}
       - {x: 0.735312, y: 0.2752735}
       - {x: 1.3157579, y: 0.39454615}
