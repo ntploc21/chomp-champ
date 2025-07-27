@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 using Michsky.UI.Reach;
 using Cinemachine;
 using UnityEngine.Rendering;
+using UnityEngine.Tilemaps;
 
 public class PlayerEffect : MonoBehaviour
 {
@@ -25,13 +27,6 @@ public class PlayerEffect : MonoBehaviour
   [SerializeField] private float eatShakeIntensity = 0.1f;
   [SerializeField] private float dashShakeDuration = 0.2f;
   [SerializeField] private float dashShakeIntensity = 0.15f;
-  [SerializeField] private float deathShakeDuration = 0.3f;
-  [SerializeField] private float deathShakeIntensity = 0.2f;
-
-  [Header("Advanced Shake Settings")]
-  [SerializeField] private AnimationCurve shakeDecayCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-  [SerializeField] private float defaultShakeFrequency = 25f;
-  [SerializeField] private bool useAdvancedShake = false;
 
   [Header("Flash Effects")]
   [SerializeField] private Color eatFlashColor = Color.green;
@@ -48,11 +43,18 @@ public class PlayerEffect : MonoBehaviour
 
   [Header("Performance")]
   [SerializeField] private bool enableParticlePooling = true;
-  [SerializeField] private bool enableAdvancedEffects = true;
-  [SerializeField] private int maxConcurrentEffects = 3;
+  [SerializeField] private int maxConcurrentEffects = 5;
 
   [Header("Debug")]
   [SerializeField] private bool enableDebugLogs = false;
+
+  [Header("Dash Effect Enhancement")]
+  [SerializeField] private LayerMask groundLayerMask = 1;
+  [SerializeField] private LayerMask wallLayerMask = 1 << 8;
+  [SerializeField] private float groundDetectionRadius = 0.5f;
+  [SerializeField] private bool enableGroundColorDetection = true;
+  [SerializeField] private float colorDarkeningFactor = 0.4f;
+  [SerializeField] private Color fallbackGroundColor = new Color(0.4f, 0.3f, 0.2f, 1f); // Default brown dirt color
   #endregion
 
   #region Properties
@@ -68,14 +70,23 @@ public class PlayerEffect : MonoBehaviour
   // Flicker effect variables
   private bool isFlickering = false;
   private Coroutine flickerCoroutine;
-
   // Performance tracking
   private int currentEffectCount = 0;
   private bool effectsEnabled = true;
 
+  // Screen shake management
+  private Coroutine currentScreenShakeCoroutine;
+  private float lastShakeTime = 0f;
+  private float shakeMinInterval = 0.1f; // Minimum time between shakes
+
   // Caching
   private WaitForSeconds flickerWait;
   private WaitForSeconds flashWait;
+
+  // Ground detection cache
+  private Tilemap[] cachedGroundTilemaps;
+  private float lastGroundCacheTime;
+  private readonly float groundCacheInterval = 2f;
   #endregion
   private void Awake()
   {
@@ -90,12 +101,27 @@ public class PlayerEffect : MonoBehaviour
     {
       originalSpriteColor = spriteRenderer.color;
     }
+    else
+    {
+      if (enableDebugLogs)
+        Debug.LogWarning("PlayerEffect: SpriteRenderer not found! Visual effects may not work.", this);
+    }
 
     // Find camera for screen shake
     playerCamera = Camera.main;
     if (playerCamera == null)
     {
       playerCamera = FindObjectOfType<Camera>();
+    }
+
+    // Validate Cinemachine camera
+    if (cinemachineVirtualCamera == null)
+    {
+      cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+      if (cinemachineVirtualCamera == null && enableDebugLogs)
+      {
+        Debug.LogWarning("PlayerEffect: CinemachineVirtualCamera not assigned! Screen shake effects will not work.", this);
+      }
     }
 
     // Cache wait times for performance
@@ -116,12 +142,30 @@ public class PlayerEffect : MonoBehaviour
       animator.SetTrigger("Spawn");
     }
 
+    // Play spawn particles
+    if (spawnParticles != null)
+    {
+      spawnParticles.Play();
+    }
+
     // Spawn visual effect
     StartCoroutine(SpawnAnimation());
   }
   public void PlayEatEffect()
   {
-    if (!effectsEnabled || currentEffectCount >= maxConcurrentEffects) return;
+    if (!effectsEnabled)
+    {
+      if (enableDebugLogs)
+        Debug.LogWarning("PlayerEffect: Effects are disabled!", this);
+      return;
+    }
+
+    if (currentEffectCount >= maxConcurrentEffects)
+    {
+      if (enableDebugLogs)
+        Debug.LogWarning($"PlayerEffect: Max concurrent effects reached ({currentEffectCount}/{maxConcurrentEffects})", this);
+      return;
+    }
 
     StartCoroutine(PlayEatEffectCoroutine());
   }
@@ -133,7 +177,7 @@ public class PlayerEffect : MonoBehaviour
     // Play eat sound
     if (UIManagerAudio.instance != null)
     {
-      // UIManagerAudio.instance.PlaySFX("EatSound");
+      UIManagerAudio.instance.PlaySFX("EatSound");
     }
 
     // Play eat particles
@@ -145,14 +189,11 @@ public class PlayerEffect : MonoBehaviour
     // Screen shake
     if (enableScreenShake)
     {
-      if (useAdvancedShake)
-        PlayAdvancedShake(eatShakeIntensity, ShakeType.Normal);
-      else
-        StartCoroutine(ScreenShake(eatShakeDuration, eatShakeIntensity));
+      currentScreenShakeCoroutine = StartCoroutine(ScreenShake(eatShakeDuration, eatShakeIntensity));
     }
 
     // Flash effect
-    StartCoroutine(FlashEffect(eatFlashColor, 0.1f));
+    StartCoroutine(FlashEffect(eatFlashColor, 10f));
 
     // Animation trigger
     if (animator != null)
@@ -208,14 +249,24 @@ public class PlayerEffect : MonoBehaviour
 
     // Special evolution animation
     StartCoroutine(EvolutionAnimation());
-
-    if (animator != null)
+  }
+  public void PlayDashEffect()
+  {
+    // Use enhanced dash effect if ground detection is enabled
+    if (enableGroundColorDetection)
     {
-      animator.SetTrigger("Evolve");
+      PlayEnhancedDashEffect();
+    }
+    else
+    {
+      PlayBasicDashEffect();
     }
   }
 
-  public void PlayDashEffect()
+  /// <summary>
+  /// Basic dash effect (original behavior)
+  /// </summary>
+  public void PlayBasicDashEffect()
   {
     // Play dash sound
     if (UIManagerAudio.instance != null)
@@ -228,22 +279,15 @@ public class PlayerEffect : MonoBehaviour
     {
       dashParticles.Play();
     }
+
     // Screen shake
     if (enableScreenShake)
     {
-      if (useAdvancedShake)
-        PlayAdvancedShake(dashShakeIntensity, ShakeType.Impulse);
-      else
-        StartCoroutine(ScreenShake(dashShakeDuration, dashShakeIntensity));
+      StartCoroutine(ScreenShake(dashShakeDuration, dashShakeIntensity));
     }
 
     // Dash trail effect
     StartCoroutine(DashTrailEffect());
-
-    if (animator != null)
-    {
-      animator.SetTrigger("Dash");
-    }
   }
 
   public void PlayDeathEffect()
@@ -346,6 +390,8 @@ public class PlayerEffect : MonoBehaviour
   {
     if (spriteRenderer == null) yield break;
 
+    Debug.LogWarning($"Flashing effect with color: {flashColor} for duration: {duration}", this);
+
     Color original = spriteRenderer.color;
     spriteRenderer.color = flashColor;
 
@@ -389,7 +435,7 @@ public class PlayerEffect : MonoBehaviour
     if (spriteRenderer == null) yield break;
 
     // Multi-color flash sequence
-    Color[] colors = { Color.white, Color.yellow, Color.cyan, Color.magenta };
+    Color[] colors = { Color.white, Color.yellow, Color.cyan, Color.magenta, Color.green, Color.blue, Color.red };
 
     for (int i = 0; i < colors.Length; i++)
     {
@@ -468,6 +514,19 @@ public class PlayerEffect : MonoBehaviour
       yield break;
     }
 
+    // Prevent multiple screen shakes running at the same time
+    float currentTime = Time.time;
+    if (currentTime - lastShakeTime > shakeMinInterval)
+    {
+      // Stop any current screen shake
+      if (currentScreenShakeCoroutine != null)
+      {
+        StopCoroutine(currentScreenShakeCoroutine);
+      }
+
+      lastShakeTime = currentTime;
+    }
+
     CinemachineBasicMultiChannelPerlin noise = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
 
     if (noise == null) yield break;
@@ -481,11 +540,12 @@ public class PlayerEffect : MonoBehaviour
     noise.m_FrequencyGain = 5f; // Optional: adjust frequency for different shake feel
 
     // Wait for the shake duration
-    yield return new WaitForSeconds(duration);
-
-    // Restore original values
+    yield return new WaitForSeconds(duration);    // Restore original values
     noise.m_AmplitudeGain = originalAmplitude;
     noise.m_FrequencyGain = originalFrequency;
+
+    // Clear the coroutine reference when done
+    currentScreenShakeCoroutine = null;
 
     if (enableDebugLogs)
     {
@@ -520,14 +580,15 @@ public class PlayerEffect : MonoBehaviour
       float progress = elapsed / duration;
       float currentIntensity = startIntensity * decayCurve.Evaluate(progress);
 
-      noise.m_AmplitudeGain = currentIntensity;
-
-      yield return null;
+      noise.m_AmplitudeGain = currentIntensity; yield return null;
     }
 
     // Restore original values
     noise.m_AmplitudeGain = originalAmplitude;
     noise.m_FrequencyGain = originalFrequency;
+
+    // Clear the coroutine reference when done
+    currentScreenShakeCoroutine = null;
   }
 
   // Impulse-based screen shake for more realistic feel
@@ -558,32 +619,45 @@ public class PlayerEffect : MonoBehaviour
 
       // Exponential decay
       float currentIntensity = intensity * Mathf.Exp(-progress * 5f);
-      noise.m_AmplitudeGain = currentIntensity;
-
-      yield return null;
+      noise.m_AmplitudeGain = currentIntensity; yield return null;
     }
 
     // Restore original values
     noise.m_AmplitudeGain = originalAmplitude;
     noise.m_FrequencyGain = originalFrequency;
-  }
 
+    // Clear the coroutine reference when done
+    currentScreenShakeCoroutine = null;
+  }
   // Public method to trigger advanced screen shake
   public void PlayAdvancedShake(float intensity, ShakeType shakeType = ShakeType.Normal)
   {
     if (!enableScreenShake) return;
 
-    switch (shakeType)
+    // Prevent multiple screen shakes running at the same time
+    float currentTime = Time.time;
+    if (currentTime - lastShakeTime > shakeMinInterval)
     {
-      case ShakeType.Normal:
-        StartCoroutine(ScreenShake(0.2f, intensity));
-        break;
-      case ShakeType.Decay:
-        StartCoroutine(ScreenShakeWithDecay(0.5f, intensity));
-        break;
-      case ShakeType.Impulse:
-        StartCoroutine(ImpulseScreenShake(intensity));
-        break;
+      // Stop any current screen shake
+      if (currentScreenShakeCoroutine != null)
+      {
+        StopCoroutine(currentScreenShakeCoroutine);
+      }
+
+      lastShakeTime = currentTime;
+
+      switch (shakeType)
+      {
+        case ShakeType.Normal:
+          currentScreenShakeCoroutine = StartCoroutine(ScreenShake(0.2f, intensity));
+          break;
+        case ShakeType.Decay:
+          currentScreenShakeCoroutine = StartCoroutine(ScreenShakeWithDecay(0.5f, intensity));
+          break;
+        case ShakeType.Impulse:
+          currentScreenShakeCoroutine = StartCoroutine(ImpulseScreenShake(intensity));
+          break;
+      }
     }
   }
 
@@ -605,11 +679,25 @@ public class PlayerEffect : MonoBehaviour
       Debug.Log($"Effects enabled: {enabled}");
     }
   }
-
   public void StopAllEffects()
   {
     StopAllCoroutines();
     currentEffectCount = 0;
+
+    // Clear screen shake coroutine reference
+    currentScreenShakeCoroutine = null;
+    lastShakeTime = 0f;
+
+    // Reset screen shake to original state
+    if (cinemachineVirtualCamera != null)
+    {
+      CinemachineBasicMultiChannelPerlin noise = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+      if (noise != null)
+      {
+        noise.m_AmplitudeGain = 0f;
+        noise.m_FrequencyGain = 0f;
+      }
+    }
 
     // Reset visual state
     if (spriteRenderer != null)
@@ -692,5 +780,383 @@ public class PlayerEffect : MonoBehaviour
       OptimizeParticleSystem(evolutionParticles);
       OptimizeParticleSystem(spawnParticles);
     }
+  }
+
+  /// <summary>
+  /// Validates that all necessary components are properly set up.
+  /// Call this method to debug PlayerEffect setup issues.
+  /// </summary>
+  public void ValidateSetup()
+  {
+    bool isValid = true;
+
+    if (spriteRenderer == null)
+    {
+      Debug.LogError("PlayerEffect: SpriteRenderer is missing! Visual effects will not work.", this);
+      isValid = false;
+    }
+
+    if (animator == null)
+    {
+      Debug.LogWarning("PlayerEffect: Animator is missing! Animation triggers will not work.", this);
+      isValid = false;
+    }
+
+    if (cinemachineVirtualCamera == null)
+    {
+      Debug.LogError("PlayerEffect: CinemachineVirtualCamera is missing! Screen shake effects will not work.", this);
+      isValid = false;
+    }
+    else
+    {
+      var noise = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+      if (noise == null)
+      {
+        Debug.LogError("PlayerEffect: CinemachineBasicMultiChannelPerlin component is missing from virtual camera! Screen shake will not work.", this);
+        isValid = false;
+      }
+    }
+
+    if (UIManagerAudio.instance == null)
+    {
+      Debug.LogWarning("PlayerEffect: UIManagerAudio.instance is null! Sound effects will not play.", this);
+    }
+
+    // Check particle systems
+    if (eatParticles == null) Debug.LogWarning("PlayerEffect: Eat particles not assigned.", this);
+    if (growthParticles == null) Debug.LogWarning("PlayerEffect: Growth particles not assigned.", this);
+    if (deathParticles == null) Debug.LogWarning("PlayerEffect: Death particles not assigned.", this);
+    if (dashParticles == null) Debug.LogWarning("PlayerEffect: Dash particles not assigned.", this);
+    if (evolutionParticles == null) Debug.LogWarning("PlayerEffect: Evolution particles not assigned.", this);
+    if (spawnParticles == null) Debug.LogWarning("PlayerEffect: Spawn particles not assigned.", this);
+
+    if (!effectsEnabled)
+    {
+      Debug.LogWarning("PlayerEffect: Effects are currently disabled!", this);
+    }
+
+    if (isValid)
+    {
+      Debug.Log("PlayerEffect: Validation passed! All critical components are properly set up.", this);
+    }
+    else
+    {
+      Debug.LogError("PlayerEffect: Validation failed! Some critical components are missing.", this);
+    }
+  }
+
+  private void Update()
+  {
+    // Update ground detection cache
+    if (Time.time - lastGroundCacheTime > groundCacheInterval)
+    {
+      UpdateGroundCache();
+    }
+  }
+
+  private void UpdateGroundCache()
+  {
+    // Get all Tilemaps in the scene
+    Tilemap[] allTilemaps = FindObjectsOfType<Tilemap>();
+
+    // Filter and cache ground Tilemaps
+    cachedGroundTilemaps = System.Array.FindAll(allTilemaps, tilemap => (groundLayerMask & (1 << tilemap.gameObject.layer)) != 0);
+
+    lastGroundCacheTime = Time.time;
+
+    if (enableDebugLogs)
+    {
+      Debug.Log($"Ground cache updated. Cached {cachedGroundTilemaps.Length} Tilemaps.", this);
+    }
+  }
+
+  /// <summary>
+  /// Get the player's current movement direction for dash particles
+  /// </summary>
+  private Vector2 GetDashDirection()
+  {
+    // Try to get movement direction from PlayerCore or PlayerMovement
+    if (playerCore != null)
+    {
+      // Check if PlayerCore has a movement component
+      PlayerMovement playerMovement = playerCore.GetComponent<PlayerMovement>();
+      if (playerMovement != null)
+      {
+        return -playerMovement.MovementDirection; // Negative for particles going backward
+      }
+
+      // Fallback: try to get from rigidbody velocity
+      Rigidbody2D rb = playerCore.GetComponent<Rigidbody2D>();
+      if (rb != null && rb.velocity.magnitude > 0.1f)
+      {
+        return -rb.velocity.normalized; // Negative for particles going backward
+      }
+    }
+
+    // Default to left if no movement detected
+    return Vector2.left;
+  }
+
+  /// <summary>
+  /// Detect ground color beneath the player using tilemap sampling
+  /// </summary>
+  private Color GetGroundColor(Vector3 position)
+  {
+    if (!enableGroundColorDetection)
+      return fallbackGroundColor;
+
+    RefreshGroundTilemapCache();
+
+    if (cachedGroundTilemaps == null || cachedGroundTilemaps.Length == 0)
+      return fallbackGroundColor;
+
+    // Sample multiple points around the player position for better color detection
+    Vector3[] samplePoints = {
+      position,
+      position + Vector3.left * 0.2f,
+      position + Vector3.right * 0.2f,
+      position + Vector3.down * 0.2f,
+      position + Vector3.up * 0.2f
+    };
+
+    Color averageColor = Color.clear;
+    int validSamples = 0;
+
+    foreach (Vector3 samplePoint in samplePoints)
+    {
+      Color tileColor = SampleTileColor(samplePoint);
+      if (tileColor != Color.clear)
+      {
+        averageColor += tileColor;
+        validSamples++;
+      }
+    }
+
+    if (validSamples > 0)
+    {
+      averageColor /= validSamples;
+      return DarkenColor(averageColor, colorDarkeningFactor);
+    }
+
+    return fallbackGroundColor;
+  }
+
+  /// <summary>
+  /// Sample tile color at a specific world position
+  /// </summary>
+  private Color SampleTileColor(Vector3 worldPosition)
+  {
+    foreach (Tilemap tilemap in cachedGroundTilemaps)
+    {
+      if (tilemap == null || !tilemap.gameObject.activeInHierarchy)
+        continue;
+
+      Vector3Int cellPosition = tilemap.WorldToCell(worldPosition);
+      TileBase tile = tilemap.GetTile(cellPosition);
+
+      if (tile != null)
+      {
+        // Try to get sprite from tile
+        Sprite tileSprite = tilemap.GetSprite(cellPosition);
+        if (tileSprite != null && tileSprite.texture != null)
+        {
+          return SampleSpriteColor(tileSprite);
+        }
+
+        // Fallback: use tilemap color
+        Color tilemapColor = tilemap.GetColor(cellPosition);
+        if (tilemapColor != Color.white) // Only use if it's not the default color
+        {
+          return tilemapColor;
+        }
+      }
+    }
+
+    return Color.clear;
+  }
+
+  /// <summary>
+  /// Sample dominant color from a sprite
+  /// </summary>
+  private Color SampleSpriteColor(Sprite sprite)
+  {
+    if (sprite == null || sprite.texture == null)
+      return Color.clear;
+
+    try
+    {
+      Texture2D texture = sprite.texture;
+      Rect spriteRect = sprite.textureRect;
+
+      // Sample from the center of the sprite
+      int centerX = Mathf.RoundToInt(spriteRect.center.x);
+      int centerY = Mathf.RoundToInt(spriteRect.center.y);
+
+      // Make sure coordinates are within bounds
+      centerX = Mathf.Clamp(centerX, 0, texture.width - 1);
+      centerY = Mathf.Clamp(centerY, 0, texture.height - 1);
+
+      return texture.GetPixel(centerX, centerY);
+    }
+    catch (System.Exception)
+    {
+      // If texture is not readable, return clear
+      return Color.clear;
+    }
+  }
+
+  /// <summary>
+  /// Darken a color by a specified factor
+  /// </summary>
+  private Color DarkenColor(Color originalColor, float darkeningFactor)
+  {
+    float factor = 1f - Mathf.Clamp01(darkeningFactor);
+    return new Color(
+      originalColor.r * factor,
+      originalColor.g * factor,
+      originalColor.b * factor,
+      originalColor.a
+    );
+  }
+
+  /// <summary>
+  /// Configure dash particles with direction and ground color
+  /// </summary>
+  private void ConfigureDashParticles(Vector2 direction, Color groundColor)
+  {
+    if (dashParticles == null) return;
+
+    var main = dashParticles.main;
+    var shape = dashParticles.shape;
+    var velocityOverLifetime = dashParticles.velocityOverLifetime;
+    var colorOverLifetime = dashParticles.colorOverLifetime;
+
+    // Configure particle color
+    main.startColor = groundColor;
+
+    // Configure emission direction
+    shape.rotation = new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+
+    // Configure velocity to emit particles backward from movement
+    velocityOverLifetime.enabled = true;
+    velocityOverLifetime.space = ParticleSystemSimulationSpace.Local;
+
+    // Set base velocity in the dash direction
+    var velocity = velocityOverLifetime.radial;
+    velocity.mode = ParticleSystemCurveMode.Constant;
+    velocity.constant = 3f; // Adjust particle spread speed
+
+    // Configure color over lifetime for fade effect
+    colorOverLifetime.enabled = true;
+    Gradient gradient = new Gradient();
+    GradientColorKey[] colorKeys = new GradientColorKey[2];
+    GradientAlphaKey[] alphaKeys = new GradientAlphaKey[3];
+
+    colorKeys[0] = new GradientColorKey(groundColor, 0f);
+    colorKeys[1] = new GradientColorKey(groundColor * 0.7f, 1f);
+
+    alphaKeys[0] = new GradientAlphaKey(1f, 0f);
+    alphaKeys[1] = new GradientAlphaKey(0.8f, 0.5f);
+    alphaKeys[2] = new GradientAlphaKey(0f, 1f);
+
+    gradient.SetKeys(colorKeys, alphaKeys);
+    colorOverLifetime.color = gradient;
+
+    // Configure size and lifetime for ground debris effect
+    main.startLifetime = 0.5f;
+    main.startSpeed = 2f;
+    main.startSize = Random.Range(0.1f, 0.3f);
+
+    // Add some randomness to make it look more natural
+    main.startSpeedMultiplier = Random.Range(0.8f, 1.2f);
+  }
+
+  /// <summary>
+  /// Enhanced dash effect with ground detection and dynamic particle configuration
+  /// </summary>
+  public void PlayEnhancedDashEffect()
+  {
+    Vector2 dashDirection = GetDashDirection();
+    Color groundColor = GetGroundColor(transform.position);
+
+    PlayEnhancedDashEffect(dashDirection, groundColor);
+  }
+
+  /// <summary>
+  /// Enhanced dash effect with specified direction and color
+  /// </summary>
+  public void PlayEnhancedDashEffect(Vector2 dashDirection, Color groundColor)
+  {
+    // Play dash sound
+    if (UIManagerAudio.instance != null)
+    {
+      UIManagerAudio.instance.PlaySFXWithSettings("DashSound");
+    }
+
+    // Configure and play enhanced dash particles
+    if (dashParticles != null)
+    {
+      ConfigureDashParticles(dashDirection, groundColor);
+      dashParticles.Play();
+    }
+
+    // Screen shake
+    if (enableScreenShake)
+    {
+      StartCoroutine(ScreenShake(dashShakeDuration, dashShakeIntensity));
+    }
+
+    // Enhanced dash trail effect with ground color
+    StartCoroutine(EnhancedDashTrailEffect(groundColor));
+  }
+
+  /// <summary>
+  /// Enhanced dash trail effect with ground color
+  /// </summary>
+  private IEnumerator EnhancedDashTrailEffect(Color groundColor)
+  {
+    if (spriteRenderer == null) yield break;
+
+    // Create trail color that matches ground but with transparency
+    Color trailColor = new Color(groundColor.r, groundColor.g, groundColor.b, 0.3f);
+    Color originalColor = spriteRenderer.color;
+
+    // Apply trail effect
+    spriteRenderer.color = Color.Lerp(originalColor, trailColor, 0.6f);
+
+    yield return new WaitForSeconds(0.15f);
+
+    // Fade back to original color
+    float fadeTime = 0.1f;
+    float elapsed = 0f;
+
+    while (elapsed < fadeTime)
+    {
+      elapsed += Time.deltaTime;
+      float t = elapsed / fadeTime;
+      spriteRenderer.color = Color.Lerp(trailColor, originalColor, t);
+      yield return null;
+    }
+
+    spriteRenderer.color = originalColor;
+  }
+
+  /// <summary>
+  /// Refresh the cache of ground tilemaps
+  /// </summary>
+  private void RefreshGroundTilemapCache()
+  {
+    if (cachedGroundTilemaps != null && Time.time - lastGroundCacheTime < groundCacheInterval)
+      return;
+
+    cachedGroundTilemaps = FindObjectsOfType<Tilemap>()
+      .Where(tilemap => ((1 << tilemap.gameObject.layer) & groundLayerMask) != 0
+                       && tilemap.gameObject.activeInHierarchy)
+      .ToArray();
+
+    lastGroundCacheTime = Time.time;
+
+    if (enableDebugLogs)
+      Debug.Log($"PlayerEffect: Refreshed ground tilemap cache, found {cachedGroundTilemaps.Length} tilemaps");
   }
 }

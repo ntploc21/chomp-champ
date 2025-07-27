@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Michsky.UI.Reach;
 
 public enum GameStateType
 {
@@ -103,10 +104,10 @@ public class GameState : MonoBehaviour
         InitializeGameState();
         SubscribeToEvents();
 
-        // Initialize UIManager when GameState starts
+        // Initialize GUIManager when GameState starts
         if (GUIManager.Instance != null)
         {
-            GUIManager.Instance.InitializeCanvasReferences();
+            // GUIManager.Instance.InitializeCanvasReferences();
         }
     }
 
@@ -299,15 +300,21 @@ public class GameState : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        // Show Game Over Canvas with game statistics
-        if (GUIManager.Instance != null)
+        // Play "GameOver" UI sound effect
+        if (UIManagerAudio.instance != null)
         {
-            float score = playerCore != null ? playerCore.Score : 0f;
-            string gameTime = GetFormattedGameTime();
-            int enemiesEaten = playerCore != null ? playerCore.DataManager.SessionData.enemiesEaten : 0;
-
-            GUIManager.Instance.ShowGameOverCanvas(score, gameTime, enemiesEaten);
+            UIManagerAudio.instance.PlayUISFX("GameOver");
         }
+
+        // Show Game Over Canvas with game statistics
+            if (GUIManager.Instance != null)
+            {
+                float score = playerCore != null ? playerCore.Score : 0f;
+                string gameTime = GetFormattedGameTime();
+                int enemiesEaten = playerCore != null ? playerCore.DataManager.SessionData.enemiesEaten : 0;
+
+                GUIManager.Instance.ShowGameOverCanvas(score, gameTime, enemiesEaten);
+            }
 
         // GameController game over handling
         if (gameController != null)
@@ -325,6 +332,12 @@ public class GameState : MonoBehaviour
             spawnManager.StopSpawning();
 
         Time.timeScale = 1f;
+
+        // Play "GameWin" UI sound effect
+        if (UIManagerAudio.instance != null)
+        {
+            UIManagerAudio.instance.PlayUISFX("GameWin");
+        }
 
         // Show Victory Canvas with game statistics
         if (GUIManager.Instance != null)

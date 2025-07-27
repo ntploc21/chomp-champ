@@ -530,8 +530,6 @@ public class PlayerCore : MonoBehaviour
 
         // Cache animation parameters for performance
         CacheAnimationParameters();
-
-        Debug.Log("Player Sprite Library System initialized successfully.");
     }
 
     /// <summary>

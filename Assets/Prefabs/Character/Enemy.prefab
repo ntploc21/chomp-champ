@@ -136,14 +136,14 @@ MonoBehaviour:
   playerTransform: {fileID: 0}
   currentState: 1
   wanderPattern: 0
-  visionRange: 0
+  visionRange: 3
   hearingRange: 5
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
   stateTransitionCooldown: 0.5
   decisionUpdateRate: 0.2
-  wanderDirectionChangeInterval: 3
+  wanderDirectionChangeInterval: 5
 --- !u!114 &6135464484432424022
 MonoBehaviour:
   m_ObjectHideFlags: 0

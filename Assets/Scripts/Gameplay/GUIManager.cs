@@ -44,7 +44,7 @@ public class GUIManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            InitializeCanvasReferences();
+            // InitializeCanvasReferences();
         }
         else if (Instance != this)
         {
@@ -113,7 +113,6 @@ public class GUIManager : MonoBehaviour
         spawnManager = FindObjectOfType<SpawnManager>();
         if (spawnManager != null)
         {
-            Debug.Log("SpawnManager found in scene");
             spawnManager.RefreshLevelScene();
         }
         else

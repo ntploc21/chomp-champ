@@ -166,8 +166,6 @@ public class SpawnManager : MonoBehaviour
   [SerializeField] private float playerAvoidRadius = 8f;
   [Tooltip("Distance around player to check for enemy density and stress calculation.")]
   [SerializeField] private float playerDetectionRadius = 20f;
-  [Tooltip("Try to balance enemy spawning around the player's position (not fully implemented).")]
-  [SerializeField] private bool balanceAroundPlayer = true;
 
   [Header("Object Pooling")]
   [Tooltip("Number of enemies to pre-create in the object pool at startup.")]
