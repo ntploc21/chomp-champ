@@ -33,6 +33,7 @@ public class GUIManager : MonoBehaviour
 
     public GameDataManager GameDataManager => gameDataManager;
     public SpawnManager SpawnManager => spawnManager;
+    public string CurrentLevelScene => currentLevelScene;
     #endregion
 
     #region Unity Lifecycle
@@ -93,6 +94,9 @@ public class GUIManager : MonoBehaviour
         {
             Debug.Log("GameDataManager found in scene");
             hudManager.SubscribeToEvents();
+
+            // Get the current level scene from GameDataManager
+            currentLevelScene = gameDataManager.LevelConfig?.levelName ?? "";
         }
         else
         {
@@ -471,33 +475,6 @@ public class GUIManager : MonoBehaviour
 
     #region Replay System
     /// <summary>
-    /// Track the current level scene for replay functionality
-    /// Call this when showing Victory/Game Over canvases
-    /// </summary>
-    private void TrackCurrentLevel()
-    {
-        // Get all loaded scenes to find the level scene
-        for (int i = 0; i < SceneManager.sceneCount; i++)
-        {
-            Scene scene = SceneManager.GetSceneAt(i);
-
-            // Skip the persistent scene, look for level scenes
-            if (scene.name != "Persistent Game State" &&
-                (scene.name.StartsWith("C") || scene.name.Contains("Level"))
-            )
-            {
-                currentLevelScene = scene.name;
-                Debug.Log($"Tracked current level for replay: {currentLevelScene}");
-                return;
-            }
-        }
-
-        // Fallback: use active scene if no specific level scene found
-        currentLevelScene = SceneManager.GetActiveScene().name;
-        Debug.Log($"Fallback: Tracked active scene for replay: {currentLevelScene}");
-    }
-
-    /// <summary>
     /// Try to replay using Reach UI Scene Manager
     /// </summary>
     private bool TryReplayWithReachUISceneManager()
@@ -606,14 +583,6 @@ public class GUIManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         Debug.Log($"Level {currentLevelScene} reloaded successfully");
-    }
-
-    /// <summary>
-    /// Get the current level scene name (for external use)
-    /// </summary>
-    public string GetCurrentLevelScene()
-    {
-        return currentLevelScene;
     }
 
     /// <summary>

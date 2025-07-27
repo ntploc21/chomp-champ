@@ -313,6 +313,13 @@ public class SpawnManager : MonoBehaviour
   /// </summary>
   private void InitializeLevelScene()
   {
+    var sceneName = "";
+    if (GUIManager.Instance != null)
+    {
+      sceneName = GUIManager.Instance.CurrentLevelScene;
+    }
+
+
     // Look for a scene that is not the Persistent Game Scene and is a level
     for (int i = 0; i < SceneManager.sceneCount; i++)
     {
@@ -320,7 +327,7 @@ public class SpawnManager : MonoBehaviour
 
       // Skip the persistent scene, look for level scenes (CxLy)
       if (scene.name != "Persistent Game State" && (
-        scene.name.StartsWith("C") || scene.name.Contains("Level")
+        scene.name.StartsWith("C") || scene.name.Contains("Level") || scene.name == sceneName
       ))
       {
         levelScene = scene;
@@ -331,13 +338,6 @@ public class SpawnManager : MonoBehaviour
         return;
       }
     }
-
-    // Fallback: use active scene if no specific level scene found
-    levelScene = SceneManager.GetActiveScene();
-    levelSceneFound = true;
-
-    if (enableDebugLogs)
-      Debug.Log($"SpawnManager: Using active scene for enemy spawning: {levelScene.name}");
   }
 
   private void InitializeObjectPool()
