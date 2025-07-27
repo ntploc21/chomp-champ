@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.SceneManagement;  // Add this for scene management
+using UnityEngine.Tilemaps;  // Add this for tilemap access
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,7 +114,6 @@ public class SpawnManager : MonoBehaviour
   [SerializeField] private float adaptiveCheckInterval = 5f;
   [Tooltip("Player stress level threshold (0-1) above which spawning will be reduced.")]
   [SerializeField] private float playerStressThreshold = 0.7f;
-
   [Header("Spawn Areas")]
   [Tooltip("Specific transform points where enemies can spawn. If empty, uses other spawn methods.")]
   [SerializeField] private Transform[] spawnPoints;
@@ -125,6 +125,17 @@ public class SpawnManager : MonoBehaviour
   [SerializeField] private bool preferOffScreenSpawning = true;
   [Tooltip("Extra distance beyond camera edge for off-screen spawning (in world units).")]
   [SerializeField] private float offScreenBuffer = 2f;
+  [Header("Layer-Based Spawning")]
+  [Tooltip("Enable layer-based spawn validation to ensure enemies spawn on valid ground.")]
+  [SerializeField] private bool useLayerValidation = true;
+  [Tooltip("Use direct tilemap access instead of physics collider checks (more efficient for tile-based games).")]
+  [SerializeField] private bool useTilemapDirectAccess = true;
+  [Tooltip("Layer mask for valid ground where enemies can spawn (e.g., Ground Layer).")]
+  [SerializeField] private LayerMask groundLayer = 1;
+  [Tooltip("Layer mask for invalid areas where enemies cannot spawn (e.g., Wall Layer).")]
+  [SerializeField] private LayerMask wallLayer = 1 << 8;
+  [Tooltip("Radius for layer detection when checking spawn positions.")]
+  [SerializeField] private float layerCheckRadius = 0.5f;
 
   [Header("Difficulty Scaling")]
   [Tooltip("Curve controlling how spawn rate increases over time. X = difficulty (0-1), Y = rate multiplier.")]
@@ -220,10 +231,19 @@ public class SpawnManager : MonoBehaviour
   private Transform playerTransform;
   private Transform cameraTransform;
   private Bounds cameraBounds;
-
   // Scene management for proper enemy assignment
   private Scene levelScene;
   private bool levelSceneFound = false;
+  // Layer-based spawning cache
+  private Collider2D[] cachedGroundColliders;
+  private float lastGroundCacheTime;
+  private readonly float groundCacheInterval = 5f; // Refresh cache every 5 seconds
+
+  // Tilemap-based spawning cache
+  private Tilemap[] groundTilemaps;
+  private Tilemap[] wallTilemaps;
+  private float lastTilemapCacheTime;
+  private readonly float tilemapCacheInterval = 10f; // Refresh tilemap cache every 10 seconds
   #endregion
 
   #region Properties
@@ -1116,9 +1136,19 @@ public class SpawnManager : MonoBehaviour
 
     return position;
   }
-
   private Vector3 GenerateRandomSpawnPosition()
   {
+    // Prioritize direct tilemap access if enabled
+    if (useLayerValidation && useTilemapDirectAccess)
+    {
+      Vector3 tilemapPosition = GenerateTilemapBasedPosition();
+      if (tilemapPosition != Vector3.zero)
+        return tilemapPosition;
+
+      if (enableDebugLogs)
+        Debug.Log("SpawnManager: Tilemap-based position generation failed, trying collider-based");
+    }
+
     if (preferOffScreenSpawning && gameCamera != null)
     {
       return GenerateOffScreenPosition();
@@ -1187,7 +1217,6 @@ public class SpawnManager : MonoBehaviour
     Vector3 offset = Random.insideUnitCircle * 2f;
     return spawnPoint.position + offset;
   }
-
   private Vector3 GeneratePlayerRadiusPosition()
   {
     if (playerTransform != null)
@@ -1199,6 +1228,174 @@ public class SpawnManager : MonoBehaviour
     return Vector3.zero + (Vector3)(Random.insideUnitCircle * 10f);
   }
 
+  /// <summary>
+  /// Generate a random point within a collider's bounds
+  /// </summary>
+  private Vector3 GeneratePointInCollider(Collider2D collider)
+  {
+    Bounds bounds = collider.bounds;
+
+    // For more accurate sampling, we could implement different strategies based on collider type
+    if (collider is BoxCollider2D)
+    {
+      // Simple box sampling
+      float x = Random.Range(bounds.min.x, bounds.max.x);
+      float y = Random.Range(bounds.min.y, bounds.max.y);
+      return new Vector3(x, y, 0f);
+    }
+    else if (collider is CircleCollider2D circle)
+    {
+      // Sample within circle
+      Vector2 randomPoint = Random.insideUnitCircle * circle.radius;
+      return (Vector3)((Vector2)circle.transform.position + randomPoint);
+    }
+    else
+    {
+      // Generic bounds sampling for other collider types
+      float x = Random.Range(bounds.min.x, bounds.max.x);
+      float y = Random.Range(bounds.min.y, bounds.max.y);
+      return new Vector3(x, y, 0f);
+    }
+  }
+  /// <summary>
+  /// Refresh the cache of ground colliders periodically
+  /// </summary>
+  private void RefreshGroundCollidersCache()
+  {
+    if (cachedGroundColliders != null && Time.time - lastGroundCacheTime < groundCacheInterval)
+      return;
+
+    // Find all colliders on ground layer
+    cachedGroundColliders = FindObjectsOfType<Collider2D>()
+      .Where(col => ((1 << col.gameObject.layer) & groundLayer) != 0
+                   && col.gameObject.activeInHierarchy
+                   && col.enabled)
+      .ToArray();
+
+    lastGroundCacheTime = Time.time;
+
+    if (enableDebugLogs)
+      Debug.Log($"SpawnManager: Refreshed ground colliders cache, found {cachedGroundColliders.Length} colliders");
+  }
+
+  /// <summary>
+  /// Generate a spawn position directly from tilemap tiles
+  /// </summary>
+  private Vector3 GenerateTilemapBasedPosition()
+  {
+    RefreshTilemapCache();
+
+    if (groundTilemaps == null || groundTilemaps.Length == 0)
+    {
+      if (enableDebugLogs)
+        Debug.Log("SpawnManager: No ground tilemaps found for tilemap-based spawning");
+      return Vector3.zero;
+    }
+
+    // Try multiple tilemaps to find a valid position
+    int maxTilemapAttempts = Mathf.Min(3, groundTilemaps.Length);
+    for (int tilemapAttempt = 0; tilemapAttempt < maxTilemapAttempts; tilemapAttempt++)
+    {
+      Tilemap groundTilemap = groundTilemaps[Random.Range(0, groundTilemaps.Length)];
+
+      if (groundTilemap == null || !groundTilemap.gameObject.activeInHierarchy)
+        continue;
+
+      // Get tilemap bounds
+      BoundsInt tilemapBounds = groundTilemap.cellBounds;
+
+      // Try multiple random positions within the tilemap
+      int maxPositionAttempts = 15;
+      for (int posAttempt = 0; posAttempt < maxPositionAttempts; posAttempt++)
+      {
+        // Generate random cell position within tilemap bounds
+        Vector3Int randomCellPos = new Vector3Int(
+          Random.Range(tilemapBounds.xMin, tilemapBounds.xMax),
+          Random.Range(tilemapBounds.yMin, tilemapBounds.yMax),
+          0
+        );
+
+        // Check if there's a tile at this position
+        TileBase groundTile = groundTilemap.GetTile(randomCellPos);
+        if (groundTile != null)
+        {
+          // Convert cell position to world position
+          Vector3 worldPos = groundTilemap.CellToWorld(randomCellPos);
+
+          // Add small random offset within the cell
+          worldPos += new Vector3(
+            Random.Range(-0.4f, 0.4f),
+            Random.Range(-0.4f, 0.4f),
+            0f
+          );
+
+          // Check if this position doesn't overlap with wall tiles
+          if (!IsPositionOnWallTile(worldPos))
+          {
+            return worldPos;
+          }
+        }
+      }
+    }
+
+    if (enableDebugLogs)
+      Debug.Log("SpawnManager: Failed to find valid tilemap-based position after all attempts");
+
+    return Vector3.zero;
+  }
+
+  /// <summary>
+  /// Check if a world position overlaps with any wall tiles
+  /// </summary>
+  private bool IsPositionOnWallTile(Vector3 worldPosition)
+  {
+    if (wallTilemaps == null || wallTilemaps.Length == 0)
+      return false;
+
+    foreach (Tilemap wallTilemap in wallTilemaps)
+    {
+      if (wallTilemap == null || !wallTilemap.gameObject.activeInHierarchy)
+        continue;
+
+      // Convert world position to cell position
+      Vector3Int cellPos = wallTilemap.WorldToCell(worldPosition);
+
+      // Check if there's a wall tile at this position
+      TileBase wallTile = wallTilemap.GetTile(cellPos);
+      if (wallTile != null)
+      {
+        return true; // Found a wall tile
+      }
+    }
+
+    return false; // No wall tiles found
+  }
+
+  /// <summary>
+  /// Refresh the cache of tilemaps periodically
+  /// </summary>
+  private void RefreshTilemapCache()
+  {
+    if (groundTilemaps != null && Time.time - lastTilemapCacheTime < tilemapCacheInterval)
+      return;
+
+    // Find all tilemaps on ground layer
+    groundTilemaps = FindObjectsOfType<Tilemap>()
+      .Where(tilemap => ((1 << tilemap.gameObject.layer) & groundLayer) != 0
+                       && tilemap.gameObject.activeInHierarchy)
+      .ToArray();
+
+    // Find all tilemaps on wall layer
+    wallTilemaps = FindObjectsOfType<Tilemap>()
+      .Where(tilemap => ((1 << tilemap.gameObject.layer) & wallLayer) != 0
+                       && tilemap.gameObject.activeInHierarchy)
+      .ToArray();
+
+    lastTilemapCacheTime = Time.time;
+
+    if (enableDebugLogs)
+      Debug.Log($"SpawnManager: Refreshed tilemap cache - Ground: {groundTilemaps.Length}, Wall: {wallTilemaps.Length}");
+  }
   private bool IsValidSpawnPosition(Vector3 position)
   {
     // Check distance to player
@@ -1206,6 +1403,14 @@ public class SpawnManager : MonoBehaviour
     {
       float distanceToPlayer = Vector3.Distance(position, playerTransform.position);
       if (distanceToPlayer < playerAvoidRadius)
+        return false;
+    }
+
+    // Only do layer validation if we're not using tilemap direct access
+    // (since direct access already ensures valid layers)
+    if (useLayerValidation && !useTilemapDirectAccess)
+    {
+      if (!IsPositionOnValidLayer(position))
         return false;
     }
 
@@ -1228,8 +1433,83 @@ public class SpawnManager : MonoBehaviour
           return false;
       }
     }
-
     return true;
+  }
+  /// <summary>
+  /// Check if the position is on a valid layer for spawning (Ground Layer but not Wall Layer)
+  /// </summary>
+  private bool IsPositionOnValidLayer(Vector3 position)
+  {
+    // Use direct tilemap access if enabled
+    if (useTilemapDirectAccess)
+    {
+      return IsValidPositionOnTilemaps(position);
+    }
+
+    // Fallback to physics-based checking
+    // Check if position is on ground layer
+    Collider2D groundCollider = Physics2D.OverlapCircle(position, layerCheckRadius, groundLayer);
+    bool onGroundLayer = groundCollider != null;
+
+    // Check if position overlaps with wall layer
+    Collider2D wallCollider = Physics2D.OverlapCircle(position, layerCheckRadius, wallLayer);
+    bool onWallLayer = wallCollider != null;
+
+    // Valid position: on ground layer AND NOT on wall layer
+    bool isValid = onGroundLayer && !onWallLayer;
+
+    if (enableDebugLogs && !isValid)
+    {
+      if (!onGroundLayer)
+        Debug.Log($"SpawnManager: Position {position} rejected - not on ground layer");
+      if (onWallLayer)
+        Debug.Log($"SpawnManager: Position {position} rejected - overlaps wall layer");
+    }
+
+    return isValid;
+  }
+
+  /// <summary>
+  /// Check if position is valid using direct tilemap access
+  /// </summary>
+  private bool IsValidPositionOnTilemaps(Vector3 position)
+  {
+    RefreshTilemapCache();
+
+    // Check if position has ground tile
+    bool hasGroundTile = false;
+    if (groundTilemaps != null)
+    {
+      foreach (Tilemap groundTilemap in groundTilemaps)
+      {
+        if (groundTilemap == null || !groundTilemap.gameObject.activeInHierarchy)
+          continue;
+
+        Vector3Int cellPos = groundTilemap.WorldToCell(position);
+        TileBase tile = groundTilemap.GetTile(cellPos);
+        if (tile != null)
+        {
+          hasGroundTile = true;
+          break;
+        }
+      }
+    }
+
+    // Check if position has wall tile
+    bool hasWallTile = IsPositionOnWallTile(position);
+
+    // Valid position: has ground tile AND no wall tile
+    bool isValid = hasGroundTile && !hasWallTile;
+
+    if (enableDebugLogs && !isValid)
+    {
+      if (!hasGroundTile)
+        Debug.Log($"SpawnManager: Position {position} rejected - no ground tile");
+      if (hasWallTile)
+        Debug.Log($"SpawnManager: Position {position} rejected - overlaps wall tile");
+    }
+
+    return isValid;
   }
 
   private void UpdateCameraBounds()
@@ -1326,13 +1606,40 @@ public class SpawnManager : MonoBehaviour
   {
     maxEnemiesOnScreen = Mathf.Max(1, maxEnemies);
   }
-
   public void SetPlayerLevel(int level)
   {
     if (useFeedingFrenzySystem)
     {
       progressionData.currentPlayerLevel = Mathf.Max(1, level);
       UpdateLevelWeights();
+    }
+  }
+  public void SetLayerValidation(bool useValidation, LayerMask ground = default, LayerMask wall = default)
+  {
+    useLayerValidation = useValidation;
+    if (ground != default) groundLayer = ground;
+    if (wall != default) wallLayer = wall;
+
+    // Refresh cache when layer settings change
+    if (useValidation)
+    {
+      cachedGroundColliders = null; // Force refresh
+      RefreshGroundCollidersCache();
+    }
+
+    if (enableDebugLogs)
+      Debug.Log($"SpawnManager: Layer validation set to {useValidation}. Ground: {groundLayer.value}, Wall: {wallLayer.value}");
+  }
+  public void RefreshGroundCache()
+  {
+    cachedGroundColliders = null;
+    RefreshGroundCollidersCache();
+
+    if (useTilemapDirectAccess)
+    {
+      groundTilemaps = null;
+      wallTilemaps = null;
+      RefreshTilemapCache();
     }
   }
 
@@ -1469,8 +1776,43 @@ public class SpawnManager : MonoBehaviour
       Gizmos.color = Color.white;
       Gizmos.DrawWireCube(cameraBounds.center, cameraBounds.size);
     }
-  }
 
+    // Draw layer check visualization for recent spawn attempts
+    if (useLayerValidation && Application.isPlaying)
+    {
+      // Draw cached ground colliders if using direct layer sampling
+      if (cachedGroundColliders != null)
+      {
+        Gizmos.color = Color.green;
+        foreach (var collider in cachedGroundColliders)
+        {
+          if (collider != null)
+          {
+            Gizmos.DrawWireCube(collider.bounds.center, collider.bounds.size);
+          }
+        }
+      }
+
+      // Draw layer check radius for a few test positions around the player
+      if (playerTransform != null)
+      {
+        for (int i = 0; i < 8; i++)
+        {
+          float angle = i * 45f * Mathf.Deg2Rad;
+          Vector3 testPos = playerTransform.position + new Vector3(
+            Mathf.Cos(angle) * spawnDistance,
+            Mathf.Sin(angle) * spawnDistance,
+            0f
+          );
+
+          // Check if this position would be valid
+          bool isValid = IsPositionOnValidLayer(testPos);
+          Gizmos.color = isValid ? Color.green : Color.red;
+          Gizmos.DrawWireSphere(testPos, layerCheckRadius);
+        }
+      }
+    }
+  }
   [System.Diagnostics.Conditional("UNITY_EDITOR")]
   public void DebugPrintStatus()
   {
@@ -1483,7 +1825,14 @@ public class SpawnManager : MonoBehaviour
               $"\nPlayer Progress: {progressionData.currentProgress:F2}" +
               $"\nPlayer Stress: {playerStressLevel:F2}" +
               $"\nSpawn Rate: {baseSpawnRate:F2}s" +
-              $"\nLast Spawn: {Time.time - lastSpawnTime:F2}s ago");
+              $"\nLast Spawn: {Time.time - lastSpawnTime:F2}s ago" +
+              $"\nLayer Validation: {useLayerValidation}" +
+              $"\nTilemap Direct Access: {useTilemapDirectAccess}" +
+              $"\nGround Layer: {groundLayer.value}" +
+              $"\nWall Layer: {wallLayer.value}" +
+              $"\nCached Ground Colliders: {(cachedGroundColliders?.Length ?? 0)}" +
+              $"\nGround Tilemaps: {(groundTilemaps?.Length ?? 0)}" +
+              $"\nWall Tilemaps: {(wallTilemaps?.Length ?? 0)}");
   }
 
   [System.Diagnostics.Conditional("UNITY_EDITOR")]
