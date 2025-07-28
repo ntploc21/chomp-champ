@@ -1280,7 +1280,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00012207031, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &244928050
@@ -1299,11 +1299,9 @@ MonoBehaviour:
   - chapterID: Chapter 1-1
     title: Level 1
     background: {fileID: 21300000, guid: 2a66010c2c342db4f8e38d821184083b, type: 3}
-    description: This is a description field. You can say something about the chapter
-      here. This is a multi-line field and is automatically sized depending on its
-      content. You can also use any TMP-supported rich text. You can use the 'Chapter
-      Manager' component to make any changes to the chapter panel. Don't worry, it's
-      really easy to use!
+    description: "With its new form, the slime slithers into nearby farmlands. Gnomes
+      and wandering merchants fall to its hunger. The slime\u2019s presence spreads
+      fear across quiet settlements."
     defaultState: 1
     titleKey: Chapter1Title
     descriptionKey: Chapter1Description
@@ -1343,11 +1341,9 @@ MonoBehaviour:
   - chapterID: Chapter 1-2
     title: Level 2
     background: {fileID: 21300000, guid: b8203f22905be8649936b198dd1f2994, type: 3}
-    description: This is a description field. You can say something about the chapter
-      here. This is a multi-line field and is automatically sized depending on its
-      content. You can also use any TMP-supported rich text. You can use the 'Chapter
-      Manager' component to make any changes to the chapter panel. Don't worry, it's
-      really easy to use!
+    description: The slime grows stronger, feeding on monks and villagers alike.
+      But now, archers patrol the roads. Though they cannot be eaten, their arrows
+      sting. The world is beginning to notice the threat.
     defaultState: 1
     titleKey: Chapter2Title
     descriptionKey: Chapter2Description
@@ -1387,11 +1383,9 @@ MonoBehaviour:
   - chapterID: Chapter 1-3
     title: Level 3
     background: {fileID: 21300000, guid: a2b9a1d3ebcc88345916f0128c9cbc0e, type: 3}
-    description: This is a description field. You can say something about the chapter
-      here. This is a multi-line field and is automatically sized depending on its
-      content. You can also use any TMP-supported rich text. You can use the 'Chapter
-      Manager' component to make any changes to the chapter panel. Don't worry, it's
-      really easy to use!
+    description: "Deep within an abandoned graveyard, the slime senses a greater
+      feast\u2014skeletal warriors bound by dark magic. As it devours the risen dead,
+      the slime grows close to shedding its fragile form entirely."
     defaultState: 1
     titleKey: Chapter3Title
     descriptionKey: Chapter3Description
@@ -1431,11 +1425,11 @@ MonoBehaviour:
   - chapterID: Chapter 1-4
     title: Level 4
     background: {fileID: 21300000, guid: c8ecd8f6dcfe2314e9d327bdf3402b90, type: 3}
-    description: This is a description field. You can say something about the chapter
-      here. This is a multi-line field and is automatically sized depending on its
-      content. You can also use any TMP-supported rich text. You can use the 'Chapter
-      Manager' component to make any changes to the chapter panel. Don't worry, it's
-      really easy to use!
+    description: "With power unmatched, the slime rampages through the land in one
+      final frenzy. But the world has prepared\u2014heroes, monsters, and kings now
+      stand against it. With only one chance, the slime must conquer or perish.\nNote:
+      In this level, you only have one life, meaning if you get eaten, you will have
+      to play this level from the start"
     defaultState: 1
     titleKey: Chapter4Title
     descriptionKey: Chapter4Description
@@ -1740,7 +1734,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00012207031, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &321272805
@@ -1806,11 +1800,13 @@ MonoBehaviour:
   - chapterID: Chapter 1
     title: Chapter 1
     background: {fileID: 21300000, guid: 2a66010c2c342db4f8e38d821184083b, type: 3}
-    description: This is a description field. You can say something about the chapter
-      here. This is a multi-line field and is automatically sized depending on its
-      content. You can also use any TMP-supported rich text. You can use the 'Chapter
-      Manager' component to make any changes to the chapter panel. Don't worry, it's
-      really easy to use!
+    description: "Long forgotten beneath the moss and rot of a sunken swamp, a creature
+      stirs. Born of decay and pure instinct, the slime begins its journey as a mindless
+      blob, weak and unnoticed. But with every innocent devoured, it learns. It grows. 
+      \nVillages vanish. Merchants disappear. Monks pray in vain. Whispers of a creeping
+      terror ripple across the land.  \nAnd yet, this is only the beginning. The
+      slime\u2019s hunger knows no bounds\u2014and the world has only just started
+      to realize it\u2019s under siege."
     defaultState: 1
     titleKey: Chapter1Title
     descriptionKey: Chapter1Description
@@ -5211,7 +5207,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5042148382741975237, guid: 2da758493bb9a96409448335d0c59538, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 142.08
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5042148382741975237, guid: 2da758493bb9a96409448335d0c59538, type: 3}
       propertyPath: m_SizeDelta.y
@@ -5719,7 +5715,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5042148382741975237, guid: 2da758493bb9a96409448335d0c59538, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 142.08
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5042148382741975237, guid: 2da758493bb9a96409448335d0c59538, type: 3}
       propertyPath: m_SizeDelta.y
@@ -6830,7 +6826,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00012207031, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1211725107
@@ -7281,7 +7277,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5042148382741975237, guid: 2da758493bb9a96409448335d0c59538, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 142.08
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5042148382741975237, guid: 2da758493bb9a96409448335d0c59538, type: 3}
       propertyPath: m_SizeDelta.y
@@ -9095,7 +9091,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6494165354426828754, guid: 55e125313b5307545b68991fd6372f4d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -319.65515
+      value: -319.65503
       objectReference: {fileID: 0}
     - target: {fileID: 6574213234265489768, guid: 55e125313b5307545b68991fd6372f4d, type: 3}
       propertyPath: m_Color.b
@@ -11477,7 +11473,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6494165354426828754, guid: 55e125313b5307545b68991fd6372f4d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -319.65515
+      value: -319.65503
       objectReference: {fileID: 0}
     - target: {fileID: 6574213234265489768, guid: 55e125313b5307545b68991fd6372f4d, type: 3}
       propertyPath: m_Color.b
@@ -13689,7 +13685,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6494165354426828754, guid: 55e125313b5307545b68991fd6372f4d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -319.65515
+      value: -319.65503
       objectReference: {fileID: 0}
     - target: {fileID: 6574213234265489768, guid: 55e125313b5307545b68991fd6372f4d, type: 3}
       propertyPath: m_Color.b
