@@ -79,7 +79,7 @@ public class SpawnManager : MonoBehaviour
 
   [Header("Enemy Data")]
   [Tooltip("Array of enemy types that can be spawned. Each has different stats and spawn weights.")]
-  [SerializeField] private EnemyData[] enemyTypes;
+  [SerializeField] public EnemyData[] enemyTypes;
   [Tooltip("The prefab to instantiate for enemies. Must have EnemyCore component.")]
   [SerializeField] private GameObject enemyPrefab;
 
