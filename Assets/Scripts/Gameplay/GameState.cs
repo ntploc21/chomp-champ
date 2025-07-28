@@ -50,6 +50,7 @@ public class GameState : MonoBehaviour
     [SerializeField] private int victoryLevel = 10;
     [SerializeField] private float victoryScore = 10000f;
     [SerializeField] private float victoryTime = 300f; // 5 minutes
+    public float VictoryTime => victoryTime;
 
     [Header("Events")]
     public UnityEvent<GameStateType> OnStateChanged;
