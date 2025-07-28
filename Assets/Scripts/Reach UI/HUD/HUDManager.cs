@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using System.Collections.Generic;
 
 namespace Michsky.UI.Reach
 {
@@ -28,12 +29,55 @@ namespace Michsky.UI.Reach
         private Transform progressBar;
         private TextMeshProUGUI scoreText;
         private TextMeshProUGUI livesText;
-        private Image imageLevel1;
-        private Image imageLevel1_2;
-        private Image imageLevel2;
-        private Image imageLevel2_2;
+        private Dictionary<int, List<Image>> imagesByLevel = new Dictionary<int, List<Image>>();
 
         public enum DefaultBehaviour { Visible, Invisible }
+
+        void InitializeComponents()
+        {
+            if (imagesByLevel.Count != 0)
+            {
+                return;
+            }
+            SpawnManager spawnManager = FindObjectOfType<SpawnManager>();
+            if (spawnManager != null)
+            {
+                foreach (EnemyData enemyData in spawnManager.enemyTypes)
+                {
+                    Sprite enemySprite = enemyData.spriteLibrary.GetSprite(enemyData.defaultSpriteCategory, "Frame 1");
+                    if (enemySprite != null)
+                    {
+                        int level = enemyData.level;
+                        if (!imagesByLevel.ContainsKey(level))
+                        {
+                            imagesByLevel[level] = new List<Image>();
+                        }
+                        int id = imagesByLevel[level].Count;
+
+                        Transform transform = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find($"Level{level}")?.Find($"Image{id}");
+                        Image image = transform?.GetComponent<Image>();
+                        if (image != null)
+                        {
+                            image.sprite = enemySprite;
+                            imagesByLevel[level].Add(image);
+                            transform.gameObject.SetActive(true);
+                            Debug.Log($"Image for Level {level} with ID {id} set in HUDPanel.");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Sprite for {enemyData.defaultSpriteCategory}/{enemyData.defaultSpriteLabel} not found in SpriteLibrary.");
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("SpawnManager not found in the scene.");
+            }
+            progressBar = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("ProgressBar")?.Find("Background")?.Find("Bar");
+            scoreText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Score")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
+            livesText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Lives")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
+        }
 
         void Awake()
         {
@@ -44,14 +88,8 @@ namespace Michsky.UI.Reach
 
             cg = HUDPanel.AddComponent<CanvasGroup>();
 
-            progressBar = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("ProgressBar")?.Find("Background")?.Find("Bar");
-            scoreText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Score")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
-            livesText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Lives")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
-            imageLevel1 = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("Level1")?.Find("Image")?.GetComponent<Image>();
-            imageLevel1_2 = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("Level1")?.Find("Image2")?.GetComponent<Image>();
-            imageLevel2 = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("Level2")?.Find("Image")?.GetComponent<Image>();
-            imageLevel2_2 = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("Level2")?.Find("Image2")?.GetComponent<Image>();
-
+            // InitializeComponents();
+            
             if (defaultBehaviour == DefaultBehaviour.Visible) { cg.alpha = 1; isOn = true; onSetVisible.Invoke(); }
             else if (defaultBehaviour == DefaultBehaviour.Invisible) { cg.alpha = 0; isOn = false; onSetInvisible.Invoke(); }
 
@@ -68,6 +106,21 @@ namespace Michsky.UI.Reach
             // UnsubscribeFromEvents();
         }
 
+        void SetEnableLevel(int level, int enable)
+        {
+            if (imagesByLevel.ContainsKey(level))
+            {
+                foreach (Image image in imagesByLevel[level])
+                {
+                    image.color = new Color(enable, enable, enable, 1f);
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"No images found for Level {level}.");
+            }
+        }
+
         public void OnDataChanged(GameSessionData gameSessionData)
         {
             if (progressBar != null && gameSessionData != null)
@@ -77,31 +130,20 @@ namespace Michsky.UI.Reach
                 progressBar.localScale = new Vector3(progress, 1, 1);
                 if (progress >= 1f / 3f - 1e-9)
                 {
-                    if (imageLevel1 != null)
-                        imageLevel1.color = new Color(1, 1, 1, 1);
-                    if (imageLevel1_2 != null)
-                        imageLevel1_2.color = new Color(1, 1, 1, 1);
+                    SetEnableLevel(2, 1);
                 }
                 else
                 {
-                    if (imageLevel1 != null)
-                        imageLevel1.color = new Color(0, 0, 0, 1);
-                    if (imageLevel1_2 != null)
-                        imageLevel1_2.color = new Color(0, 0, 0, 1);
+                    SetEnableLevel(2, 0);
                 }
+
                 if (progress >= 2f / 3f - 1e-9)
                 {
-                    if (imageLevel2 != null)
-                        imageLevel2.color = new Color(1, 1, 1, 1);
-                    if (imageLevel2_2 != null)
-                        imageLevel2_2.color = new Color(1, 1, 1, 1);
+                    SetEnableLevel(3, 1);
                 }
                 else
                 {
-                    if (imageLevel2 != null)
-                        imageLevel2.color = new Color(0, 0, 0, 1);
-                    if (imageLevel2_2 != null)
-                        imageLevel2_2.color = new Color(0, 0, 0, 1);
+                    SetEnableLevel(3, 0);
                 }
                 // Debug.Log($"ProgressBar scale set to: {progressBar.localScale}");
             }
@@ -136,6 +178,7 @@ namespace Michsky.UI.Reach
                 gameDataManager.OnScoreChanged.AddListener(OnScoreChanged);
                 gameDataManager.OnLivesChanged.AddListener(OnLivesChanged);
             }
+            InitializeComponents();
         }
 
         public void UnsubscribeFromEvents()
