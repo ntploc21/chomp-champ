@@ -4574,6 +4574,28 @@ MonoBehaviour:
             m_StringArgument: Chapter 1
             m_BoolArgument: 0
           m_CallState: 2
+  - chapterID: Chapter 2
+    title: Chapter 2
+    background: {fileID: 21300000, guid: b8203f22905be8649936b198dd1f2994, type: 3}
+    description: "From the grave of gluttony, the slime is no more. In its place rises
+      something colder\u2014sharper. A skeleton, bound by dark magic, stands where
+      once there was only goo.  \nIt remembers the hunger, but now it marches with
+      purpose. Every shattered bone and consumed soul adds to its strength. \nVillages
+      are already empty. Now, the heroes fall. Archers\u2014once protectors\u2014become
+      prey.  \nThe dead do not rest. They rise. And the world begins to understand:
+      this is no mere monster. This is a harbinger."
+    defaultState: 1
+    titleKey: Chapter2Title
+    descriptionKey: Chapter2Description
+    onContinue:
+      m_PersistentCalls:
+        m_Calls: []
+    onPlay:
+      m_PersistentCalls:
+        m_Calls: []
+    onReplay:
+      m_PersistentCalls:
+        m_Calls: []
   - chapterID: Chapter 3
     title: Chapter 3
     background: {fileID: 21300000, guid: a2b9a1d3ebcc88345916f0128c9cbc0e, type: 3}
