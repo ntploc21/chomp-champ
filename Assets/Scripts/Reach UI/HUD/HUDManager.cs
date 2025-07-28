@@ -30,6 +30,9 @@ namespace Michsky.UI.Reach
         private TextMeshProUGUI scoreText;
         private TextMeshProUGUI livesText;
         private Dictionary<int, List<Image>> imagesByLevel = new Dictionary<int, List<Image>>();
+        private Transform timerMask;
+        private Transform timerMaskImage;
+        private float totalTime = 0f;
 
         public enum DefaultBehaviour { Visible, Invisible }
 
@@ -77,6 +80,26 @@ namespace Michsky.UI.Reach
             progressBar = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("ProgressBar")?.Find("Background")?.Find("Bar");
             scoreText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Score")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
             livesText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Lives")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
+
+            totalTime = spawnManager?.gameState?.VictoryTime ?? 0f;
+            Transform timer = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Timer");
+            if (totalTime <= 0f)
+            {
+                timer?.gameObject.SetActive(false);
+            }
+            else
+            {
+                timer?.gameObject.SetActive(true);
+                timerMask = timer?.Find("Mask");
+                timerMaskImage = timerMask?.Find("Image");
+            }
+        }
+
+        void SetTimerLeftRatio(float ratio)
+        {
+            if (timerMask == null || timerMaskImage == null) return;
+            timerMask.localScale = new Vector3(1, ratio, 1);
+            timerMaskImage.localScale = new Vector3(1, 1f / ratio, 1);
         }
 
         void Awake()
@@ -165,16 +188,23 @@ namespace Michsky.UI.Reach
             }
         }
 
+        public void OnGameTimerUpdate(float time)
+        {
+            SetTimerLeftRatio(1.0f - time / totalTime);
+        }
+
         public void SubscribeToEvents()
         {
             GameDataManager gameDataManager = GUIManager.Instance.GameDataManager;
             if (gameDataManager != null)
             {
                 gameDataManager.OnDataChanged.AddListener(OnDataChanged);
-                gameDataManager.OnScoreChanged.AddListener(OnScoreChanged);
-                gameDataManager.OnLivesChanged.AddListener(OnLivesChanged);
+                // gameDataManager.OnScoreChanged.AddListener(OnScoreChanged);
+                // gameDataManager.OnLivesChanged.AddListener(OnLivesChanged);
             }
             InitializeComponents();
+            SpawnManager spawnManager = FindObjectOfType<SpawnManager>();
+            spawnManager?.gameState?.OnGameTimerUpdate?.AddListener(OnGameTimerUpdate);
         }
 
         public void UnsubscribeFromEvents()
@@ -183,9 +213,11 @@ namespace Michsky.UI.Reach
             if (gameDataManager != null)
             {
                 gameDataManager.OnDataChanged.RemoveListener(OnDataChanged);
-                gameDataManager.OnScoreChanged.RemoveListener(OnScoreChanged);
-                gameDataManager.OnLivesChanged.RemoveListener(OnLivesChanged);
+                // gameDataManager.OnScoreChanged.RemoveListener(OnScoreChanged);
+                // gameDataManager.OnLivesChanged.RemoveListener(OnLivesChanged);
             } 
+            SpawnManager spawnManager = FindObjectOfType<SpawnManager>();
+            spawnManager?.gameState?.OnGameTimerUpdate?.RemoveListener(OnGameTimerUpdate);
         }
 
         public void SetVisible()
