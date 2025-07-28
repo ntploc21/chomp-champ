@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f5ca5adee6231248aec8f6457b2e3b3, type: 3}
-  m_Name: Gnome
+  m_Name: Monk-C2L1
   m_EditorClassIdentifier: 
-  enemyName: Predator
-  spriteLibrary: {fileID: 7108339969198208228, guid: b8e438d3a357c418596354339513f479, type: 3}
+  enemyName: Enemy
+  spriteLibrary: {fileID: 7108339969198208228, guid: 0ff669587ecc0cf43ab5bffff2365516, type: 3}
   defaultSpriteCategory: Idle
   defaultSpriteLabel: Normal
-  fallbackSprite: {fileID: 21300000, guid: e45146f7603c55441b2c053f7a9b5b24, type: 3}
+  fallbackSprite: {fileID: 21300000, guid: 01b3079c2f955c249ac56478b939ed7e, type: 3}
   animatorController: {fileID: 9100000, guid: e3c1d4507170a794a8337129c5d4de0b, type: 2}
   hitAnimationParameter: hit
   deathAnimationParameter: death
   invincibleAnimationParameter: invincible
   isMovingAnimationParameter: isMoving
   level: 1
-  size: 0.75
+  size: 1.5
   baseSpeed: 3
   detectionRange: 5
   behaviorType: 2
@@ -36,6 +36,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   deathEffectPrefab: {fileID: 0}
   spawnEffectPrefab: {fileID: 0}
-  maxSpawnCount: 40
-  spawnWeight: 0.75
+  maxSpawnCount: 10
+  spawnWeight: 0.5
   canSpawnInWaves: 1
