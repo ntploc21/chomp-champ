@@ -23,7 +23,7 @@ MonoBehaviour:
   invincibleAnimationParameter: invincible
   isMovingAnimationParameter: isMoving
   level: 3
-  size: 2.25
+  size: 2.5
   baseSpeed: 2.5
   detectionRange: 5
   behaviorType: 1
