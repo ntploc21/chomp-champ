@@ -114,7 +114,19 @@ public class GameState : MonoBehaviour
         if (UIManagerAudio.instance != null)
         {
             // Store original music volume for resuming later
-            originalMusicVolume = UIManagerAudio.instance.GetMusicVolume();
+            originalMusicVolume = UIManagerAudio.instance.GetMusicVolume() / 100f;
+
+            string forcedMusicName = playerCore?.DataManager?.LevelConfig?.musicName;
+            if (!string.IsNullOrEmpty(forcedMusicName))
+            {
+                // Play specific music for the level if defined
+                UIManagerAudio.instance.PlayMusic(forcedMusicName);
+            }
+            else
+            {
+                // Otherwise play default gameplay music
+                UIManagerAudio.instance.PlayMusicInCategory(MusicLibrary.MusicCategory.Custom, "Gameplay");
+            }
         }
     }
 
@@ -270,7 +282,9 @@ public class GameState : MonoBehaviour
 
         // Disable game systems
         if (spawnManager != null)
-            spawnManager.StopSpawning(); Time.timeScale = 1f;
+            spawnManager.StopSpawning();
+
+        Time.timeScale = 1f;
 
         // Hide all UI canvases
         if (GUIManager.Instance != null)
@@ -297,7 +311,6 @@ public class GameState : MonoBehaviour
         {
             // Reset music volume to original when starting gameplay
             UIManagerAudio.instance.SetMusicVolume(originalMusicVolume);
-            UIManagerAudio.instance.PlayMusicInCategory(MusicLibrary.MusicCategory.Custom, "Gameplay");
         }
 
         OnGameStart?.Invoke();
@@ -311,7 +324,7 @@ public class GameState : MonoBehaviour
         // Tone down music when paused
         if (UIManagerAudio.instance != null)
         {
-            UIManagerAudio.instance.SetMusicVolume(originalMusicVolume * 0.2f);
+            UIManagerAudio.instance.SetMusicVolume(originalMusicVolume * 0.5f);
         }
 
         OnGamePause?.Invoke();
@@ -335,14 +348,14 @@ public class GameState : MonoBehaviour
         }
 
         // Show Game Over Canvas with game statistics
-            if (GUIManager.Instance != null)
-            {
-                float score = playerCore != null ? playerCore.Score : 0f;
-                string gameTime = GetFormattedGameTime();
-                int enemiesEaten = playerCore != null ? playerCore.DataManager.SessionData.enemiesEaten : 0;
+        if (GUIManager.Instance != null)
+        {
+            float score = playerCore != null ? playerCore.Score : 0f;
+            string gameTime = GetFormattedGameTime();
+            int enemiesEaten = playerCore != null ? playerCore.DataManager.SessionData.enemiesEaten : 0;
 
-                GUIManager.Instance.ShowGameOverCanvas(score, gameTime, enemiesEaten);
-            }
+            GUIManager.Instance.ShowGameOverCanvas(score, gameTime, enemiesEaten);
+        }
 
         // GameController game over handling
         if (gameController != null)

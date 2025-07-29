@@ -27,15 +27,39 @@ MonoBehaviour:
     fadeIn: 0
     fadeOut: 0
     fadeSpeed: 0
-  - trackName: BGM_Track4
-    displayName: BGM_Track4
-    audioClip: {fileID: 8300000, guid: 45c597703b8e34fcc8d1b32cd16f312d, type: 3}
+  - trackName: Music_1
+    displayName: Music 1
+    audioClip: {fileID: 8300000, guid: dca92a3dbc723ec47a05c2b06fc5562c, type: 3}
     artist: 
     album: 
     defaultVolume: 1
     loopByDefault: 1
     category: 7
-    customCategory: 
+    customCategory: Gameplay
+    fadeIn: 1
+    fadeOut: 1
+    fadeSpeed: 2
+  - trackName: Music_2
+    displayName: Music_2
+    audioClip: {fileID: 8300000, guid: 4ed06103785afdb4db20ca740fd4e85b, type: 3}
+    artist: 
+    album: 
+    defaultVolume: 1
+    loopByDefault: 1
+    category: 7
+    customCategory: Gameplay
+    fadeIn: 1
+    fadeOut: 1
+    fadeSpeed: 2
+  - trackName: Music_3
+    displayName: Music_3
+    audioClip: {fileID: 8300000, guid: 50f6aeceb73a7ff4e842cd0cd2bdac2d, type: 3}
+    artist: 
+    album: 
+    defaultVolume: 1
+    loopByDefault: 1
+    category: 7
+    customCategory: Gameplay
     fadeIn: 1
     fadeOut: 1
     fadeSpeed: 2

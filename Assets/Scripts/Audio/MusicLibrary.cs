@@ -219,15 +219,21 @@ namespace Michsky.UI.Reach
         {
             if (newTrack != null && !string.IsNullOrEmpty(newTrack.trackName))
             {
-                if (!HasTrack(newTrack.trackName))
+                if (HasTrack(newTrack.trackName))
                 {
-                    musicTracks.Add(newTrack);
-                    BuildDictionary();
+                    // Add suffix to avoid duplicates
+                    int suffix = 1;
+                    string originalName = newTrack.trackName;
+
+                    while (HasTrack(newTrack.trackName))
+                    {
+                        newTrack.trackName = $"{originalName}_{suffix}";
+                        suffix++;
+                    }
                 }
-                else
-                {
-                    Debug.LogWarning($"Track '{newTrack.trackName}' already exists in library", this);
-                }
+                
+                musicTracks.Add(newTrack);
+                BuildDictionary();
             }
         }
 
