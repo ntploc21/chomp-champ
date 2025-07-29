@@ -108,15 +108,24 @@ namespace Michsky.UI.Reach
             return null;
         }
 
-        public List<MusicTrack> GetTracksByCategory(MusicCategory category)
+        public List<MusicTrack> GetTracksByCategory(MusicCategory category, string customCategory = null)
         {
+            if (category == MusicCategory.Custom && string.IsNullOrEmpty(customCategory))
+            {
+                Debug.LogWarning("Custom category is required when filtering by MusicCategory.Custom", this);
+                return new List<MusicTrack>();
+            }
+
             List<MusicTrack> categoryTracks = new List<MusicTrack>();
             
             foreach (MusicTrack track in musicTracks)
             {
                 if (track.category == category)
                 {
-                    categoryTracks.Add(track);
+                    if (category == MusicCategory.Custom && track.customCategory == customCategory)
+                        categoryTracks.Add(track);
+                    else if (category != MusicCategory.Custom)
+                        categoryTracks.Add(track);
                 }
             }
             
@@ -168,10 +177,10 @@ namespace Michsky.UI.Reach
             return musicTracks[Random.Range(0, musicTracks.Count)];
         }
 
-        public MusicTrack GetRandomTrackByCategory(MusicCategory category)
+        public MusicTrack GetRandomTrackByCategory(MusicCategory category, string customCategory = null)
         {
-            List<MusicTrack> categoryTracks = GetTracksByCategory(category);
-            
+            List<MusicTrack> categoryTracks = GetTracksByCategory(category, customCategory);
+
             if (categoryTracks.Count == 0)
                 return null;
 

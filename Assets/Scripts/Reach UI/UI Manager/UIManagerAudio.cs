@@ -256,6 +256,22 @@ namespace Michsky.UI.Reach
             }
         }
 
+        public void PlayMusicInCategory(MusicLibrary.MusicCategory category, string customCategory = null, bool fadeIn = false)
+        {
+            if (musicLibrary == null) return;
+
+            var musicClip = musicLibrary.GetRandomTrackByCategory(category, customCategory);
+
+            if (musicClip != null)
+            {
+                PlayMusic(musicClip.trackName, fadeIn);
+            }
+            else
+            {
+                Debug.LogWarning($"No music found in category '{category}'.");
+            }
+        }
+
         public void StopMusic(bool fadeOut = false)
         {
             if (fadeOut)
