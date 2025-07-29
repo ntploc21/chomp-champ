@@ -194,28 +194,28 @@ namespace Michsky.UI.Reach
         public void SetMasterVolume(float volume)
         {
             masterVolume = Mathf.Clamp01(volume);
-            audioMixer.SetFloat("Master", Mathf.Log10(volume) * 20);
+            audioMixer.SetFloat("Master", Mathf.Log10(masterVolume) * 20);
             UpdateAudioSources();
         }
 
         public void SetMusicVolume(float volume)
         {
             musicVolume = Mathf.Clamp01(volume);
-            audioMixer.SetFloat("Music", Mathf.Log10(volume) * 20);
+            audioMixer.SetFloat("Music", Mathf.Log10(musicVolume) * 20);
             UpdateAudioSources();
         }
 
         public void SetSFXVolume(float volume)
         {
             sfxVolume = Mathf.Clamp01(volume);
-            audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
+            audioMixer.SetFloat("SFX", Mathf.Log10(sfxVolume) * 20);
             UpdateAudioSources();
         }
 
         public void SetUIVolume(float volume)
         {
             uiVolume = Mathf.Clamp01(volume);
-            audioMixer.SetFloat("UI", Mathf.Log10(volume) * 20);
+            audioMixer.SetFloat("UI", Mathf.Log10(uiVolume) * 20);
             UpdateAudioSources();
         }
         void UpdateAudioSources()
