@@ -283,7 +283,7 @@ public class PlayerEffect : MonoBehaviour
     // Screen shake
     if (enableScreenShake)
     {
-      StartCoroutine(ScreenShake(dashShakeDuration, dashShakeIntensity));
+      currentScreenShakeCoroutine = StartCoroutine(ScreenShake(dashShakeDuration, dashShakeIntensity));
     }
 
     // Dash trail effect
@@ -516,16 +516,17 @@ public class PlayerEffect : MonoBehaviour
 
     // Prevent multiple screen shakes running at the same time
     float currentTime = Time.time;
-    if (currentTime - lastShakeTime > shakeMinInterval)
-    {
+    //if (currentTime - lastShakeTime > shakeMinInterval)
+    //{
       // Stop any current screen shake
       if (currentScreenShakeCoroutine != null)
       {
-        StopCoroutine(currentScreenShakeCoroutine);
+        //StopCoroutine(currentScreenShakeCoroutine);
+        yield break;
       }
 
-      lastShakeTime = currentTime;
-    }
+      lastShakeTime = currentTime; 
+    //}
 
     CinemachineBasicMultiChannelPerlin noise = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
 
@@ -543,10 +544,6 @@ public class PlayerEffect : MonoBehaviour
     yield return new WaitForSeconds(duration);    // Restore original values
     noise.m_AmplitudeGain = originalAmplitude;
     noise.m_FrequencyGain = originalFrequency;
-
-    // Clear the coroutine reference when done
-    currentScreenShakeCoroutine = null;
-
     if (enableDebugLogs)
     {
       Debug.Log($"Screen shake completed - Duration: {duration}s, Intensity: {intensity}");
@@ -721,7 +718,7 @@ public class PlayerEffect : MonoBehaviour
   {
     if (enableScreenShake)
     {
-      StartCoroutine(ScreenShake(duration, intensity));
+      currentScreenShakeCoroutine = StartCoroutine(ScreenShake(duration, intensity));
     }
   }
 
@@ -1103,7 +1100,7 @@ public class PlayerEffect : MonoBehaviour
     // Screen shake
     if (enableScreenShake)
     {
-      StartCoroutine(ScreenShake(dashShakeDuration, dashShakeIntensity));
+      currentScreenShakeCoroutine = StartCoroutine(ScreenShake(dashShakeDuration, dashShakeIntensity));
     }
 
     // Enhanced dash trail effect with ground color
