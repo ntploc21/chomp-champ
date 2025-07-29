@@ -159,6 +159,18 @@ public class PlayerMovement : MonoBehaviour
     }
   }
 
+  public float sprintPickupTime = 10f;
+  public float sprintPickupStart = -1000000f;
+  public void StartSprintPickup()
+  {
+    sprintPickupStart = Time.time;
+    Debug.Log("Sprint pickup started.");
+  }
+  public bool IsSprintPickupActive()
+  {
+    return Time.time - sprintPickupStart < sprintPickupTime;
+  }
+
   private void UpdateSizeSpeedModifier()
   {
     if (_playerCore != null)
@@ -221,10 +233,22 @@ public class PlayerMovement : MonoBehaviour
     }
   }
 
+  public int dashCount = 0;
+
+  public void AddDash(int count = 1) 
+  {
+    dashCount += count;
+    if (enableDebugLogs)
+    {
+      Debug.Log($"Dashes added: {count}. Total dashes: {dashCount}");
+    }
+  }
+
   private void HandleDash()
   {
-    if (!CanDash || !canMove) return;
+    if (!CanDash || !canMove || dashCount <= 0) return;
 
+    dashCount--;
     Vector2 dashDirection = inputVector.magnitude > 0.1f ? inputVector.normalized : lastMovementDirection;
 
     // Fallback to forward if no movement history
@@ -279,7 +303,7 @@ public class PlayerMovement : MonoBehaviour
     float currentSpeed = baseSpeed;
 
     // Apply sprint multiplier if sprinting
-    if (isSprinting)
+    if (isSprinting || IsSprintPickupActive())
     {
       currentSpeed *= sprintMultiplier;
     }

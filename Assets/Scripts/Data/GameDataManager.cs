@@ -63,6 +63,28 @@ public class GameDataManager : MonoBehaviour
     GUIManager.Instance.FindGameDataManagerInScenes();
   }
 
+  public float doubleScoreTime = 10f;
+  public float doubleScoreStart = -1000000f;
+
+  public void StartDoubleScore()
+  {
+    doubleScoreStart = Time.time;
+    Debug.Log("Double score started.");
+  }
+
+  public float ScoreMultiplier()
+  {
+    float elapsed = Time.time - doubleScoreStart;
+    if (elapsed < doubleScoreTime)
+    {
+      return 2f; 
+    }
+    else
+    {
+      return 1f; 
+    }
+  }
+
   private void Update()
   {
     // Auto save functionality
@@ -107,7 +129,7 @@ public class GameDataManager : MonoBehaviour
   public void AddScore(float amount)
   {
     float oldScore = gameSessionData.score;
-    gameSessionData.score += amount;
+    gameSessionData.score += amount * ScoreMultiplier();
 
     OnScoreChanged?.Invoke(gameSessionData.score);
     OnDataChanged?.Invoke(gameSessionData);

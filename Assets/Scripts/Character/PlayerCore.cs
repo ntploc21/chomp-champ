@@ -229,6 +229,29 @@ public class PlayerCore : MonoBehaviour
         OnPlayerDeath?.Invoke(this);
     }
 
+    public void OnPickedUp(IPickup pickup)
+    {
+        if (pickup == null || !IsAlive) return;
+
+        // Handle pickup effects based on type
+        pickup.GetPickupType(out PickupType type);
+        switch (type)
+        {
+            case PickupType.Speed:
+                playerMovement?.StartSprintPickup();
+                break;
+            case PickupType.Dash:
+                playerMovement?.AddDash();
+                break;
+            case PickupType.DoubleScore:
+                dataManager?.StartDoubleScore();
+                break;
+            default:
+                Debug.LogWarning($"Unknown pickup type: {type}");
+                break;
+        }
+    }
+
     /// <summary>
     /// Respawns the player after death.
     /// This method makes the player temporarily invincible, re-enables movement,

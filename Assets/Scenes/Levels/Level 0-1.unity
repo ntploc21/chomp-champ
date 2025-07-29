@@ -23327,6 +23327,7 @@ Transform:
   - {fileID: 1977048620}
   - {fileID: 1696440810}
   - {fileID: 1385091526}
+  - {fileID: 1643688593}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1236318777
@@ -23530,6 +23531,53 @@ MonoBehaviour:
   enableDebugLogs: 0
   showSpawnGizmos: 0
   showLevelDistribution: 0
+--- !u!1 &1643688592
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1643688593}
+  - component: {fileID: 1643688594}
+  m_Layer: 0
+  m_Name: Pickup Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1643688593
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1643688592}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1168991509}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1643688594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1643688592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bbd8f45920b51142a04dcd43b192e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lastSpawnTime: 0
+  pickupSpawnInterval: 2
+  pickupSpawnRatio: 1
 --- !u!1 &1696440809
 GameObject:
   m_ObjectHideFlags: 0
@@ -32621,6 +32669,8 @@ MonoBehaviour:
   OnXPChanged:
     m_PersistentCalls:
       m_Calls: []
+  doubleScoreTime: 10
+  doubleScoreStart: -1000000
 --- !u!1 &2002656650
 GameObject:
   m_ObjectHideFlags: 0
@@ -32803,6 +32853,9 @@ MonoBehaviour:
   _rigidbody: {fileID: 2002656652}
   enableDebugLogs: 0
   showMovementGizmos: 0
+  sprintPickupTime: 10
+  sprintPickupStart: -1000000
+  dashCount: 0
 --- !u!114 &2002656656
 MonoBehaviour:
   m_ObjectHideFlags: 0

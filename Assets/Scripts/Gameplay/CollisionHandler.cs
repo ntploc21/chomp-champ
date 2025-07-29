@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public interface IPickup
 {
   void OnPickedUp(PlayerCore player);
+  void GetPickupType(out PickupType type);
 }
 
 public class CollisionHandler : MonoBehaviour
@@ -120,6 +121,7 @@ public class CollisionHandler : MonoBehaviour
     if (pickupComponent != null)
     {
       pickupComponent.OnPickedUp(playerCore);
+      playerCore.OnPickedUp(pickupComponent);
     }
 
     OnPickupCollected?.Invoke(player, pickup);
