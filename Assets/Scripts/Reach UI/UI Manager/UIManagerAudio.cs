@@ -182,10 +182,11 @@ namespace Michsky.UI.Reach
                 float uiValue = PlayerPrefs.GetFloat("Slider_" + UISlider.saveKey, 1f);
                 audioMixer.SetFloat("UI", Mathf.Log10(Mathf.Max(uiValue, 0.0001f)) * 20);
                 UISlider.mainSlider.onValueChanged.AddListener(SetUIVolume);
-            }        }
+            }
+        }
 
         #region Volume Controls (Audio Mixer)
-        
+
         /// <summary>
         /// Sets the master volume for all audio
         /// </summary>
@@ -216,20 +217,21 @@ namespace Michsky.UI.Reach
             uiVolume = Mathf.Clamp01(volume);
             audioMixer.SetFloat("UI", Mathf.Log10(volume) * 20);
             UpdateAudioSources();
-        }        void UpdateAudioSources()
+        }
+        void UpdateAudioSources()
         {
             if (musicSource != null)
                 musicSource.volume = masterVolume * musicVolume;
 
             if (sfxSource != null)
-                sfxSource.volume = masterVolume * sfxVolume;            if (uiSource != null)
+                sfxSource.volume = masterVolume * sfxVolume; if (uiSource != null)
                 uiSource.volume = masterVolume * uiVolume;
         }
 
         #endregion
 
         #region Music Controls
-        
+
         /// <summary>
         /// Plays a music track with optional fade-in effect
         /// </summary>
@@ -293,7 +295,8 @@ namespace Michsky.UI.Reach
         public void ResumeMusic()
         {
             musicSource.UnPause();
-        }        public string GetCurrentMusicTrack()
+        }
+        public string GetCurrentMusicTrack()
         {
             return currentMusicTrack;
         }
@@ -301,7 +304,7 @@ namespace Michsky.UI.Reach
         #endregion
 
         #region Sound Effects (SFX)
-        
+
         /// <summary>
         /// Plays a sound effect using basic settings (legacy method for backward compatibility)
         /// </summary>
@@ -351,7 +354,7 @@ namespace Michsky.UI.Reach
             if (sfxClip?.audioClip == null) return;
 
             // Determine which audio source to use
-            AudioSource sourceToUse = sfxClip.use3D && position.HasValue ? 
+            AudioSource sourceToUse = sfxClip.use3D && position.HasValue ?
                 CreateTemporary3DAudioSource(position.Value, sfxClip) : sfxSource;
 
             // Calculate randomized volume
@@ -399,13 +402,13 @@ namespace Michsky.UI.Reach
         {
             GameObject tempAudioObject = new GameObject($"TempAudio_{sfxClip.sfxName}");
             tempAudioObject.transform.position = position;
-            
+
             AudioSource tempSource = tempAudioObject.AddComponent<AudioSource>();
             tempSource.spatialBlend = 1f; // Full 3D
             tempSource.minDistance = sfxClip.minDistance;
             tempSource.maxDistance = sfxClip.maxDistance;
             tempSource.playOnAwake = false;
-            
+
             // Apply audio mixer group if available
             if (sfxSource.outputAudioMixerGroup != null)
             {
@@ -488,12 +491,13 @@ namespace Michsky.UI.Reach
             if (string.IsNullOrEmpty(soundName))
                 PlayRandomSFXFromCategory(SFXLibrary.SFXCategory.Movement, position);
             else
-                PlaySFXWithSettings(soundName, position);        }
+                PlaySFXWithSettings(soundName, position);
+        }
 
         #endregion
 
         #region UI Sound Effects
-        
+
         /// <summary>
         /// Plays a UI sound effect using basic settings (legacy method for backward compatibility)
         /// </summary>
@@ -536,7 +540,8 @@ namespace Michsky.UI.Reach
             {
                 Debug.LogWarning("Click sound not found in UI library.");
             }
-        }        public void PlayNotificationSound()
+        }
+        public void PlayNotificationSound()
         {
             if (uiAudioLibrary.GetNotificationSound() != null)
             {
@@ -551,7 +556,7 @@ namespace Michsky.UI.Reach
         #endregion
 
         #region Volume Controls
-        
+
         // Volume Getters
         public float GetMasterVolume() { return masterVolume * 100f; }
         public float GetMusicVolume() { return musicVolume * 100f; }
@@ -591,7 +596,8 @@ namespace Michsky.UI.Reach
                 elapsed += Time.deltaTime;
                 musicSource.volume = Mathf.MoveTowards(musicSource.volume, 0f, (startVolume / duration) * Time.deltaTime);
                 yield return null;
-            }            musicSource.Stop();
+            }
+            musicSource.Stop();
             musicSource.volume = masterVolume * musicVolume;
             currentMusicTrack = null;
         }
@@ -599,7 +605,7 @@ namespace Michsky.UI.Reach
         #endregion
 
         #region Library Management
-        
+
         /// <summary>
         /// Reloads all audio libraries to refresh the cached clips
         /// </summary>

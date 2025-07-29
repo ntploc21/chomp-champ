@@ -64,6 +64,7 @@ public class GameState : MonoBehaviour
 
     #region Internal Data
     private GameController gameController; // Reference to GameController for game management
+    private float originalMusicVolume = 1f; // Store original music volume for resuming
     #endregion
 
     // Properties
@@ -109,6 +110,12 @@ public class GameState : MonoBehaviour
         {
             // GUIManager.Instance.InitializeCanvasReferences();
         }
+
+        if (UIManagerAudio.instance != null)
+        {
+            // Store original music volume for resuming later
+            originalMusicVolume = UIManagerAudio.instance.GetMusicVolume();
+        }
     }
 
     private void Update()
@@ -125,6 +132,12 @@ public class GameState : MonoBehaviour
     private void OnDestroy()
     {
         UnsubscribeFromEvents();
+
+        // Reset volume back to original when GameState is destroyed
+        if (UIManagerAudio.instance != null)
+        {
+            UIManagerAudio.instance.SetMusicVolume(originalMusicVolume);
+        }
 
         if (Instance == this)
         {
@@ -279,6 +292,14 @@ public class GameState : MonoBehaviour
         if (GUIManager.Instance != null)
             GUIManager.Instance.HideAllCanvases();
 
+        // Enable music for gameplay
+        if (UIManagerAudio.instance != null)
+        {
+            // Reset music volume to original when starting gameplay
+            UIManagerAudio.instance.SetMusicVolume(originalMusicVolume);
+            UIManagerAudio.instance.PlayMusicInCategory(MusicLibrary.MusicCategory.Custom, "Gameplay");
+        }
+
         OnGameStart?.Invoke();
     }
 
@@ -286,6 +307,12 @@ public class GameState : MonoBehaviour
     {
         isPaused = true;
         Time.timeScale = 0f;
+
+        // Tone down music when paused
+        if (UIManagerAudio.instance != null)
+        {
+            UIManagerAudio.instance.SetMusicVolume(originalMusicVolume * 0.2f);
+        }
 
         OnGamePause?.Invoke();
     }
@@ -303,6 +330,7 @@ public class GameState : MonoBehaviour
         // Play "GameOver" UI sound effect
         if (UIManagerAudio.instance != null)
         {
+            UIManagerAudio.instance.StopMusic();
             UIManagerAudio.instance.PlayUISFX("GameOver");
         }
 
@@ -336,6 +364,7 @@ public class GameState : MonoBehaviour
         // Play "GameWin" UI sound effect
         if (UIManagerAudio.instance != null)
         {
+            UIManagerAudio.instance.StopMusic();
             UIManagerAudio.instance.PlayUISFX("GameWin");
         }
 
