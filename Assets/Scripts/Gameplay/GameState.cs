@@ -50,7 +50,8 @@ public class GameState : MonoBehaviour
     [Header("Victory Conditions")]
     [SerializeField] private int victoryLevel = 10;
     [SerializeField] private float victoryScore = 10000f;
-    [SerializeField] private float victoryTime = 300f; // 5 minutes
+    [SerializeField] private float victoryTime = 300f; // This time is for survival mode, where player must survive for a certain duration
+    [SerializeField] private float loseTime = 300f; // This time is for timing out the player, where player must complete the level before this time
 
     [Header("Events")]
     public UnityEvent<GameStateType> OnStateChanged;
@@ -507,6 +508,13 @@ public class GameState : MonoBehaviour
         // Don't check victory conditions if it in Victory
         if (currentState == GameStateType.Victory || currentState == GameStateType.GameOver)
         {
+            return;
+        }
+
+        // Check time-based lose condition (timed level), disabled by setting loseTime to 0
+        if (loseTime > 0 && gameTimer >= loseTime)
+        {
+            GameOver();
             return;
         }
 
