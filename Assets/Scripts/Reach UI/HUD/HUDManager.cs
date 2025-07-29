@@ -79,7 +79,7 @@ namespace Michsky.UI.Reach
             }
             progressBar = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("ProgressBar")?.Find("Background")?.Find("Bar");
             scoreText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Score")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
-            scoreText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Score")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
+            livesText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Lives")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
 
             totalTime = spawnManager?.gameState?.VictoryTime ?? 0f;
             Transform timer = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Timer");

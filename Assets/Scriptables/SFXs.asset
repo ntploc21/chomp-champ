@@ -159,6 +159,78 @@ MonoBehaviour:
     use3D: 0
     minDistance: 1
     maxDistance: 500
+  - sfxName: StartGame0
+    displayName: StartGame0
+    audioClip: {fileID: 8300000, guid: dca92a3dbc723ec47a05c2b06fc5562c, type: 3}
+    defaultVolume: 1
+    defaultPitch: 1
+    spatialBlend: 0
+    loopByDefault: 1
+    category: 9
+    customCategory: 
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    use3D: 0
+    minDistance: 1
+    maxDistance: 500
+  - sfxName: StartGame1
+    displayName: StartGame1
+    audioClip: {fileID: 8300000, guid: 4ed06103785afdb4db20ca740fd4e85b, type: 3}
+    defaultVolume: 1
+    defaultPitch: 1
+    spatialBlend: 0
+    loopByDefault: 1
+    category: 9
+    customCategory: 
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    use3D: 0
+    minDistance: 1
+    maxDistance: 500
+  - sfxName: StartGame2
+    displayName: StartGame2
+    audioClip: {fileID: 8300000, guid: 50f6aeceb73a7ff4e842cd0cd2bdac2d, type: 3}
+    defaultVolume: 1
+    defaultPitch: 1
+    spatialBlend: 0
+    loopByDefault: 1
+    category: 9
+    customCategory: 
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    use3D: 0
+    minDistance: 1
+    maxDistance: 500
+  - sfxName: StartGame3
+    displayName: StartGame3
+    audioClip: {fileID: 8300000, guid: 45c597703b8e34fcc8d1b32cd16f312d, type: 3}
+    defaultVolume: 1
+    defaultPitch: 1
+    spatialBlend: 0
+    loopByDefault: 1
+    category: 9
+    customCategory: 
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    use3D: 0
+    minDistance: 1
+    maxDistance: 500
   defaultSFX:
     sfxName: 
     displayName: 

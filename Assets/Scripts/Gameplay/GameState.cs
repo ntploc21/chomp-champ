@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Michsky.UI.Reach;
 
 public enum GameStateType
 {
@@ -51,6 +52,9 @@ public class GameState : MonoBehaviour
     [SerializeField] private float victoryScore = 10000f;
     [SerializeField] private float victoryTime = 300f; // 5 minutes
     public float VictoryTime => victoryTime;
+
+    [Header("Music Settings")]
+    [SerializeField] private int bgmId = -1;
 
     [Header("Events")]
     public UnityEvent<GameStateType> OnStateChanged;
@@ -263,6 +267,10 @@ public class GameState : MonoBehaviour
         if (GUIManager.Instance != null)
             GUIManager.Instance.HideAllCanvases();
 
+        if (bgmId >= 0)
+            UIManagerAudio.instance?.PlaySFX($"StartGame{bgmId}");
+        else
+            UIManagerAudio.instance?.PlaySFX($"StartGame{Random.Range(0, 4)}");
         OnGameStart?.Invoke();
     }
 
@@ -270,7 +278,8 @@ public class GameState : MonoBehaviour
     {
         isPaused = true;
         Time.timeScale = 0f;
-
+        
+        UIManagerAudio.instance?.PauseMusic();
         OnGamePause?.Invoke();
     }
     private void HandleGameOverState()
@@ -353,6 +362,7 @@ public class GameState : MonoBehaviour
         if (!allowPause || currentState != GameStateType.Playing) return;
 
         Debug.Log("Pausing game...");
+        UIManagerAudio.instance?.PauseMusic();
         ChangeState(GameStateType.Paused);
     }
 
@@ -365,6 +375,7 @@ public class GameState : MonoBehaviour
         Time.timeScale = 1f;
         ChangeState(GameStateType.Playing);
 
+        UIManagerAudio.instance?.ResumeMusic();
         OnGameResume?.Invoke();
     }
 
@@ -384,6 +395,7 @@ public class GameState : MonoBehaviour
         if (currentState == GameStateType.GameOver) return;
 
         Debug.Log("Game Over!");
+        UIManagerAudio.instance?.StopMusic();
         StartCoroutine(GameOverCoroutine());
     }
     public void Victory()
@@ -391,12 +403,14 @@ public class GameState : MonoBehaviour
         if (currentState == GameStateType.Victory) return;
 
         Debug.Log("Victory!");
+        UIManagerAudio.instance?.StopMusic();
         StartCoroutine(VictoryCoroutine());
     }
 
     public void QuitGame()
     {
         Debug.Log("Quitting game...");
+        UIManagerAudio.instance?.StopMusic();
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
