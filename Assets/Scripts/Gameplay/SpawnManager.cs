@@ -1150,11 +1150,7 @@ public class SpawnManager : MonoBehaviour
       Vector3 tilemapPosition = GenerateTilemapBasedPosition();
       if (tilemapPosition != Vector3.zero)
         return tilemapPosition;
-
-      if (enableDebugLogs)
-        Debug.Log("SpawnManager: Tilemap-based position generation failed, trying collider-based");
     }
-    Debug.Log($"GenerateRandomSpawnPosition: {useLayerValidation && useTilemapDirectAccess}");
 
     if (preferOffScreenSpawning && gameCamera != null)
     {
@@ -1294,8 +1290,6 @@ public class SpawnManager : MonoBehaviour
 
     if (groundTilemaps == null || groundTilemaps.Length == 0)
     {
-      if (enableDebugLogs)
-        Debug.Log("SpawnManager: No ground tilemaps found for tilemap-based spawning");
       return Vector3.zero;
     }
 
@@ -1315,11 +1309,11 @@ public class SpawnManager : MonoBehaviour
       Vector3 cellPos = spawnableCellOnTilemap[Random.Range(0, spawnableCellOnTilemap.Count)];
 
       // Add small random offset within the cell
-      cellPos += new Vector3(
-        Random.Range(-0.4f, 0.4f),
-        Random.Range(-0.4f, 0.4f),
-        0f
-      );
+      // cellPos += new Vector3(
+      //   Random.Range(-0.4f, 0.4f),
+      //   Random.Range(-0.4f, 0.4f),
+      //   0f
+      // );
 
       // Check if this position doesn't overlap with wall tiles
       if (!IsPositionOnWallTile(cellPos))
@@ -1573,7 +1567,7 @@ public class SpawnManager : MonoBehaviour
     }
 
     // Step 4: Filter cells that have sufficient neighbors
-    yield return StartCoroutine(FilterCellsByNeighborsCoroutine(validCells, combinedBounds));
+    yield return StartCoroutine(FilterCellsByNeighborsCoroutine(validCells));
   }
 
   /// <summary>
@@ -1629,7 +1623,7 @@ public class SpawnManager : MonoBehaviour
   /// <summary>
   /// Filter cells by neighbor count using coroutine for performance
   /// </summary>
-  private IEnumerator FilterCellsByNeighborsCoroutine(HashSet<Vector3Int> validCells, BoundsInt bounds)
+  private IEnumerator FilterCellsByNeighborsCoroutine(HashSet<Vector3Int> validCells)
   {
     var finalSpawnCells = new List<Vector3>();
     int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
@@ -1664,9 +1658,6 @@ public class SpawnManager : MonoBehaviour
         yield return null;
       }
     }
-
-    // Remove duplicates and ensure final positions are valid
-    finalSpawnCells = finalSpawnCells.Distinct().Where(pos => IsValidSpawnPosition(pos)).ToList();
 
     // Update the final spawn cell list
     spawnableCellOnTilemap.Clear();
@@ -1713,6 +1704,7 @@ public class SpawnManager : MonoBehaviour
     }
     return true;
   }
+  
   /// <summary>
   /// Check if the position is on a valid layer for spawning (Ground Layer but not Wall Layer)
   /// </summary>
