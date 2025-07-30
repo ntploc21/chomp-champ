@@ -233,22 +233,10 @@ public class PlayerMovement : MonoBehaviour
     }
   }
 
-  public int dashCount = 100000000;
-
-  public void AddDash(int count = 1) 
-  {
-    dashCount += count;
-    if (enableDebugLogs)
-    {
-      Debug.Log($"Dashes added: {count}. Total dashes: {dashCount}");
-    }
-  }
-
   private void HandleDash()
   {
-    if (!CanDash || !canMove || dashCount <= 0) return;
+    if (!CanDash || !canMove) return;
 
-    dashCount--;
     Vector2 dashDirection = inputVector.magnitude > 0.1f ? inputVector.normalized : lastMovementDirection;
 
     // Fallback to forward if no movement history

@@ -13,12 +13,14 @@ public class PickupManager : MonoBehaviour
     public float lastSpawnTime = 0f;
     public float pickupSpawnInterval = 2f;
     public float pickupSpawnRatio = 1f;
+    private List<Vector3Int> spawnCells = new List<Vector3Int>();
 
     public void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            Initialize();
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -26,6 +28,32 @@ public class PickupManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    private Tilemap tilemap;
+    private void Initialize()
+    {
+        tilemap = GameObject.Find("PickupSpawn")?.GetComponent<Tilemap>();
+        if (tilemap == null)
+        {
+            Debug.LogWarning("PickupSpawn tilemap not found!");
+        }
+
+        BoundsInt bounds = tilemap.cellBounds;
+
+        for (int i = bounds.xMin; i < bounds.xMax; i++)
+        {
+            for (int j = bounds.yMin; j < bounds.yMax; j++)
+            {
+                Vector3Int cell = new Vector3Int(i, j, 0);
+                if (tilemap.HasTile(cell))
+                {
+                    spawnCells.Add(cell);
+                }
+            }
+        }
+
+        Debug.Log($"Found {spawnCells.Count} valid spawn cells for pickups.");
+    } 
 
     public void Update()
     {
@@ -42,6 +70,22 @@ public class PickupManager : MonoBehaviour
         {
             SpawnPickup();
         }
+    }
+
+    private Vector3 GetRandomWalkablePosition()
+    {
+        return GetRandomPositionInCell(spawnCells[Random.Range(0, spawnCells.Count)]);
+    }
+
+    private Vector3 GetRandomPositionInCell(Vector3Int cell)
+    {
+        Vector3 cellWorldPosition = tilemap.CellToWorld(cell);
+        Vector3 cellSize = tilemap.cellSize;
+
+        float randomX = Random.Range(0f, cellSize.x);
+        float randomY = Random.Range(0f, cellSize.y);
+
+        return cellWorldPosition + new Vector3(randomX, randomY, 0);
     }
 
     private void SpawnPickup()
@@ -68,43 +112,5 @@ public class PickupManager : MonoBehaviour
         {
             Debug.LogWarning($"Pickup prefab {pickupType} not found!");
         }
-    }
-    
-    Vector3 GetRandomWalkablePosition()
-    {
-        Tilemap tilemap = GameObject.Find("PickupSpawn")?.GetComponent<Tilemap>();
-        if (tilemap == null)
-        {
-            Debug.LogWarning("PickupSpawn tilemap not found!");
-            return Vector3.zero;
-        }
-
-        BoundsInt bounds = tilemap.cellBounds;
-        Vector3Int cell;
-        Vector3 worldPos;
-
-        for (int i = 0; i < 5; i++)
-        {
-            cell = new Vector3Int(
-                Random.Range(bounds.xMin, bounds.xMax),
-                Random.Range(bounds.yMin, bounds.yMax),
-                0
-            );
-
-            if (!tilemap.HasTile(cell))
-                continue;
-
-            worldPos = tilemap.GetCellCenterWorld(cell);
-            return worldPos;
-
-            // Check if worldPos is inside the composite collider
-            // if (groundCollider.OverlapPoint(worldPos))
-            // {
-            //     return worldPos;
-            // }
-        }
-
-        Debug.LogWarning("Could not find a walkable position after 5 tries.");
-        return Vector3.zero;
     }
 }
