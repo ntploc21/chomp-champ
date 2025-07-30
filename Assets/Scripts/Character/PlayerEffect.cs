@@ -51,7 +51,6 @@ public class PlayerEffect : MonoBehaviour
   [Header("Dash Effect Enhancement")]
   [SerializeField] private LayerMask groundLayerMask = 1;
   [SerializeField] private LayerMask wallLayerMask = 1 << 8;
-  [SerializeField] private float groundDetectionRadius = 0.5f;
   [SerializeField] private bool enableGroundColorDetection = true;
   [SerializeField] private float colorDarkeningFactor = 0.4f;
   [SerializeField] private Color fallbackGroundColor = new Color(0.4f, 0.3f, 0.2f, 1f); // Default brown dirt color
@@ -136,12 +135,6 @@ public class PlayerEffect : MonoBehaviour
 
   public void PlaySpawnEffect()
   {
-    // Play spawn animation
-    if (animator != null)
-    {
-      animator.SetTrigger("Spawn");
-    }
-
     // Play spawn particles
     if (spawnParticles != null)
     {
@@ -194,12 +187,6 @@ public class PlayerEffect : MonoBehaviour
 
     // Flash effect
     StartCoroutine(FlashEffect(eatFlashColor, 10f));
-
-    // Animation trigger
-    if (animator != null)
-    {
-      animator.SetTrigger("Eat");
-    }
 
     if (enableDebugLogs)
     {
@@ -321,11 +308,6 @@ public class PlayerEffect : MonoBehaviour
     }
     // Similar to spawn but with different timing
     StartCoroutine(RespawnAnimation());
-
-    if (animator != null)
-    {
-      animator.SetTrigger("Respawn");
-    }
   }
 
   public void SetFlicker(bool flicker)
@@ -389,8 +371,6 @@ public class PlayerEffect : MonoBehaviour
   private IEnumerator FlashEffect(Color flashColor, float duration)
   {
     if (spriteRenderer == null) yield break;
-
-    Debug.LogWarning($"Flashing effect with color: {flashColor} for duration: {duration}", this);
 
     Color original = spriteRenderer.color;
     spriteRenderer.color = flashColor;
