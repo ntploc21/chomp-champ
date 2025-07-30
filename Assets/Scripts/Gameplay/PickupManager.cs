@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;  // Add this for scene management
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Tilemaps;
 
 public class PickupManager : MonoBehaviour
 {
@@ -46,13 +47,12 @@ public class PickupManager : MonoBehaviour
     private void SpawnPickup()
     {
         // Debug.Log("Spawning pickup...");
-
-        Camera mainCamera = Camera.main;
-        if (mainCamera == null) return;
-
-        Vector2 screenSize = new Vector2(Screen.width, Screen.height);
-        Vector2 worldSize = mainCamera.ScreenToWorldPoint(screenSize);
-        Vector2 spawnPosition = new Vector2(Random.Range(-worldSize.x / 2, worldSize.x / 2), Random.Range(-worldSize.y / 2, worldSize.y / 2));
+        Vector3 spawnPosition = GetRandomWalkablePosition();
+        if (spawnPosition == Vector3.zero)
+        {
+            Debug.LogWarning("Failed to find a valid spawn position for the pickup.");
+            return;
+        }
 
         string pickupType = Random.Range(0, 2) switch
         {
@@ -68,5 +68,43 @@ public class PickupManager : MonoBehaviour
         {
             Debug.LogWarning($"Pickup prefab {pickupType} not found!");
         }
+    }
+    
+    Vector3 GetRandomWalkablePosition()
+    {
+        Tilemap tilemap = GameObject.Find("PickupSpawn")?.GetComponent<Tilemap>();
+        if (tilemap == null)
+        {
+            Debug.LogWarning("PickupSpawn tilemap not found!");
+            return Vector3.zero;
+        }
+
+        BoundsInt bounds = tilemap.cellBounds;
+        Vector3Int cell;
+        Vector3 worldPos;
+
+        for (int i = 0; i < 5; i++)
+        {
+            cell = new Vector3Int(
+                Random.Range(bounds.xMin, bounds.xMax),
+                Random.Range(bounds.yMin, bounds.yMax),
+                0
+            );
+
+            if (!tilemap.HasTile(cell))
+                continue;
+
+            worldPos = tilemap.GetCellCenterWorld(cell);
+            return worldPos;
+
+            // Check if worldPos is inside the composite collider
+            // if (groundCollider.OverlapPoint(worldPos))
+            // {
+            //     return worldPos;
+            // }
+        }
+
+        Debug.LogWarning("Could not find a walkable position after 5 tries.");
+        return Vector3.zero;
     }
 }
