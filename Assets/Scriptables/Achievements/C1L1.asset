@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9399b3dc93af77b46909f461c7b7a9c4, type: 3}
+  m_Name: C1L1
+  m_EditorClassIdentifier: 
+  levelName: C1L1
+  levelDisplayName: Nope
+  levelDescription: Nope
+  achievements:
+  - achievementId: C1L1_Tutorial
+    achievementTitle: Welcome to Chomp Champ
+    achievementDescription: Lmao Testing Here
+    achievementType: 0
+    achievementIcon: {fileID: -589372785, guid: 3fd2f42dedce5914890fe278e6627ab4, type: 3}
+    isHidden: 0
+    condition:
+      rid: 5775825431363321863
+    currencyReward: 0
+    xpReward: 0
+  - achievementId: C1L1_Enemy
+    achievementTitle: Snack Attack
+    achievementDescription: They were tasty. And plentiful. Good start.
+    achievementType: 0
+    achievementIcon: {fileID: -589372785, guid: 3fd2f42dedce5914890fe278e6627ab4, type: 3}
+    isHidden: 0
+    condition:
+      rid: 5775825431363321863
+    currencyReward: 0
+    xpReward: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 5775825431363321863
+      type: {class: EnemiesEatenCondition, ns: , asm: Assembly-CSharp}
+      data:
+        conditionName: Lmao
+        description: Lmao
+        minimumEnemies: 10
+        level: 1

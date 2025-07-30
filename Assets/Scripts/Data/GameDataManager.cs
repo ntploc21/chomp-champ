@@ -147,6 +147,13 @@ public class GameDataManager : MonoBehaviour
     float scoreGained = enemySize * 100f * bonusMul * scoreBoost;
     AddScore(scoreGained);
 
+    // Track enemies eaten per level
+    if (!gameSessionData.enemiesEatenPerLevel.ContainsKey(gameSessionData.currentLevel))
+    {
+      gameSessionData.enemiesEatenPerLevel[gameSessionData.currentLevel] = 0;
+    }
+    gameSessionData.enemiesEatenPerLevel[gameSessionData.currentLevel]++;
+
     OnDataChanged?.Invoke(gameSessionData);
   }
 

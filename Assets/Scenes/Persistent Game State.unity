@@ -15442,6 +15442,7 @@ Transform:
   - {fileID: 594739430}
   - {fileID: 1681289623}
   - {fileID: 7210979}
+  - {fileID: 1898849436}
   - {fileID: 918453002}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47316,27 +47317,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774294875512, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774294875512, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774294875512, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 246.85999
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774294875512, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 31.63
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774294875512, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774294875512, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -15.815
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774321293761, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_FillAmount
@@ -47372,7 +47373,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774512910498, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 31.63
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774512910498, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -59689,6 +59690,63 @@ MonoBehaviour:
   colorType: 5
   useCustomColor: 0
   useCustomAlpha: 1
+--- !u!1 &1898849435
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1898849436}
+  - component: {fileID: 1898849437}
+  m_Layer: 0
+  m_Name: Achievement Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1898849436
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898849435}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 556351431}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1898849437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898849435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc1f13ef794909c49b3ebb4750b95882, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelConfigs:
+  - {fileID: 11400000, guid: 145a42a573722bb4d811a5bab6c83ebc, type: 2}
+  enableDebugLogging: 1
+  showAchievementNotifications: 1
+  notificationDuration: 3
+  achievementNotificationPrefab: {fileID: 2035305696}
+  notificationParent: {fileID: 0}
+  OnAchievementUnlocked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAchievementComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1907642350
 GameObject:
   m_ObjectHideFlags: 0
@@ -63218,7 +63276,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2035305697
 RectTransform:
   m_ObjectHideFlags: 0

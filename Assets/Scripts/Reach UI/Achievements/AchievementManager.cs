@@ -179,7 +179,7 @@ namespace Michsky.UI.Reach
             if (commonUnlockedObj != null) { commonUnlockedObj.text = commonUnlockedCount.ToString(); }
             if (rareUnlockedObj != null) { rareUnlockedObj.text = rareUnlockedCount.ToString(); }
             if (legendaryUnlockedObj != null) { legendaryUnlockedObj.text = legendaryUnlockedCount.ToString(); }
-            
+
             if (commonlTotalObj != null)
             {
                 commonlTotalObj.text = commonCount.ToString();
@@ -242,6 +242,12 @@ namespace Michsky.UI.Reach
         {
             if (value == true) { PlayerPrefs.SetString("ACH_" + title, "true"); }
             else { PlayerPrefs.SetString("ACH_" + title, "false"); }
+        }
+        
+        public static void ResetAchievements()
+        {
+            PlayerPrefs.DeleteAll();
+            PlayerPrefs.Save();
         }
     }
 }

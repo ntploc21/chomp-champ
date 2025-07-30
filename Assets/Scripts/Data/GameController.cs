@@ -36,6 +36,7 @@ public class GameController : MonoBehaviour
     // Find components if not assigned
     if (gameDataManager == null)
       gameDataManager = FindObjectOfType<GameDataManager>();
+
     if (playerDataHelper == null)
       playerDataHelper = FindObjectOfType<PlayerDataHelper>();
   }
@@ -44,6 +45,7 @@ public class GameController : MonoBehaviour
     // Find components if not assigned again
     if (gameDataManager == null)
       gameDataManager = FindObjectOfType<GameDataManager>();
+      
     if (playerDataHelper == null)
       playerDataHelper = FindObjectOfType<PlayerDataHelper>();
 
@@ -94,8 +96,7 @@ public class GameController : MonoBehaviour
   }
   #endregion
 
-  #region Game Flow Methods
-  /// <summary>
+  #region Game Flow Methods  /// <summary>
   /// Starts a new game session.
   /// </summary>
   public void StartGame()
@@ -106,6 +107,13 @@ public class GameController : MonoBehaviour
 
     // Increment games played counter
     PlayerDataManager.IncrementGamesPlayed();
+
+    // Initialize achievement tracking if achievement manager is available
+    var achievementManager = FindObjectOfType<FFAchievementManager>();
+    if (achievementManager != null)
+    {
+      achievementManager.OnLevelStart();
+    }
 
     // Notify other systems
     if (playerDataHelper != null)
@@ -132,7 +140,6 @@ public class GameController : MonoBehaviour
 
     Debug.Log($"Game ended. Duration: {sessionDuration:F1}s, Level completed: {levelCompleted}");
   }
-
   /// <summary>
   /// Called when the player completes the current level.
   /// </summary>
@@ -147,6 +154,13 @@ public class GameController : MonoBehaviour
     {
       PlayerDataManager.UnlockLevel(nextLevelName);
       Debug.Log($"Level {nextLevelName} unlocked!");
+    }
+
+    // Check achievements if achievement manager is available
+    var achievementManager = FindObjectOfType<FFAchievementManager>();
+    if (achievementManager != null)
+    {
+      achievementManager.OnLevelComplete();
     }
 
     // Notify PlayerDataHelper
