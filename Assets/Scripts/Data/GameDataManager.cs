@@ -131,28 +131,28 @@ public class GameDataManager : MonoBehaviour
     OnDataChanged?.Invoke(gameSessionData);
   }
 
-  public void EatEnemy(float enemySize, bool isStreak = false)
+  public void EatEnemy(int enemyLevel, bool isStreak = false)
   {
     gameSessionData.enemiesEaten++;
 
     // Calculate the XP gained from eating an enemy
-    float baseXP = enemySize * 10f; // Example: 10 XP per unit size
-    float bonusMul = levelData.CalculateXPBonus(gameSessionData.currentSize, enemySize, isStreak);
+    float baseXP = enemyLevel * 10f; // Example: 10 XP per unit level
+    float bonusMul = levelData.CalculateXPBonus(gameSessionData.currentSize, enemyLevel, isStreak);
     float totalXP = baseXP * bonusMul;
 
     // Add XP to the player
     AddXP(totalXP);
 
     // Calculate score based on enemy size
-    float scoreGained = enemySize * 100f * bonusMul * scoreBoost;
+    float scoreGained = enemyLevel * 100f * bonusMul * scoreBoost;
     AddScore(scoreGained);
 
     // Track enemies eaten per level
-    if (!gameSessionData.enemiesEatenPerLevel.ContainsKey(gameSessionData.currentLevel))
+    if (!gameSessionData.enemiesEatenPerLevel.ContainsKey(enemyLevel))
     {
-      gameSessionData.enemiesEatenPerLevel[gameSessionData.currentLevel] = 0;
+      gameSessionData.enemiesEatenPerLevel[enemyLevel] = 0;
     }
-    gameSessionData.enemiesEatenPerLevel[gameSessionData.currentLevel]++;
+    gameSessionData.enemiesEatenPerLevel[enemyLevel]++;
 
     OnDataChanged?.Invoke(gameSessionData);
   }
