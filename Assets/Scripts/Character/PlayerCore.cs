@@ -240,9 +240,9 @@ public class PlayerCore : MonoBehaviour
             case PickupType.Speed:
                 playerMovement?.StartSprintPickup();
                 break;
-            case PickupType.Dash:
-                playerMovement?.AddDash();
-                break;
+            // case PickupType.Dash:
+            //     playerMovement?.AddDash();
+            //     break;
             case PickupType.DoubleScore:
                 dataManager?.StartDoubleScore();
                 break;

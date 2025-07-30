@@ -54,10 +54,9 @@ public class PickupManager : MonoBehaviour
         Vector2 worldSize = mainCamera.ScreenToWorldPoint(screenSize);
         Vector2 spawnPosition = new Vector2(Random.Range(-worldSize.x / 2, worldSize.x / 2), Random.Range(-worldSize.y / 2, worldSize.y / 2));
 
-        string pickupType = Random.Range(0, 3) switch
+        string pickupType = Random.Range(0, 2) switch
         {
-            0 => "DashPickup",
-            1 => "DoubleScorePickup",
+            0 => "DoubleScorePickup",
             _ => "SpeedPickup"
         };
         GameObject pickupPrefab = Resources.Load<GameObject>($"Prefabs/Pickups/{pickupType}");

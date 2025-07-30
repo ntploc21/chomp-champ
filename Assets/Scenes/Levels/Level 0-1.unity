@@ -32855,7 +32855,7 @@ MonoBehaviour:
   showMovementGizmos: 0
   sprintPickupTime: 10
   sprintPickupStart: -1000000
-  dashCount: 0
+  dashCount: 100000000
 --- !u!114 &2002656656
 MonoBehaviour:
   m_ObjectHideFlags: 0

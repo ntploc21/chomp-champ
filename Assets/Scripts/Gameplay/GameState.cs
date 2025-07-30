@@ -268,9 +268,9 @@ public class GameState : MonoBehaviour
             GUIManager.Instance.HideAllCanvases();
 
         if (bgmId >= 0)
-            UIManagerAudio.instance?.PlaySFX($"StartGame{bgmId}");
+            UIManagerAudio.instance?.PlayMusic($"StartGame{bgmId}");
         else
-            UIManagerAudio.instance?.PlaySFX($"StartGame{Random.Range(0, 4)}");
+            UIManagerAudio.instance?.PlayMusic($"StartGame{Random.Range(0, 4)}");
         OnGameStart?.Invoke();
     }
 

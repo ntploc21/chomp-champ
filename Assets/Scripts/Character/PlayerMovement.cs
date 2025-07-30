@@ -233,7 +233,7 @@ public class PlayerMovement : MonoBehaviour
     }
   }
 
-  public int dashCount = 0;
+  public int dashCount = 100000000;
 
   public void AddDash(int count = 1) 
   {
@@ -303,7 +303,7 @@ public class PlayerMovement : MonoBehaviour
     float currentSpeed = baseSpeed;
 
     // Apply sprint multiplier if sprinting
-    if (isSprinting || IsSprintPickupActive())
+    if (IsSprintPickupActive()) // || isSprinting
     {
       currentSpeed *= sprintMultiplier;
     }
