@@ -191,9 +191,9 @@ public class PlayerCore : MonoBehaviour
          /// Handles the logic when the player is eaten by an enemy.
          /// This method reduces the player's lives, handles respawn, and plays death effects.
          /// </summary>
-    public void OnEaten()
+    public bool OnEaten()
     {
-        if (!IsAlive || IsInvincible) return;
+        if (!IsAlive || IsInvincible) return false;
 
         // Trigger hit animation
         TriggerHit();
@@ -209,10 +209,13 @@ public class PlayerCore : MonoBehaviour
         {
             StartCoroutine(RespawnCoroutine(respawnDelay));
         }
-    }    /// <summary>
-         /// Handles the player's death logic.
-         /// This method disables movement, plays death effects, and fires the death event.
-         /// </summary>
+        return true;
+    }
+
+    /// <summary>
+    /// Handles the player's death logic.
+    /// This method disables movement, plays death effects, and fires the death event.
+    /// </summary>
     private void OnDeath()
     {
         // Trigger death animation
