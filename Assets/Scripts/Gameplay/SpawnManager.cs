@@ -1665,6 +1665,9 @@ public class SpawnManager : MonoBehaviour
       }
     }
 
+    // Remove duplicates and ensure final positions are valid
+    finalSpawnCells = finalSpawnCells.Distinct().Where(pos => IsValidSpawnPosition(pos)).ToList();
+
     // Update the final spawn cell list
     spawnableCellOnTilemap.Clear();
     spawnableCellOnTilemap.AddRange(finalSpawnCells);
@@ -1780,6 +1783,7 @@ public class SpawnManager : MonoBehaviour
     {
       if (!hasGroundTile)
         Debug.Log($"SpawnManager: Position {position} rejected - no ground tile");
+        
       if (hasWallTile)
         Debug.Log($"SpawnManager: Position {position} rejected - overlaps wall tile");
     }
@@ -1789,7 +1793,7 @@ public class SpawnManager : MonoBehaviour
 
   private void UpdateCameraBounds()
   {
-    if (gameCamera == null) return;
+    if (gameCamera == null || cameraTransform == null) return;
 
     float height = gameCamera.orthographicSize * 2f;
     float width = height * gameCamera.aspect;
