@@ -332,6 +332,9 @@ public class SpawnManager : MonoBehaviour
 
     // Find and cache the level scene for enemy spawning
     InitializeLevelScene();
+
+    // Cache ground and wall tilemaps if using tilemap spawning
+    RefreshTilemapCache();
   }
 
   /// <summary>
@@ -344,7 +347,6 @@ public class SpawnManager : MonoBehaviour
     {
       sceneName = GUIManager.Instance.CurrentLevelScene;
     }
-
 
     // Look for a scene that is not the Persistent Game Scene and is a level
     for (int i = 0; i < SceneManager.sceneCount; i++)
@@ -634,34 +636,6 @@ public class SpawnManager : MonoBehaviour
     }
     levelDist.spawnCount++;
   }
-
-  private int SelectEnemyLevel()
-  {
-    if (!useFeedingFrenzySystem || levelWeights.Count == 0)
-    {
-      return progressionData.currentPlayerLevel;
-    }
-
-    float totalWeight = levelWeights.Values.Sum();
-    float randomValue = Random.Range(0f, totalWeight);
-    float currentWeight = 0f;
-
-    foreach (var kvp in levelWeights)
-    {
-      currentWeight += kvp.Value;
-      if (randomValue <= currentWeight)
-      {
-        // Track spawn for balancing
-        recentSpawnLevels.Enqueue(kvp.Key);
-        if (recentSpawnLevels.Count > 20) // Keep only recent 20 spawns
-          recentSpawnLevels.Dequeue();
-
-        return kvp.Key;
-      }
-    }
-
-    return progressionData.currentPlayerLevel; // Fallback
-  }
   #endregion
 
   #region Adaptive Spawning System
@@ -736,9 +710,6 @@ public class SpawnManager : MonoBehaviour
     if (levelSceneFound && levelScene.IsValid())
     {
       SceneManager.MoveGameObjectToScene(enemy, levelScene);
-
-      if (enableDebugLogs)
-        Debug.Log($"SpawnManager: Moved enemy to level scene: {levelScene.name}");
     }
     else
     {
@@ -748,9 +719,6 @@ public class SpawnManager : MonoBehaviour
       if (levelSceneFound && levelScene.IsValid())
       {
         SceneManager.MoveGameObjectToScene(enemy, levelScene);
-
-        if (enableDebugLogs)
-          Debug.Log($"SpawnManager: Re-initialized and moved enemy to level scene: {levelScene.name}");
       }
       else if (enableDebugLogs)
       {
@@ -1015,7 +983,7 @@ public class SpawnManager : MonoBehaviour
     }
 
     if (enableDebugLogs)
-      Debug.Log($"SpawnManager: Spawned {enemyData.enemyName} at level {level} at {position}");
+      Debug.Log($"SpawnManager: Spawned {enemyData.enemyName} at level {level} at {position}. Is in wall layer: {IsPositionOnWallTile(position)}");
   }
   #endregion
 
@@ -1148,6 +1116,7 @@ public class SpawnManager : MonoBehaviour
     if (useLayerValidation && useTilemapDirectAccess)
     {
       Vector3 tilemapPosition = GenerateTilemapBasedPosition();
+
       if (tilemapPosition != Vector3.zero)
         return tilemapPosition;
     }
@@ -1299,8 +1268,10 @@ public class SpawnManager : MonoBehaviour
       if (enableDebugLogs)
         Debug.Log("SpawnManager: No valid spawn cells available, attempting synchronous fallback");
 
+      return Vector3.zero; // No valid spawn cells found
+
       // Try synchronous fallback for emergency spawning
-      return GenerateFallbackTilemapPosition();
+      // return GenerateFallbackTilemapPosition();
     }
 
     int maxPositionAttempts = 15;
@@ -1354,6 +1325,7 @@ public class SpawnManager : MonoBehaviour
 
     return false; // No wall tiles found
   }
+  
   /// <summary>
   /// Check if a cell position contains a wall tile (optimized for Vector3Int)
   /// </summary>
@@ -1377,6 +1349,7 @@ public class SpawnManager : MonoBehaviour
 
     return false; // No wall tiles found
   }
+  
   /// <summary>
   /// Optimized tilemap cache refresh with change detection and coroutine-based processing
   /// </summary>
@@ -1665,6 +1638,22 @@ public class SpawnManager : MonoBehaviour
 
     Debug.Log($"RefreshTilemapCache: Found {spawnableCellOnTilemap.Count} valid spawn cells for spawning enemies");
   }
+
+  private bool IsPositionOnTilemapCollider(Vector3 position)
+  {
+    // Check for any Tilemap Collider 2D at this position
+    Collider2D tilemapCollider = Physics2D.OverlapPoint(position);
+
+    if (tilemapCollider != null && tilemapCollider is TilemapCollider2D)
+    {
+      if (enableDebugLogs)
+        Debug.Log($"SpawnManager: Position {position} rejected - overlaps TilemapCollider2D on {tilemapCollider.gameObject.name}");
+      
+      return true;
+    }
+
+    return false;
+  }
   private bool IsValidSpawnPosition(Vector3 position)
   {
     // Check distance to player
@@ -1675,9 +1664,17 @@ public class SpawnManager : MonoBehaviour
         return false;
     }
 
+    if (useTilemapDirectAccess && IsPositionOnTilemapCollider(position))
+    {
+      if (enableDebugLogs)
+        Debug.Log($"SpawnManager: Position {position} rejected - overlaps TilemapCollider2D");
+
+      return false;
+    }
+
     // Only do layer validation if we're not using tilemap direct access
     // (since direct access already ensures valid layers)
-    if (useLayerValidation && !useTilemapDirectAccess)
+    if (useLayerValidation)
     {
       if (!IsPositionOnValidLayer(position))
         return false;
