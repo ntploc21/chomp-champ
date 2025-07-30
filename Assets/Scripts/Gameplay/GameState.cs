@@ -102,14 +102,13 @@ public class GameState : MonoBehaviour
     }
     private void Start()
     {
-        InitializeGameController();
+        InitializeGameReferences_();
         InitializeGameState();
         SubscribeToEvents();
 
         // Initialize GUIManager when GameState starts
         if (GUIManager.Instance != null)
         {
-            // GUIManager.Instance.InitializeCanvasReferences();
         }
 
         if (UIManagerAudio.instance != null)
@@ -181,6 +180,27 @@ public class GameState : MonoBehaviour
         // For in-game scenes, start directly in Playing state
         if (isInGameScene && startInPlayingState)
         {
+            // Apply shop effects if available
+            if (ShopManager.Instance != null)
+            {
+                Debug.Log("Applying shop effects at game start");
+                
+                int lifeBoost = ShopManager.Instance.GetTotalLifeBoost();
+                if (lifeBoost > 0)
+                {
+                    playerCore?.DataManager?.AddLives(lifeBoost);
+                }
+
+                float scoreMultiplier = ShopManager.Instance.GetTotalScoreMultiplier();
+                if (scoreMultiplier > 1f)
+                {
+                    if (playerCore != null)
+                    {
+                        playerCore.DataManager.scoreBoost = scoreMultiplier;
+                    }
+                }
+            }
+
             gameController?.StartGame();
             ChangeState(GameStateType.Playing);
         }
@@ -191,7 +211,7 @@ public class GameState : MonoBehaviour
         }
     }
 
-    private void InitializeGameController()
+    private void InitializeGameReferences_()
     {
         // Find GameController in the scene
         gameController = FindObjectOfType<GameController>();
@@ -316,7 +336,6 @@ public class GameState : MonoBehaviour
 
         OnGameStart?.Invoke();
     }
-
     private void HandlePausedState()
     {
         isPaused = true;

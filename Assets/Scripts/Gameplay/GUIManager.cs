@@ -92,7 +92,6 @@ public class GUIManager : MonoBehaviour
         gameDataManager = FindObjectOfType<GameDataManager>();
         if (gameDataManager != null)
         {
-            Debug.Log("GameDataManager found in scene");
             hudManager.SubscribeToEvents();
 
             // Get the current level scene from GameDataManager
@@ -184,8 +183,6 @@ public class GUIManager : MonoBehaviour
             // Restore game cursor state (locked and hidden for gameplay)
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-
-            Debug.Log("Victory Canvas hidden (Game Resumed)");
         }
     }
     /// <summary>
@@ -248,8 +245,6 @@ public class GUIManager : MonoBehaviour
             // Restore game cursor state (locked and hidden for gameplay)
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-
-            Debug.Log("Game Over Canvas hidden (Game Resumed)");
         }
     }
 

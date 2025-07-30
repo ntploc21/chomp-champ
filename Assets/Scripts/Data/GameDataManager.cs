@@ -13,14 +13,6 @@ public class GameDataManager : MonoBehaviour
   [SerializeField] private GameSessionData gameSessionData = null;
   [SerializeField] private LevelData levelData = null;
 
-  [Header("Settings")]
-  [Tooltip("Enable auto-saving of game data.")]
-  [SerializeField] private bool autoSaveEnabled = true;
-  [Tooltip("Interval for auto-saving game data.")]
-  [SerializeField] private float autoSaveInterval = 60f; // Auto-save every 60 seconds
-  [Tooltip("Enable data persistence between sessions. This allows the game to save and load data even after the game is closed.")]
-  [SerializeField] private bool enablePersistence = true;
-
   [Header("Events")]
   public UnityEvent<GameSessionData> OnDataChanged = null;
   public UnityEvent<int> OnLevelUp = null;
@@ -30,8 +22,7 @@ public class GameDataManager : MonoBehaviour
   #endregion
 
   #region Internal Data
-  private float lastAutoSaveTime = 0f;
-  private string saveKey = "GameSessionData";
+  public float scoreBoost = 1f; // Default score boost multiplier
   #endregion
 
   #region Properties
@@ -49,29 +40,15 @@ public class GameDataManager : MonoBehaviour
 
     // Initialize session data from level data at game start
     InitializeSessionFromLevelData();
-
-    if (enablePersistence)
-    {
-      LoadData();
-    }
   }
 
   private void Start()
   {
-    lastAutoSaveTime = Time.time;
-
     GUIManager.Instance.FindGameDataManagerInScenes();
   }
 
   private void Update()
   {
-    // Auto save functionality
-    if (autoSaveEnabled && (Time.time - lastAutoSaveTime) >= autoSaveInterval)
-    {
-      SaveData();
-      lastAutoSaveTime = Time.time;
-    }
-
     // Update play time
     if (gameSessionData.isAlive)
     {
@@ -83,18 +60,12 @@ public class GameDataManager : MonoBehaviour
   #region Data Event Handlers
   private void OnApplicationPause(bool pauseStatus)
   {
-    if (pauseStatus && enablePersistence)
-    {
-      SaveData();
-    }
+
   }
 
   private void OnAplicationFocus(bool hasFocus)
   {
-    if (!hasFocus && enablePersistence)
-    {
-      SaveData();
-    }
+
   }
   #endregion
   #region Data Management
@@ -154,7 +125,6 @@ public class GameDataManager : MonoBehaviour
     if (gameSessionData.lives <= 0)
     {
       gameSessionData.isAlive = false; // Player is dead
-      EndSession();
     }
 
     OnLivesChanged?.Invoke(gameSessionData.lives);
@@ -174,7 +144,7 @@ public class GameDataManager : MonoBehaviour
     AddXP(totalXP);
 
     // Calculate score based on enemy size
-    float scoreGained = enemySize * 100f * bonusMul;
+    float scoreGained = enemySize * 100f * bonusMul * scoreBoost;
     AddScore(scoreGained);
 
     OnDataChanged?.Invoke(gameSessionData);
@@ -211,89 +181,6 @@ public class GameDataManager : MonoBehaviour
   public void UpdatePosition(Vector2 position)
   {
     gameSessionData.lastPosition = position;
-  }
-
-  private void EndSession()
-  {
-    if (enablePersistence)
-    {
-      SaveData();
-    }
-  }
-  #endregion
-
-  #region Save/Load System
-  public void SaveData()
-  {
-    if (!enablePersistence) return;
-
-    try
-    {
-      string jsonData = JsonUtility.ToJson(gameSessionData);
-      PlayerPrefs.SetString(saveKey, jsonData);
-      PlayerPrefs.Save();
-
-      Debug.Log("Game data saved successfully.");
-    }
-    catch (Exception ex)
-    {
-      Debug.LogError($"Failed to save game data: {ex.Message}");
-    }
-  }
-
-  public void LoadData()
-  {
-    if (!enablePersistence) return;
-
-    try
-    {
-      if (PlayerPrefs.HasKey(saveKey))
-      {
-        string jsonData = PlayerPrefs.GetString(saveKey);
-        gameSessionData = JsonUtility.FromJson<GameSessionData>(jsonData);
-
-        // Validate loaded data
-        ValidateData();
-
-        OnDataChanged?.Invoke(gameSessionData);
-        NotifyAllChanges();
-
-        Debug.Log("Game data loaded successfully.");
-      }
-      else
-      {
-        Debug.LogWarning("No saved game data found. Initializing with default values.");
-      }
-    }
-    catch (Exception ex)
-    {
-      Debug.LogError($"Failed to load game data: {ex.Message}");
-    }
-  }
-
-  public void DeleteSaveData()
-  {
-    PlayerPrefs.DeleteKey(saveKey);
-    gameSessionData = new GameSessionData(); // Reset to default values
-
-    OnDataChanged?.Invoke(gameSessionData);
-    NotifyAllChanges();
-
-    Debug.Log("Game data deleted successfully.");
-  }
-  private void ValidateData()
-  {
-    // Ensure data integrity
-    gameSessionData.lives = Mathf.Max(0, gameSessionData.lives);
-    gameSessionData.currentLevel = Mathf.Max(1, gameSessionData.currentLevel);
-    gameSessionData.currentSize = Mathf.Max(levelData.baseSize, gameSessionData.currentSize);
-
-    // Always sync XP requirements and size with LevelData (single source of truth)
-    gameSessionData.xpToNextLevel = levelData.GetXPForLevel(gameSessionData.currentLevel);
-    gameSessionData.currentSize = levelData.GetSizeForLevel(gameSessionData.currentLevel);
-
-    Debug.Log($"Validated data synced with LevelData: Level {gameSessionData.currentLevel}, " +
-              $"Size {gameSessionData.currentSize:F2}, XP to next: {gameSessionData.xpToNextLevel}");
   }
   #endregion
 

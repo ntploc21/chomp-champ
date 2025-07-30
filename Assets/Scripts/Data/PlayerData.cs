@@ -3,6 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
+/// Data structure for tracking purchased shop items
+/// </summary>
+[Serializable]
+public class PurchasedItemData
+{
+    public string itemId;           // Unique identifier for the shop item
+    public bool isActive;           // Whether the item effect is currently active
+    public string purchaseTime;     // When the item was purchased
+    public int timesUsed;          // How many times this item has been used/consumed
+    public ShopItemType itemType;   // Type of the shop item
+    public int value;              // Value/power of the item
+    
+    public PurchasedItemData(string id, ShopItemType type, int val)
+    {
+        itemId = id;
+        itemType = type;
+        value = val;
+        isActive = true;
+        timesUsed = 0;
+        purchaseTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+    }
+}
+
+/// <summary>
 /// Class to hold persistent player data.
 /// This class is used to store the player's progression, stats, and other relevant information
 /// that persists between game sessions
@@ -47,10 +71,11 @@ public class PlayerData
   [Header("Achievements")]
   [Tooltip("List of achievements unlocked by the player.")]
   public List<string> achievements = new List<string>();
-
   [Header("Shopping")]
   [Tooltip("Player's currency balance.")]
   public int currencyBalance = 0; // Player's currency balance for shopping
+  [Tooltip("Dictionary of purchased shop items with their purchase data.")]
+  public Dictionary<string, PurchasedItemData> purchasedItems = new Dictionary<string, PurchasedItemData>();
 
   [Header("Settings & Preferences")]
   [Tooltip("Last save timestamp.")]
@@ -101,10 +126,9 @@ public class PlayerData
     completedLevels = new string[0];
 
     // Reset Achievements
-    achievements.Clear();
-
-    // Reset shopping
+    achievements.Clear();    // Reset shopping
     currencyBalance = 0;
+    purchasedItems.Clear();
 
     // Reset settings
     lastSaveTime = System.DateTime.Now.ToString();

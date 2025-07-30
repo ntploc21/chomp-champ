@@ -27639,7 +27639,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1087495095287656159, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 280.33002
       objectReference: {fileID: 0}
     - target: {fileID: 1087495095287656159, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_LocalPosition.x
@@ -27891,7 +27891,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9206267957047599996, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 225.33
       objectReference: {fileID: 0}
     - target: {fileID: 9206267957047599996, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.y
@@ -36118,7 +36118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1087495095287656159, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 153.09
       objectReference: {fileID: 0}
     - target: {fileID: 1087495095287656159, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36398,7 +36398,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9206267957047599996, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 98.09
       objectReference: {fileID: 0}
     - target: {fileID: 9206267957047599996, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.y
@@ -36768,7 +36768,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1087495095287656159, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 232.63
       objectReference: {fileID: 0}
     - target: {fileID: 1087495095287656159, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37020,7 +37020,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9206267957047599996, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 177.63
       objectReference: {fileID: 0}
     - target: {fileID: 9206267957047599996, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.y
@@ -54011,7 +54011,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1087495095287656159, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 180.3
       objectReference: {fileID: 0}
     - target: {fileID: 1087495095287656159, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_LocalPosition.x
@@ -54267,7 +54267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9206267957047599996, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 125.3
       objectReference: {fileID: 0}
     - target: {fileID: 9206267957047599996, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.y
@@ -72229,7 +72229,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1087495095287656159, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 355.99
       objectReference: {fileID: 0}
     - target: {fileID: 1087495095287656159, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_LocalPosition.x
@@ -72537,7 +72537,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9206267957047599996, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 300.99
       objectReference: {fileID: 0}
     - target: {fileID: 9206267957047599996, guid: 98e041e89031b034381ead3eef61fdef, type: 3}
       propertyPath: m_SizeDelta.y
@@ -83437,6 +83437,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shopItemsContainer: {fileID: 845084792}
   shopItemPrefab: {fileID: 9015902957713137195, guid: e66fb36e3aedc0349b89222844ec5ea2, type: 3}
+  purchaseModal: {fileID: 946746496}
   currencyDisplay: {fileID: 1518997683}
   errorMessageText: {fileID: 0}
   errorMessagePanel: {fileID: 0}
@@ -89742,7 +89743,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingMode: 0
-  presetName: Standard (Countdown)
+  presetName: Standard (Quick)
   enableTrigger: 0
   onTriggerExit: 0
   loadWithTag: 0
@@ -89759,7 +89760,7 @@ MonoBehaviour:
   - {fileID: 8985211846813716763, guid: 2e032f973bfa7da4b95039db5496ee9a, type: 3}
   - {fileID: 8985211846813716763, guid: 4c00f7073bf769d488574c4718131411, type: 3}
   - {fileID: 8985211846813716763, guid: 8a64ef689de31784091e742137c1d8db, type: 3}
-  selectedLoadingIndex: 5
+  selectedLoadingIndex: 6
   selectedTagIndex: 0
   onLoadingStart:
     m_PersistentCalls:

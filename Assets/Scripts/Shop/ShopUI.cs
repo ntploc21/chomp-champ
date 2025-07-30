@@ -12,6 +12,7 @@ public class ShopUI : MonoBehaviour
   [Header("UI References")]
   [SerializeField] private Transform shopItemsContainer;
   [SerializeField] private GameObject shopItemPrefab; // Prefab with ShopButtonManager component
+  [SerializeField] private ModalWindowManager purchaseModal; // Optional modal for purchase confirmation
   [SerializeField] private TextMeshProUGUI currencyDisplay;
   [SerializeField] private TextMeshProUGUI errorMessageText;
   [SerializeField] private GameObject errorMessagePanel;
@@ -94,6 +95,7 @@ public class ShopUI : MonoBehaviour
     buttonManager.buttonTitle = shopItem.itemName;
     buttonManager.buttonDescription = shopItem.description;
     buttonManager.priceText = shopItem.cost.ToString();
+    buttonManager.purchaseModal = purchaseModal;
 
     if (shopItem.itemIcon != null)
     {
@@ -101,8 +103,8 @@ public class ShopUI : MonoBehaviour
     }
 
     // Set up purchase event
-    buttonManager.onPurchase.RemoveAllListeners();
     buttonManager.onPurchase.AddListener(() => PurchaseItem(itemIndex));
+    buttonManager.InitializePurchaseEvents();
 
     // Set initial state
     UpdateItemState(buttonManager, shopItem);
@@ -231,21 +233,5 @@ public class ShopUI : MonoBehaviour
     public ShopItem shopItem;
     public ShopButtonManager buttonManager;
     public int itemIndex;
-  }
-
-  // Editor methods for testing
-  [ContextMenu("Test Award Currency")]
-  private void TestAwardCurrency()
-  {
-    if (ShopManager.Instance != null)
-    {
-      ShopManager.Instance.AwardCurrency(100);
-    }
-  }
-
-  [ContextMenu("Test Reset Shop")]
-  private void TestResetShop()
-  {
-    ResetShop();
   }
 }

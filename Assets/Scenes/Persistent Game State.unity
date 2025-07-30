@@ -96,7 +96,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000002, guid: 2f0cb785b9956ac45ba57e60be25b64e, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -15436,12 +15436,13 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 551717577}
-  - {fileID: 1309030721}
-  - {fileID: 594739430}
-  - {fileID: 7210979}
   - {fileID: 70196390}
-  - {fileID: 1681289623}
+  - {fileID: 1309030721}
   - {fileID: 35148888}
+  - {fileID: 594739430}
+  - {fileID: 1681289623}
+  - {fileID: 7210979}
+  - {fileID: 918453002}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &563568020
@@ -26274,6 +26275,60 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f22ca2fec02a5de43931538fb8a25698, type: 3}
+--- !u!1 &918453001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 918453002}
+  - component: {fileID: 918453003}
+  m_Layer: 0
+  m_Name: Shop Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &918453002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918453001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 556351431}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &918453003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918453001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae1db6f355a381249afe1487d97d10e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableItems: []
+  OnItemPurchased:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCurrencyChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPurchaseError:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &923400160
 GameObject:
   m_ObjectHideFlags: 0
