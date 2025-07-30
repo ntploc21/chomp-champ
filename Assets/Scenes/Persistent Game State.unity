@@ -59736,6 +59736,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelConfigs:
   - {fileID: 11400000, guid: 145a42a573722bb4d811a5bab6c83ebc, type: 2}
+  - {fileID: 11400000, guid: de7eb669c1c3d35439fbbdd641342c84, type: 2}
+  - {fileID: 11400000, guid: c9b1a83a185227c4db9b19e884e83a79, type: 2}
   enableDebugLogging: 1
   showAchievementNotifications: 1
   notificationDuration: 3

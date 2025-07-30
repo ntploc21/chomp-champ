@@ -16,33 +16,23 @@ MonoBehaviour:
   levelDisplayName: Nope
   levelDescription: Nope
   achievements:
-  - achievementId: C1L1_Tutorial
-    achievementTitle: Welcome to Chomp Champ
-    achievementDescription: Lmao Testing Here
+  - achievementId: C1L1_Time
+    achievementTitle: Fast Feast
+    achievementDescription: Complete this task to unlock the achievement
     achievementType: 0
-    achievementIcon: {fileID: -589372785, guid: 3fd2f42dedce5914890fe278e6627ab4, type: 3}
+    achievementIcon: {fileID: 0}
     isHidden: 0
     condition:
-      rid: 5775825431363321863
-    currencyReward: 0
-    xpReward: 0
-  - achievementId: C1L1_Enemy
-    achievementTitle: Snack Attack
-    achievementDescription: They were tasty. And plentiful. Good start.
-    achievementType: 0
-    achievementIcon: {fileID: -589372785, guid: 3fd2f42dedce5914890fe278e6627ab4, type: 3}
-    isHidden: 0
-    condition:
-      rid: 5775825431363321863
+      rid: 5775825431363321864
     currencyReward: 0
     xpReward: 0
   references:
     version: 2
     RefIds:
-    - rid: 5775825431363321863
-      type: {class: EnemiesEatenCondition, ns: , asm: Assembly-CSharp}
+    - rid: 5775825431363321864
+      type: {class: TimeCondition, ns: , asm: Assembly-CSharp}
       data:
-        conditionName: Lmao
-        description: Lmao
-        minimumEnemies: 10
-        level: 1
+        conditionName: New Condition
+        description: Condition description
+        maxTimeSeconds: 300
+        useGameTime: 1
