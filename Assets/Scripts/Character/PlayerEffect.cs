@@ -283,7 +283,7 @@ public class PlayerEffect : MonoBehaviour
     // Screen shake
     if (enableScreenShake)
     {
-      StartCoroutine(ScreenShake(dashShakeDuration, dashShakeIntensity));
+      currentScreenShakeCoroutine = StartCoroutine(ScreenShake(dashShakeDuration, dashShakeIntensity));
     }
 
     // Dash trail effect
@@ -514,17 +514,10 @@ public class PlayerEffect : MonoBehaviour
       yield break;
     }
 
-    // Prevent multiple screen shakes running at the same time
-    float currentTime = Time.time;
-    if (currentTime - lastShakeTime > shakeMinInterval)
+    // Stop any current screen shake
+    if (currentScreenShakeCoroutine != null)
     {
-      // Stop any current screen shake
-      if (currentScreenShakeCoroutine != null)
-      {
-        StopCoroutine(currentScreenShakeCoroutine);
-      }
-
-      lastShakeTime = currentTime;
+      yield break;
     }
 
     CinemachineBasicMultiChannelPerlin noise = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
@@ -721,7 +714,7 @@ public class PlayerEffect : MonoBehaviour
   {
     if (enableScreenShake)
     {
-      StartCoroutine(ScreenShake(duration, intensity));
+      currentScreenShakeCoroutine = StartCoroutine(ScreenShake(duration, intensity));
     }
   }
 
@@ -1103,7 +1096,7 @@ public class PlayerEffect : MonoBehaviour
     // Screen shake
     if (enableScreenShake)
     {
-      StartCoroutine(ScreenShake(dashShakeDuration, dashShakeIntensity));
+      currentScreenShakeCoroutine = StartCoroutine(ScreenShake(dashShakeDuration, dashShakeIntensity));
     }
 
     // Enhanced dash trail effect with ground color
