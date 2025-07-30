@@ -184,7 +184,7 @@ public class GameState : MonoBehaviour
             if (ShopManager.Instance != null)
             {
                 Debug.Log("Applying shop effects at game start");
-                
+
                 int lifeBoost = ShopManager.Instance.GetTotalLifeBoost();
                 if (lifeBoost > 0)
                 {
@@ -199,6 +199,10 @@ public class GameState : MonoBehaviour
                         playerCore.DataManager.scoreBoost = scoreMultiplier;
                     }
                 }
+
+                // Add onVictory listeners to GameController
+                OnVictory.AddListener(ShopManager.Instance.ResetPurchasedItems);
+                // OnGameOver.AddListener(ShopManager.Instance.ResetPurchasedItems);
             }
 
             gameController?.StartGame();
