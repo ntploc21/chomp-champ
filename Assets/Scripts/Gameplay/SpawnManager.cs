@@ -241,7 +241,9 @@ public class SpawnManager : MonoBehaviour
   private Tilemap[] groundTilemaps;
   private Tilemap[] wallTilemaps;
   private float lastTilemapCacheTime;
-  private readonly float tilemapCacheInterval = 10f; // Refresh tilemap cache every 10 seconds
+  private readonly float tilemapCacheInterval = 60f; // Refresh tilemap cache every 10 seconds
+  private List<Vector3> spawnableCellOnTilemap = new List<Vector3>();
+  
   #endregion
 
   #region Properties
@@ -1146,6 +1148,7 @@ public class SpawnManager : MonoBehaviour
       if (enableDebugLogs)
         Debug.Log("SpawnManager: Tilemap-based position generation failed, trying collider-based");
     }
+    Debug.Log($"GenerateRandomSpawnPosition: {useLayerValidation && useTilemapDirectAccess}");
 
     if (preferOffScreenSpawning && gameCamera != null)
     {
@@ -1289,52 +1292,72 @@ public class SpawnManager : MonoBehaviour
         Debug.Log("SpawnManager: No ground tilemaps found for tilemap-based spawning");
       return Vector3.zero;
     }
+    
+    // Debug.Log($"SpawnManager: ");
 
-    // Try multiple tilemaps to find a valid position
-    int maxTilemapAttempts = Mathf.Min(3, groundTilemaps.Length);
-    for (int tilemapAttempt = 0; tilemapAttempt < maxTilemapAttempts; tilemapAttempt++)
+    int maxPositionAttempts = 15;
+    for (int posAttempt = 0; posAttempt < maxPositionAttempts; posAttempt++)
     {
-      Tilemap groundTilemap = groundTilemaps[Random.Range(0, groundTilemaps.Length)];
-
-      if (groundTilemap == null || !groundTilemap.gameObject.activeInHierarchy)
-        continue;
-
-      // Get tilemap bounds
-      BoundsInt tilemapBounds = groundTilemap.cellBounds;
-
-      // Try multiple random positions within the tilemap
-      int maxPositionAttempts = 15;
-      for (int posAttempt = 0; posAttempt < maxPositionAttempts; posAttempt++)
+      Vector3 cellPos = spawnableCellOnTilemap[Random.Range(0, spawnableCellOnTilemap.Count)];
+      // Add small random offset within the cell
+      cellPos += new Vector3(
+        Random.Range(-0.4f, 0.4f),
+        Random.Range(-0.4f, 0.4f),
+        0f
+      );
+      
+      // Check if this position doesn't overlap with wall tiles
+      if (!IsPositionOnWallTile(cellPos))
       {
-        // Generate random cell position within tilemap bounds
-        Vector3Int randomCellPos = new Vector3Int(
-          Random.Range(tilemapBounds.xMin, tilemapBounds.xMax),
-          Random.Range(tilemapBounds.yMin, tilemapBounds.yMax),
-          0
-        );
-
-        // Check if there's a tile at this position
-        TileBase groundTile = groundTilemap.GetTile(randomCellPos);
-        if (groundTile != null)
-        {
-          // Convert cell position to world position
-          Vector3 worldPos = groundTilemap.CellToWorld(randomCellPos);
-
-          // Add small random offset within the cell
-          worldPos += new Vector3(
-            Random.Range(-0.4f, 0.4f),
-            Random.Range(-0.4f, 0.4f),
-            0f
-          );
-
-          // Check if this position doesn't overlap with wall tiles
-          if (!IsPositionOnWallTile(worldPos))
-          {
-            return worldPos;
-          }
-        }
+        return cellPos;
       }
     }
+
+    // Try multiple tilemaps to find a valid position
+    // int maxTilemapAttempts = Mathf.Min(3, groundTilemaps.Length);
+    // for (int tilemapAttempt = 0; tilemapAttempt < maxTilemapAttempts; tilemapAttempt++)
+    // {
+    //   Tilemap groundTilemap = groundTilemaps[Random.Range(0, groundTilemaps.Length)];
+    //
+    //   if (groundTilemap == null || !groundTilemap.gameObject.activeInHierarchy)
+    //     continue;
+
+      // // Get tilemap bounds
+      // BoundsInt tilemapBounds = groundTilemap.cellBounds;
+      //
+      // // Try multiple random positions within the tilemap
+      // int maxPositionAttempts = 15;
+      // for (int posAttempt = 0; posAttempt < maxPositionAttempts; posAttempt++)
+      // {
+      //   // Generate random cell position within tilemap bounds
+      //   Vector3Int randomCellPos = new Vector3Int(
+      //     Random.Range(tilemapBounds.xMin, tilemapBounds.xMax),
+      //     Random.Range(tilemapBounds.yMin, tilemapBounds.yMax),
+      //     0
+      //   );
+      //
+      //   // Check if there's a tile at this position
+      //   TileBase groundTile = groundTilemap.GetTile(randomCellPos);
+      //   if (groundTile != null)
+      //   {
+      //     // Convert cell position to world position
+      //     Vector3 worldPos = groundTilemap.CellToWorld(randomCellPos);
+      //
+      //     // Add small random offset within the cell
+      //     worldPos += new Vector3(
+      //       Random.Range(-0.4f, 0.4f),
+      //       Random.Range(-0.4f, 0.4f),
+      //       0f
+      //     );
+      //
+      //     // Check if this position doesn't overlap with wall tiles
+      //     if (!IsPositionOnWallTile(worldPos))
+      //     {
+      //       return worldPos;
+      //     }
+      //   }
+      // }
+    // }
 
     if (enableDebugLogs)
       Debug.Log("SpawnManager: Failed to find valid tilemap-based position after all attempts");
@@ -1390,6 +1413,116 @@ public class SpawnManager : MonoBehaviour
       .ToArray();
 
     lastTilemapCacheTime = Time.time;
+    
+    // Generate walkable spawn points for tilemap
+    if (groundTilemaps != null && groundTilemaps.Length > 0)
+    {
+      spawnableCellOnTilemap.Clear();
+      
+      bool hasBounds = false;
+      Bounds combinedBounds = new Bounds();
+      BoundsInt bounds = new BoundsInt();
+
+      foreach (var tilemap in groundTilemaps)
+      {
+        if (tilemap == null || !tilemap.gameObject.activeInHierarchy) continue;
+
+        // Only include non-empty bounds
+        if (tilemap.cellBounds.size == Vector3Int.zero) continue;
+
+        BoundsInt cellBounds = tilemap.cellBounds;
+        Vector3 min = tilemap.CellToWorld(cellBounds.min);
+        Vector3 max = tilemap.CellToWorld(cellBounds.max);
+        Bounds worldBound = new Bounds();
+        worldBound.SetMinMax(min, max);
+
+        if (!hasBounds)
+        {
+          combinedBounds = worldBound;
+          hasBounds = true;
+        }
+        else
+        {
+          combinedBounds.Encapsulate(worldBound);
+        }
+      }
+      
+      bounds.xMin = Mathf.Min(Mathf.FloorToInt(combinedBounds.min.x), bounds.xMin);
+      bounds.xMax = Mathf.Max(Mathf.CeilToInt(combinedBounds.max.x), bounds.xMax);
+      bounds.yMin = Mathf.Min(Mathf.FloorToInt(combinedBounds.min.y), bounds.yMin);
+      bounds.yMax = Mathf.Max(Mathf.CeilToInt(combinedBounds.max.y), bounds.yMax);
+      
+      int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
+      int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
+      
+      int[][] spawnableCells = new int[bounds.xMax - bounds.xMin + 1][];
+      for (int x = bounds.xMin; x < bounds.xMax; x++)
+      {
+        spawnableCells[x - bounds.xMin] = new int[bounds.yMax - bounds.yMin + 1];
+        for (int y = bounds.yMin; y < bounds.yMax; y++)
+        {
+          Vector3 worldPos = new Vector3Int(x, y, 0);
+
+          bool validGroundCell = false;
+          foreach (Tilemap groundTilemap in groundTilemaps)
+          {
+            Vector3Int cellPos = groundTilemap.WorldToCell(worldPos);
+
+            if (groundTilemap.GetTile(cellPos) != null)
+            {
+              validGroundCell = true;
+              break;
+            }
+          }
+
+          if (!validGroundCell)
+          {
+            continue;
+          }
+          
+          if (!IsPositionOnWallTile(worldPos))
+          {
+            spawnableCells[x - bounds.xMin][y - bounds.yMin] = 1;
+          }
+        }
+      }
+
+      for (int i = 1; i < spawnableCells.Length - 1; i++)
+      {
+        for (int j = 1; j < spawnableCells[i].Length - 1; j++)
+        {
+          if (spawnableCells[i][j] == 0)
+          {
+            continue;
+          }
+
+          for (int k = 0; k < 8; k++)
+          {
+            int nextX = i + dx[k];
+            int nextY = j + dy[k];
+
+            if (spawnableCells[nextX][nextY] != 0)
+            {
+              spawnableCells[i][j]++;
+            }
+          }
+        }
+      }
+
+      for (int x = bounds.xMin; x < bounds.xMax; x++)
+      {
+        for (int y = bounds.yMin; y < bounds.yMax; y++)
+        {
+          if (spawnableCells[x - bounds.xMin][y - bounds.yMin] == 9)
+          {
+            spawnableCellOnTilemap.Add(new Vector3Int(x, y, 0));
+          }
+        }
+      }
+      
+      
+      Debug.Log($"RefreshTilemapCache: Found {spawnableCellOnTilemap.Count} valid spawn cells for spawning enemies");
+    }
 
     if (enableDebugLogs)
       Debug.Log($"SpawnManager: Refreshed tilemap cache - Ground: {groundTilemaps.Length}, Wall: {wallTilemaps.Length}");
