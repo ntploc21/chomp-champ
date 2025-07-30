@@ -62,8 +62,7 @@ public class AchievementConditionPropertyDrawer : PropertyDrawer
     }
 
     EditorGUI.EndProperty();
-  }
-  public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+  }  public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
   {
     float height = EditorGUIUtility.singleLineHeight;
 
@@ -72,19 +71,16 @@ public class AchievementConditionPropertyDrawer : PropertyDrawer
       // Add space for the condition properties
       height += SPACING;
 
-      // Calculate height by iterating through the same properties we draw
-      SerializedProperty conditionProperty = property.Copy();
-      if (conditionProperty.hasChildren)
+      // Calculate height using the same field names we use for drawing
+      string[] fieldNames = GetConditionFieldNames(property.managedReferenceValue.GetType());
+      
+      foreach (string fieldName in fieldNames)
       {
-        conditionProperty.NextVisible(true); // Enter children
-        do
+        SerializedProperty fieldProperty = property.FindPropertyRelative(fieldName);
+        if (fieldProperty != null)
         {
-          if (conditionProperty.depth <= property.depth + 1) // Only direct children
-          {
-            height += EditorGUI.GetPropertyHeight(conditionProperty, true) + EditorGUIUtility.standardVerticalSpacing;
-          }
+          height += EditorGUI.GetPropertyHeight(fieldProperty, true) + EditorGUIUtility.standardVerticalSpacing;
         }
-        while (conditionProperty.NextVisible(false));
       }
     }
 
@@ -116,27 +112,26 @@ public class AchievementConditionPropertyDrawer : PropertyDrawer
     }
 
     menu.DropDown(rect);
-  }
-  private void DrawConditionProperties(Rect position, SerializedProperty property)
+  }  private void DrawConditionProperties(Rect position, SerializedProperty property)
   {
     float currentY = position.y;
 
-    // Use SerializedProperty to draw the condition's fields
-    SerializedProperty conditionProperty = property.Copy();
-    if (conditionProperty.hasChildren)
+    if (property.managedReferenceValue != null)
     {
-      conditionProperty.NextVisible(true); // Enter children
-      do
+      // Get the specific field names that should be displayed for each condition type
+      string[] fieldNames = GetConditionFieldNames(property.managedReferenceValue.GetType());
+      
+      foreach (string fieldName in fieldNames)
       {
-        if (conditionProperty.depth <= property.depth + 1) // Only direct children
+        SerializedProperty fieldProperty = property.FindPropertyRelative(fieldName);
+        if (fieldProperty != null)
         {
-          float propertyHeight = EditorGUI.GetPropertyHeight(conditionProperty, true);
+          float propertyHeight = EditorGUI.GetPropertyHeight(fieldProperty, true);
           Rect fieldRect = new Rect(position.x, currentY, position.width, propertyHeight);
-          EditorGUI.PropertyField(fieldRect, conditionProperty, true);
+          EditorGUI.PropertyField(fieldRect, fieldProperty, true);
           currentY += propertyHeight + EditorGUIUtility.standardVerticalSpacing;
         }
       }
-      while (conditionProperty.NextVisible(false));
     }
   }
 
@@ -156,8 +151,7 @@ public class AchievementConditionPropertyDrawer : PropertyDrawer
     }
 
     return types;
-  }
-  private string GetDisplayName(Type type)
+  }  private string GetDisplayName(Type type)
   {
     // Convert CamelCase to readable names
     string name = type.Name;
@@ -178,6 +172,37 @@ public class AchievementConditionPropertyDrawer : PropertyDrawer
     }
 
     return result;
+  }
+
+  private string[] GetConditionFieldNames(Type conditionType)
+  {
+    // Define the specific fields for each condition type
+    // This prevents showing inherited fields or fields from other conditions
+    
+    if (conditionType == typeof(ScoreCondition))
+      return new[] { "minimumScore" };
+    
+    if (conditionType == typeof(TimeCondition))
+      return new[] { "maxTimeSeconds", "useGameTime" };
+    
+    if (conditionType == typeof(EnemiesEatenCondition))
+      return new[] { "minimumEnemies", "level" };
+    
+    if (conditionType == typeof(NoDeathCondition))
+      return new[] { "maxLivesLost", "startingLives" };
+    
+    if (conditionType == typeof(CompositeAndCondition) || conditionType == typeof(CompositeOrCondition))
+      return new[] { "subConditions" };
+    
+    if (conditionType == typeof(CustomFunctionCondition))
+      return new[] { "functionName", "functionDescription" };
+    
+    // For any unknown condition types, try to get their serialized fields but exclude base class fields
+    return conditionType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+        .Where(field => field.IsPublic || field.GetCustomAttribute<SerializeField>() != null)
+        .Where(field => field.DeclaringType == conditionType) // Only fields declared in this specific type
+        .Select(field => field.Name)
+        .ToArray();
   }
 }
 
