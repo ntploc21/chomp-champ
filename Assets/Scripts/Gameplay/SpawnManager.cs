@@ -1461,13 +1461,14 @@ public class SpawnManager : MonoBehaviour
       if (tilemap != null)
       {
         tilemapHashCache[tilemap] = CalculateTilemapHash(tilemap);
-        Debug.Log($"SpawnManager: Cached tilemap {tilemap.name} with hash {tilemapHashCache[tilemap]}");
       }
     }
     foreach (var tilemap in wallTilemaps)
     {
       if (tilemap != null)
+      {
         tilemapHashCache[tilemap] = CalculateTilemapHash(tilemap);
+      }
     }
 
     yield return null; // Yield after reference caching
