@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4416768e9e5481d4da660e9fef5a2f89, type: 3}
   m_Name: C2L2
   m_EditorClassIdentifier: 
+  levelName: C2L2
+  musicName: 
   growthFactor: 1.25
   baseSize: 1.5
   maxSize: 10
