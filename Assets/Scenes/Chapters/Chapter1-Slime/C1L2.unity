@@ -882,7 +882,7 @@ MonoBehaviour:
   victoryLevel: 4
   victoryScore: -1
   victoryTime: -1
-  loseTime: 300
+  loseTime: -1
   OnStateChanged:
     m_PersistentCalls:
       m_Calls: []
