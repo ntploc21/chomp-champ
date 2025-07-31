@@ -34,8 +34,8 @@ MonoBehaviour:
   collisionLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  deathEffectPrefab: {fileID: 0}
-  spawnEffectPrefab: {fileID: 0}
-  maxSpawnCount: 40
+  deathEffectPrefab: {fileID: 4741133393346867453, guid: 1a2e6c3d734407c489d1acbc9ce19467, type: 3}
+  spawnEffectPrefab: {fileID: 4741133393346867453, guid: 05ed04f227ad22346a6161e1b94abf6c, type: 3}
+  maxSpawnCount: 20
   spawnWeight: 1
   canSpawnInWaves: 1
