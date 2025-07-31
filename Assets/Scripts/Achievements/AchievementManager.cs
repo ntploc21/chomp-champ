@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Main Achievement Manager for Feeding Frenzy game
@@ -103,7 +104,13 @@ public class FFAchievementManager : MonoBehaviour
         if (gameController == null)
             return;
 
-        string currentLevelName = gameController.CurrentLevelName;
+        string currentLevelName = GUIManager.Instance.CurrentLevelScene;
+
+        if (string.IsNullOrEmpty(currentLevelName))
+        {
+            currentLevelName = GetLevelName();
+        }
+
         currentLevelConfig = GetLevelConfig(currentLevelName);
 
         if (currentLevelConfig != null)
@@ -342,6 +349,34 @@ public class FFAchievementManager : MonoBehaviour
                 Debug.Log($"  - {achievementTitle}");
             }
         }
+    }
+
+    /// <summary>
+    /// Find and cache the level scene to ensure enemies spawn in the correct scene
+    /// </summary>
+    private string GetLevelName()
+    {
+        var sceneName = "";
+        if (GUIManager.Instance != null)
+        {
+            sceneName = GUIManager.Instance.CurrentLevelScene;
+        }
+
+        // Look for a scene that is not the Persistent Game Scene and is a level
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+
+            // Skip the persistent scene, look for level scenes (CxLy)
+            if (scene.name != "Persistent Game State" && (
+              scene.name.StartsWith("C") || scene.name.Contains("Level") || scene.name == sceneName
+            ))
+            {
+                return scene.name;
+            }
+        }
+
+        return "";
     }
     #endregion
 
