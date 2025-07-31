@@ -31,7 +31,7 @@ MonoBehaviour:
     hiddenTitleKey: AchievementHiddenTitle
     hiddenDescKey: AchievementHiddenDesc
   - id: C1L3_Enemy
-    title: "Bone App\xE9tit"
+    title: Bone Appetit
     icon: {fileID: 1686297355, guid: ee939c325b9cdf94599fb59f5aa357f6, type: 3}
     description: "You turned the undead into dinner. That\u2019s hardcore.\nEat 5+
       skeletons in Chapter 1 - Level 3"
