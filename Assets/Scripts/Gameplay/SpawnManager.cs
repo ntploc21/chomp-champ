@@ -247,7 +247,7 @@ public class SpawnManager : MonoBehaviour
   private Dictionary<Tilemap, int> tilemapHashCache = new Dictionary<Tilemap, int>();
   private Coroutine tilemapRefreshCoroutine;
   private bool isTilemapRefreshing = false;
-  private Queue<Vector3Int> cellProcessingQueue = new Queue<Vector3Int>();
+  private Queue<Vector3> cellProcessingQueue = new Queue<Vector3>();
   private readonly int maxCellsPerFrame = 100; // Process max 100 cells per frame to avoid hitches
 
   #endregion
@@ -1259,6 +1259,9 @@ public class SpawnManager : MonoBehaviour
 
     if (groundTilemaps == null || groundTilemaps.Length == 0)
     {
+      if (enableDebugLogs)
+        Debug.LogWarning("SpawnManager: No ground tilemaps found for tilemap-based spawning");
+
       return Vector3.zero;
     }
 
@@ -1317,30 +1320,6 @@ public class SpawnManager : MonoBehaviour
 
       // Check if there's a wall tile at this position
       TileBase wallTile = wallTilemap.GetTile(cellPos);
-      if (wallTile != null)
-      {
-        return true; // Found a wall tile
-      }
-    }
-
-    return false; // No wall tiles found
-  }
-  
-  /// <summary>
-  /// Check if a cell position contains a wall tile (optimized for Vector3Int)
-  /// </summary>
-  private bool IsPositionOnWallTile(Vector3Int cellPosition)
-  {
-    if (wallTilemaps == null || wallTilemaps.Length == 0)
-      return false;
-
-    foreach (Tilemap wallTilemap in wallTilemaps)
-    {
-      if (wallTilemap == null || !wallTilemap.gameObject.activeInHierarchy)
-        continue;
-
-      // Check if there's a wall tile at this position
-      TileBase wallTile = wallTilemap.GetTile(cellPosition);
       if (wallTile != null)
       {
         return true; // Found a wall tile
@@ -1480,7 +1459,10 @@ public class SpawnManager : MonoBehaviour
     foreach (var tilemap in groundTilemaps)
     {
       if (tilemap != null)
+      {
         tilemapHashCache[tilemap] = CalculateTilemapHash(tilemap);
+        Debug.Log($"SpawnManager: Cached tilemap {tilemap.name} with hash {tilemapHashCache[tilemap]}");
+      }
     }
     foreach (var tilemap in wallTilemaps)
     {
@@ -1506,23 +1488,27 @@ public class SpawnManager : MonoBehaviour
     if (combinedBounds.size == Vector3Int.zero)
       yield break;
 
+    Debug.Log($"SpawnManager: Step 1: Combined tilemap bounds calculated: {combinedBounds}.");
+
     // Step 2: Pre-populate cell processing queue
     cellProcessingQueue.Clear();
     for (int x = combinedBounds.xMin; x < combinedBounds.xMax; x++)
     {
       for (int y = combinedBounds.yMin; y < combinedBounds.yMax; y++)
       {
-        cellProcessingQueue.Enqueue(new Vector3Int(x, y, 0));
+        cellProcessingQueue.Enqueue(new Vector3(x, y, 0));
       }
     }
 
+    Debug.Log($"SpawnManager: Step 2: Calculated {cellProcessingQueue.Count} cells for processing in tilemaps");
+
     // Step 3: Process cells in batches across frames
-    var validCells = new HashSet<Vector3Int>();
+    var validCells = new HashSet<Vector3>();
     int processedThisFrame = 0;
 
     while (cellProcessingQueue.Count > 0)
     {
-      Vector3Int cellPos = cellProcessingQueue.Dequeue();
+      Vector3 cellPos = cellProcessingQueue.Dequeue();
 
       if (IsValidGroundCell(cellPos) && !IsPositionOnWallTile(cellPos))
       {
@@ -1538,6 +1524,8 @@ public class SpawnManager : MonoBehaviour
         yield return null;
       }
     }
+
+    Debug.Log($"SpawnManager: Step 3: Processed {validCells.Count} valid ground cells from tilemaps");
 
     // Step 4: Filter cells that have sufficient neighbors
     yield return StartCoroutine(FilterCellsByNeighborsCoroutine(validCells));
@@ -1555,6 +1543,7 @@ public class SpawnManager : MonoBehaviour
     {
       if (tilemap == null || !tilemap.gameObject.activeInHierarchy)
         continue;
+
 
       BoundsInt cellBounds = tilemap.cellBounds;
       if (cellBounds.size == Vector3Int.zero)
@@ -1580,14 +1569,17 @@ public class SpawnManager : MonoBehaviour
   /// <summary>
   /// Check if a cell position is a valid ground cell
   /// </summary>
-  private bool IsValidGroundCell(Vector3Int cellPos)
+  private bool IsValidGroundCell(Vector3 cellPos)
   {
     foreach (var groundTilemap in groundTilemaps)
     {
       if (groundTilemap == null || !groundTilemap.gameObject.activeInHierarchy)
         continue;
 
-      if (groundTilemap.GetTile(cellPos) != null)
+      // Convert world position to cell position
+      Vector3Int cellPosition = groundTilemap.WorldToCell(cellPos);
+
+      if (groundTilemap.GetTile(cellPosition) != null)
         return true;
     }
     return false;
@@ -1596,7 +1588,7 @@ public class SpawnManager : MonoBehaviour
   /// <summary>
   /// Filter cells by neighbor count using coroutine for performance
   /// </summary>
-  private IEnumerator FilterCellsByNeighborsCoroutine(HashSet<Vector3Int> validCells)
+  private IEnumerator FilterCellsByNeighborsCoroutine(HashSet<Vector3> validCells)
   {
     var finalSpawnCells = new List<Vector3>();
     int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
@@ -1611,13 +1603,13 @@ public class SpawnManager : MonoBehaviour
       // Count valid neighbors
       for (int k = 0; k < 8; k++)
       {
-        Vector3Int neighborPos = new Vector3Int(cell.x + dx[k], cell.y + dy[k], 0);
+        Vector3 neighborPos = new Vector3(cell.x + dx[k], cell.y + dy[k], 0);
         if (validCells.Contains(neighborPos))
           neighborCount++;
       }
 
       // Only add cells with all 8 neighbors (completely surrounded)
-      if (neighborCount == 8)
+      if (neighborCount >= 8)
       {
         finalSpawnCells.Add((Vector3)cell);
       }
@@ -1639,21 +1631,22 @@ public class SpawnManager : MonoBehaviour
     Debug.Log($"RefreshTilemapCache: Found {spawnableCellOnTilemap.Count} valid spawn cells for spawning enemies");
   }
 
-  private bool IsPositionOnTilemapCollider(Vector3 position)
+  private bool IsPositionOnCollider(Vector3 position)
   {
-    // Check for any Tilemap Collider 2D at this position
-    Collider2D tilemapCollider = Physics2D.OverlapPoint(position);
+    // Check for any Collider2D at this position
+    Collider2D collider = Physics2D.OverlapPoint(position);
 
-    if (tilemapCollider != null && tilemapCollider is TilemapCollider2D)
+    if (collider != null)
     {
       if (enableDebugLogs)
-        Debug.Log($"SpawnManager: Position {position} rejected - overlaps TilemapCollider2D on {tilemapCollider.gameObject.name}");
-      
+        Debug.Log($"SpawnManager: Position {position} rejected - overlaps {collider.GetType().Name} on {collider.gameObject.name}");
+
       return true;
     }
 
     return false;
   }
+
   private bool IsValidSpawnPosition(Vector3 position)
   {
     // Check distance to player
@@ -1664,7 +1657,7 @@ public class SpawnManager : MonoBehaviour
         return false;
     }
 
-    if (useTilemapDirectAccess && IsPositionOnTilemapCollider(position))
+    if (useTilemapDirectAccess && IsPositionOnCollider(position))
     {
       if (enableDebugLogs)
         Debug.Log($"SpawnManager: Position {position} rejected - overlaps TilemapCollider2D");
@@ -2045,42 +2038,65 @@ public class SpawnManager : MonoBehaviour
       Gizmos.DrawWireCube(cameraBounds.center, cameraBounds.size);
     }
 
-    // Draw layer check visualization for recent spawn attempts
-    if (useLayerValidation && Application.isPlaying)
+    // Draw valid spawn cells
+    if (spawnableCellOnTilemap != null && spawnableCellOnTilemap.Count > 0)
     {
-      // Draw cached ground colliders if using direct layer sampling
-      if (cachedGroundColliders != null)
+      Gizmos.color = Color.red;
+      foreach (Vector3 cellPos in spawnableCellOnTilemap)
       {
-        Gizmos.color = Color.green;
-        foreach (var collider in cachedGroundColliders)
+        Gizmos.DrawSphere(cellPos, 0.4f);
+      }
+    }
+
+    // Draw all wall cells for comparison
+    if (wallTilemaps != null)
+    {
+      Gizmos.color = Color.magenta;
+      foreach (var tilemap in wallTilemaps)
+      {
+        if (tilemap == null || !tilemap.gameObject.activeInHierarchy) continue;
+
+        BoundsInt bounds = tilemap.cellBounds;
+        for (int x = bounds.xMin; x < bounds.xMax; x++)
         {
-          if (collider != null)
+          for (int y = bounds.yMin; y < bounds.yMax; y++)
           {
-            Gizmos.DrawWireCube(collider.bounds.center, collider.bounds.size);
+            Vector3Int cellPos = new Vector3Int(x, y, 0);
+            if (tilemap.GetTile(cellPos) != null)
+            {
+              Vector3 worldPos = tilemap.CellToWorld(cellPos);
+              Gizmos.DrawWireCube(worldPos, Vector3.one * 0.6f);
+            }
           }
         }
       }
+    }
 
-      // Draw layer check radius for a few test positions around the player
-      if (playerTransform != null)
+    // Draw all ground cells for comparison
+      if (groundTilemaps != null)
       {
-        for (int i = 0; i < 8; i++)
+        Gizmos.color = Color.blue;
+        foreach (var tilemap in groundTilemaps)
         {
-          float angle = i * 45f * Mathf.Deg2Rad;
-          Vector3 testPos = playerTransform.position + new Vector3(
-            Mathf.Cos(angle) * spawnDistance,
-            Mathf.Sin(angle) * spawnDistance,
-            0f
-          );
+          if (tilemap == null || !tilemap.gameObject.activeInHierarchy) continue;
 
-          // Check if this position would be valid
-          bool isValid = IsPositionOnValidLayer(testPos);
-          Gizmos.color = isValid ? Color.green : Color.red;
-          Gizmos.DrawWireSphere(testPos, layerCheckRadius);
+          BoundsInt bounds = tilemap.cellBounds;
+          for (int x = bounds.xMin; x < bounds.xMax; x++)
+          {
+            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            {
+              Vector3Int cellPos = new Vector3Int(x, y, 0);
+              if (tilemap.GetTile(cellPos) != null)
+              {
+                Vector3 worldPos = tilemap.CellToWorld(cellPos);
+                Gizmos.DrawWireCube(worldPos, Vector3.one * 0.8f);
+              }
+            }
+          }
         }
       }
-    }
   }
+
   [System.Diagnostics.Conditional("UNITY_EDITOR")]
   public void DebugPrintStatus()
   {
