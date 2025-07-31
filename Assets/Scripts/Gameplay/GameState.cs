@@ -53,6 +53,7 @@ public class GameState : MonoBehaviour
     [SerializeField] private float victoryTime = 300f; // This time is for survival mode, where player must survive for a certain duration
     [SerializeField] private float loseTime = 300f; // This time is for timing out the player, where player must complete the level before this time
     public float VictoryTime => victoryTime;
+    public float LoseTime => loseTime;
 
     [Header("Events")]
     public UnityEvent<GameStateType> OnStateChanged;
