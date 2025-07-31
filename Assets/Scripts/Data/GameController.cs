@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Example game controller showing how to integrate the PlayerData save/load system
@@ -23,7 +24,7 @@ public class GameController : MonoBehaviour
   #endregion
 
   #region Properties
-  public string CurrentLevelName => gameDataManager?.LevelConfig?.levelName ?? "";
+  public string CurrentLevelName => gameDataManager?.LevelConfig?.levelName ?? GetLevelName();
   #endregion
 
 
@@ -40,12 +41,13 @@ public class GameController : MonoBehaviour
     if (playerDataHelper == null)
       playerDataHelper = FindObjectOfType<PlayerDataHelper>();
   }
+  
   private void Start()
   {
     // Find components if not assigned again
     if (gameDataManager == null)
       gameDataManager = FindObjectOfType<GameDataManager>();
-      
+
     if (playerDataHelper == null)
       playerDataHelper = FindObjectOfType<PlayerDataHelper>();
 
@@ -192,7 +194,8 @@ public class GameController : MonoBehaviour
     Debug.Log($"Player died. Total deaths: {PlayerDataManager.CurrentPlayerData.totalDeaths}");
 
     // End the game if the player has no lives left
-    if (gameDataManager.SessionData.lives <= 0 || isGameOver)
+    GameSessionData gameSessionData = gameDataManager?.SessionData ?? GUIManager.Instance?.GameDataManager?.SessionData;
+    if ((gameSessionData != null && gameSessionData.lives <= 0) || isGameOver)
       EndGame(false);
   }
 
@@ -309,6 +312,34 @@ public class GameController : MonoBehaviour
 
     // Save the data
     PlayerDataManager.SavePlayerData();
+  }
+
+  /// <summary>
+  /// Find and cache the level scene to ensure enemies spawn in the correct scene
+  /// </summary>
+  private string GetLevelName()
+  {
+    var sceneName = "";
+    if (GUIManager.Instance != null)
+    {
+      sceneName = GUIManager.Instance.CurrentLevelScene;
+    }
+
+    // Look for a scene that is not the Persistent Game Scene and is a level
+    for (int i = 0; i < SceneManager.sceneCount; i++)
+    {
+      Scene scene = SceneManager.GetSceneAt(i);
+
+      // Skip the persistent scene, look for level scenes (CxLy)
+      if (scene.name != "Persistent Game State" && (
+        scene.name.StartsWith("C") || scene.name.Contains("Level") || scene.name == sceneName
+      ))
+      {
+        return scene.name;
+      }
+    }
+
+    return "";
   }
   #endregion
 
