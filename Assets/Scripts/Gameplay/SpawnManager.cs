@@ -934,8 +934,8 @@ public class SpawnManager : MonoBehaviour
   }
   private void SpawnWave()
   {
-    Vector3 centerPosition = GetSpawnPosition();
-    if (centerPosition == Vector3.zero) return;
+    Vector3 spawnPosition = GetSpawnPosition();
+    if (spawnPosition == Vector3.zero) return;
 
     WaveType waveType = SelectWaveType();
     EnemyData enemyData = SelectWaveEnemyType();
@@ -945,9 +945,6 @@ public class SpawnManager : MonoBehaviour
 
     for (int i = 0; i < waveSize && spawnsThisFrame < maxSpawnsPerFrame; i++)
     {
-      Vector3 offset = Random.insideUnitCircle * radius;
-      Vector3 spawnPosition = centerPosition + offset;
-
       int enemyLevel = enemyData.level; // Use the actual level from EnemyData
 
       // Only apply variance if wave type specifically allows mixed levels
@@ -1656,6 +1653,11 @@ public class SpawnManager : MonoBehaviour
       float distanceToPlayer = Vector3.Distance(position, playerTransform.position);
       if (distanceToPlayer < playerAvoidRadius)
         return false;
+    }
+    
+    if (IsPositionOnWallTile(position))
+    {
+      return false;
     }
 
     if (useTilemapDirectAccess && IsPositionOnCollider(position))
