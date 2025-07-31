@@ -59,7 +59,7 @@ public class EnemyData : ScriptableObject
 
     [Header("Movement")]
     [Tooltip("Base movement speed of the enemy.")]
-    [Range(0.5f, 20f)]
+    [Range(0f, 20f)]
     public float baseSpeed = 3f;            // Base movement speed
     [Tooltip("Speed multiplier when the enemy is fleeing or chasing.")]
     [Range(1f, 50f)]
@@ -107,6 +107,6 @@ public class EnemyData : ScriptableObject
     {
         level = Mathf.Max(1, level);
         hitboxRadius = Mathf.Max(0.1f, hitboxRadius);
-        baseSpeed = Mathf.Max(0.1f, baseSpeed);
+        baseSpeed = Mathf.Max(0f, baseSpeed);
     }
 }
