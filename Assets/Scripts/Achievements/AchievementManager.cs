@@ -157,8 +157,11 @@ public class FFAchievementManager : MonoBehaviour
 
         if (sessionData == null)
         {
-            Debug.LogError("GameSessionData is null! Cannot check achievements.");
-            return;
+            sessionData = GUIManager.Instance?.GameDataManager?.SessionData;
+            if (sessionData == null) {
+                Debug.LogError("GameSessionData is null! Cannot check achievements.");
+                return;
+            }
         }
 
         CheckAndUnlockAchievements(sessionData, levelCompletionTime);

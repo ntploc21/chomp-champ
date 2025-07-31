@@ -113,6 +113,10 @@ public class GUIManager : MonoBehaviour
         if (spawnManager != null)
         {
             spawnManager.RefreshLevelScene();
+
+            hudManager.InitializeComponents();
+
+            spawnManager.gameState.OnGameTimerUpdate.AddListener(hudManager.OnGameTimerUpdate);
         }
         else
         {

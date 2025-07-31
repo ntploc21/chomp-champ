@@ -36,13 +36,15 @@ namespace Michsky.UI.Reach
 
         public enum DefaultBehaviour { Visible, Invisible }
 
-        void InitializeComponents()
+        public void InitializeComponents()
         {
             if (imagesByLevel.Count != 0)
             {
                 return;
             }
+
             SpawnManager spawnManager = FindObjectOfType<SpawnManager>();
+
             if (spawnManager != null)
             {
                 foreach (EnemyData enemyData in spawnManager.enemyTypes)
@@ -77,6 +79,8 @@ namespace Michsky.UI.Reach
             {
                 Debug.LogWarning("SpawnManager not found in the scene.");
             }
+
+
             progressBar = HUDPanel.transform.Find("Statistic")?.Find("Progress")?.Find("ProgressBar")?.Find("Background")?.Find("Bar");
             scoreText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Score")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
             livesText = HUDPanel.transform.Find("Statistic")?.Find("Stats")?.Find("Lives")?.Find("Text")?.GetComponent<TextMeshProUGUI>();
@@ -202,9 +206,6 @@ namespace Michsky.UI.Reach
                 // gameDataManager.OnScoreChanged.AddListener(OnScoreChanged);
                 // gameDataManager.OnLivesChanged.AddListener(OnLivesChanged);
             }
-            InitializeComponents();
-            SpawnManager spawnManager = FindObjectOfType<SpawnManager>();
-            spawnManager?.gameState?.OnGameTimerUpdate?.AddListener(OnGameTimerUpdate);
         }
 
         public void UnsubscribeFromEvents()
@@ -215,7 +216,8 @@ namespace Michsky.UI.Reach
                 gameDataManager.OnDataChanged.RemoveListener(OnDataChanged);
                 // gameDataManager.OnScoreChanged.RemoveListener(OnScoreChanged);
                 // gameDataManager.OnLivesChanged.RemoveListener(OnLivesChanged);
-            } 
+            }
+            
             SpawnManager spawnManager = FindObjectOfType<SpawnManager>();
             spawnManager?.gameState?.OnGameTimerUpdate?.RemoveListener(OnGameTimerUpdate);
         }
