@@ -20,7 +20,7 @@ MonoBehaviour:
 
       Finish under
       5 minutes in Chapter 3 - Level 3'
-    type: 1
+    type: 0
     dataBehaviour: 0
     isHidden: 0
     hiddenTitle: Hidden Achievement
@@ -66,7 +66,7 @@ MonoBehaviour:
 
       Eat
       more than 50 villagers in Chapter 2 - Level 2.'
-    type: 1
+    type: 0
     dataBehaviour: 0
     isHidden: 0
     hiddenTitle: Hidden Achievement
@@ -81,7 +81,7 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: db92a5f1eef5660448852e2e0f3b4ce1, type: 3}
     description: "Your old minions make the best meal\u2014bone marrow is rich in
       mana\nEat more than 20 skeletons in Chapter 3 - Level 3"
-    type: 1
+    type: 0
     dataBehaviour: 0
     isHidden: 0
     hiddenTitle: Hidden Achievement
@@ -130,7 +130,7 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: db92a5f1eef5660448852e2e0f3b4ce1, type: 3}
     description: "Who says skeletons can\u2019t sprint?\nFinish under 5 minutes in
       Chapter 2 - Level 1."
-    type: 1
+    type: 0
     dataBehaviour: 0
     isHidden: 0
     hiddenTitle: Hidden Achievement
@@ -164,7 +164,7 @@ MonoBehaviour:
 
       Eat more than 15 knights
       in Chapter 2 - Level 4'
-    type: 0
+    type: 1
     dataBehaviour: 0
     isHidden: 0
     hiddenTitle: Hidden Achievement
@@ -245,7 +245,7 @@ MonoBehaviour:
     icon: {fileID: -589372785, guid: 3fd2f42dedce5914890fe278e6627ab4, type: 3}
     description: "Feasting on the learned grants you ancient knowledge\u2014and indigestion.\nEat
       more than 15 wizards in Chapter 3 - Level 3"
-    type: 2
+    type: 0
     dataBehaviour: 0
     isHidden: 0
     hiddenTitle: Hidden Achievement
