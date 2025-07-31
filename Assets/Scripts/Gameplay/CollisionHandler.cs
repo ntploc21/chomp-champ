@@ -100,10 +100,10 @@ public class CollisionHandler : MonoBehaviour
       OnEnemyEatsPlayer?.Invoke(enemy, player);
 
       // Trigger player death/life loss
-      playerCore.OnEaten();
+      bool hasBeenEaten = playerCore.OnEaten();
 
       // Trigger enemy eating effect
-      if (enemyCore.Effects != null)
+      if (hasBeenEaten && enemyCore.Effects != null)
       {
         enemyCore.Effects.PlayEatEffect();
       }

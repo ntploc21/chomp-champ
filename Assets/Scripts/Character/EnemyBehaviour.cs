@@ -249,7 +249,7 @@ public class EnemyBehaviour : MonoBehaviour
         {
             case EnemyType.Predator:
                 // Chase if we're bigger or same size
-                return (core.CurrentLevel >= playerCore.CurrentLevel) ? AIState.Chasing : AIState.Fleeing;
+                return (core.CurrentLevel > playerCore.CurrentLevel) ? AIState.Chasing : AIState.Fleeing;
 
             case EnemyType.Prey:
                 // Always flee from player

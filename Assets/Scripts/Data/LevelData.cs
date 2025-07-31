@@ -11,6 +11,12 @@ using System;
 public class LevelData : ScriptableObject
 {
     #region Editor Data
+    [Header("Level Info")]
+    [Tooltip("Name of the level.")]
+    public string levelName = "C0L1";
+    [Tooltip("Music name play during level.")]
+    public string musicName = ""; // Empty string for random music selection; else use specific music name
+
     [Header("Basic Growth Settings")]
     [Tooltip("Growth factor for player size per level.")]
     public float growthFactor = 1.1f;

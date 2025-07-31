@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Michsky.UI.Reach;
 
 public enum GameStateType
 {
@@ -49,7 +50,8 @@ public class GameState : MonoBehaviour
     [Header("Victory Conditions")]
     [SerializeField] private int victoryLevel = 10;
     [SerializeField] private float victoryScore = 10000f;
-    [SerializeField] private float victoryTime = 300f; // 5 minutes
+    [SerializeField] private float victoryTime = 300f; // This time is for survival mode, where player must survive for a certain duration
+    [SerializeField] private float loseTime = 300f; // This time is for timing out the player, where player must complete the level before this time
 
     [Header("Events")]
     public UnityEvent<GameStateType> OnStateChanged;
@@ -59,6 +61,11 @@ public class GameState : MonoBehaviour
     public UnityEvent OnGameOver;
     public UnityEvent OnVictory;
     public UnityEvent<float> OnGameTimerUpdate;
+    #endregion
+
+    #region Internal Data
+    private GameController gameController; // Reference to GameController for game management
+    private float originalMusicVolume = 1f; // Store original music volume for resuming
     #endregion
 
     // Properties
@@ -95,13 +102,31 @@ public class GameState : MonoBehaviour
     }
     private void Start()
     {
+        InitializeGameReferences_();
         InitializeGameState();
         SubscribeToEvents();
 
-        // Initialize UIManager when GameState starts
+        // Initialize GUIManager when GameState starts
         if (GUIManager.Instance != null)
         {
-            GUIManager.Instance.InitializeCanvasReferences();
+        }
+
+        if (UIManagerAudio.instance != null)
+        {
+            // Store original music volume for resuming later
+            originalMusicVolume = UIManagerAudio.instance.GetMusicVolume() / 100f;
+
+            string forcedMusicName = playerCore?.DataManager?.LevelConfig?.musicName;
+            if (!string.IsNullOrEmpty(forcedMusicName))
+            {
+                // Play specific music for the level if defined
+                UIManagerAudio.instance.PlayMusic(forcedMusicName);
+            }
+            else
+            {
+                // Otherwise play default gameplay music
+                UIManagerAudio.instance.PlayMusicInCategory(MusicLibrary.MusicCategory.Custom, "Gameplay");
+            }
         }
     }
 
@@ -119,6 +144,12 @@ public class GameState : MonoBehaviour
     private void OnDestroy()
     {
         UnsubscribeFromEvents();
+
+        // Reset volume back to original when GameState is destroyed
+        if (UIManagerAudio.instance != null)
+        {
+            UIManagerAudio.instance.SetMusicVolume(originalMusicVolume);
+        }
 
         if (Instance == this)
         {
@@ -149,12 +180,48 @@ public class GameState : MonoBehaviour
         // For in-game scenes, start directly in Playing state
         if (isInGameScene && startInPlayingState)
         {
+            // Apply shop effects if available
+            if (ShopManager.Instance != null)
+            {
+                Debug.Log("Applying shop effects at game start");
+
+                int lifeBoost = ShopManager.Instance.GetTotalLifeBoost();
+                if (lifeBoost > 0)
+                {
+                    playerCore?.DataManager?.AddLives(lifeBoost);
+                }
+
+                float scoreMultiplier = ShopManager.Instance.GetTotalScoreMultiplier();
+                if (scoreMultiplier > 1f)
+                {
+                    if (playerCore != null)
+                    {
+                        playerCore.DataManager.scoreBoost = scoreMultiplier;
+                    }
+                }
+
+                // Add onVictory listeners to GameController
+                OnVictory.AddListener(ShopManager.Instance.ResetPurchasedItems);
+                // OnGameOver.AddListener(ShopManager.Instance.ResetPurchasedItems);
+            }
+
+            gameController?.StartGame();
             ChangeState(GameStateType.Playing);
         }
         else
         {
             // Set initial state for non-game scenes
             ChangeState(GameStateType.MainMenu);
+        }
+    }
+
+    private void InitializeGameReferences_()
+    {
+        // Find GameController in the scene
+        gameController = FindObjectOfType<GameController>();
+        if (gameController == null)
+        {
+            Debug.LogError("GameState: GameController not found in the scene!");
         }
     }
 
@@ -240,7 +307,9 @@ public class GameState : MonoBehaviour
 
         // Disable game systems
         if (spawnManager != null)
-            spawnManager.StopSpawning(); Time.timeScale = 1f;
+            spawnManager.StopSpawning();
+
+        Time.timeScale = 1f;
 
         // Hide all UI canvases
         if (GUIManager.Instance != null)
@@ -262,13 +331,25 @@ public class GameState : MonoBehaviour
         if (GUIManager.Instance != null)
             GUIManager.Instance.HideAllCanvases();
 
+        // Enable music for gameplay
+        if (UIManagerAudio.instance != null)
+        {
+            // Reset music volume to original when starting gameplay
+            UIManagerAudio.instance.SetMusicVolume(originalMusicVolume);
+        }
+
         OnGameStart?.Invoke();
     }
-
     private void HandlePausedState()
     {
         isPaused = true;
         Time.timeScale = 0f;
+
+        // Tone down music when paused
+        if (UIManagerAudio.instance != null)
+        {
+            UIManagerAudio.instance.SetMusicVolume(originalMusicVolume * 0.5f);
+        }
 
         OnGamePause?.Invoke();
     }
@@ -283,6 +364,13 @@ public class GameState : MonoBehaviour
 
         Time.timeScale = 1f;
 
+        // Play "GameOver" UI sound effect
+        if (UIManagerAudio.instance != null)
+        {
+            UIManagerAudio.instance.StopMusic();
+            UIManagerAudio.instance.PlayUISFX("GameOver");
+        }
+
         // Show Game Over Canvas with game statistics
         if (GUIManager.Instance != null)
         {
@@ -292,6 +380,10 @@ public class GameState : MonoBehaviour
 
             GUIManager.Instance.ShowGameOverCanvas(score, gameTime, enemiesEaten);
         }
+
+        // GameController game over handling
+        if (gameController != null)
+            gameController.OnPlayerDied(true);
 
         OnGameOver?.Invoke();
     }
@@ -306,6 +398,13 @@ public class GameState : MonoBehaviour
 
         Time.timeScale = 1f;
 
+        // Play "GameWin" UI sound effect
+        if (UIManagerAudio.instance != null)
+        {
+            UIManagerAudio.instance.StopMusic();
+            UIManagerAudio.instance.PlayUISFX("GameWin");
+        }
+
         // Show Victory Canvas with game statistics
         if (GUIManager.Instance != null)
         {
@@ -314,6 +413,12 @@ public class GameState : MonoBehaviour
             int enemiesEaten = playerCore != null ? playerCore.DataManager.SessionData.enemiesEaten : 0;
 
             GUIManager.Instance.ShowVictoryCanvas(score, gameTime, enemiesEaten);
+        }
+
+        // GameController victory handling
+        if (gameController != null)
+        {
+            gameController.OnLevelCompleted();
         }
 
         OnVictory?.Invoke();
@@ -382,14 +487,12 @@ public class GameState : MonoBehaviour
     {
         if (currentState == GameStateType.GameOver) return;
 
-        Debug.Log("Game Over!");
         StartCoroutine(GameOverCoroutine());
     }
     public void Victory()
     {
         if (currentState == GameStateType.Victory) return;
 
-        Debug.Log("Victory!");
         StartCoroutine(VictoryCoroutine());
     }
 
@@ -424,6 +527,19 @@ public class GameState : MonoBehaviour
     private void CheckVictoryConditions()
     {
         if (playerCore == null) return;
+
+        // Don't check victory conditions if it in Victory
+        if (currentState == GameStateType.Victory || currentState == GameStateType.GameOver)
+        {
+            return;
+        }
+
+        // Check time-based lose condition (timed level), disabled by setting loseTime to 0
+        if (loseTime > 0 && gameTimer >= loseTime)
+        {
+            GameOver();
+            return;
+        }
 
         // Check level-based victory, disabled by setting victoryLevel to 0
         if (victoryLevel > 0 && playerCore.CurrentLevel >= victoryLevel)

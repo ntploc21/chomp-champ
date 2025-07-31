@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9399b3dc93af77b46909f461c7b7a9c4, type: 3}
+  m_Name: C3L4
+  m_EditorClassIdentifier: 
+  levelName: C3L4
+  levelDisplayName: Crown of Shadows - Final boss
+  levelDescription: 
+  achievements:
+  - achievementId: C3_All
+    achievementTitle: Master of Time and Death
+    achievementDescription: "Even kings fall before you\u2014quickly, and without
+      a word.\nFinish the level under 5 minutes in Chapter 3 - Level 4."
+    achievementType: 2
+    achievementIcon: {fileID: 0}
+    isHidden: 0
+    condition:
+      rid: 4256014502292094976
+    currencyReward: 0
+    xpReward: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 4256014502292094976
+      type: {class: TimeCondition, ns: , asm: Assembly-CSharp}
+      data:
+        conditionName: New Condition
+        description: Condition description
+        maxTimeSeconds: 300
+        useGameTime: 1

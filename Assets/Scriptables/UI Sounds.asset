@@ -14,7 +14,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   libraryName: UI Library
   description: 
-  uiSounds: []
+  uiSounds:
+  - soundName: GameOver
+    displayName: Game Over
+    audioClip: {fileID: 8300000, guid: bd04430083b13be458add875ff851f45, type: 3}
+    defaultVolume: 1
+    defaultPitch: 1
+    loopByDefault: 0
+    category: 19
+    customCategory: GameOver
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    playOnHover: 0
+    playOnClick: 0
+    playOnSelect: 0
+    playOnDeselect: 0
+    useCooldown: 0
+    cooldownTime: 0.1
+  - soundName: GameWin
+    displayName: Game Win
+    audioClip: {fileID: 8300000, guid: 5d48dfc2aac989e439cba52b60eca673, type: 3}
+    defaultVolume: 1
+    defaultPitch: 1
+    loopByDefault: 0
+    category: 19
+    customCategory: GameWin
+    useRandomPitch: 0
+    minPitch: 0.9
+    maxPitch: 1.1
+    useRandomVolume: 0
+    minVolume: 0.8
+    maxVolume: 1
+    playOnHover: 0
+    playOnClick: 0
+    playOnSelect: 0
+    playOnDeselect: 0
+    useCooldown: 0
+    cooldownTime: 0.1
   defaultHoverSound:
     soundName: 
     displayName: 

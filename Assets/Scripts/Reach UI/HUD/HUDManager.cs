@@ -37,8 +37,6 @@ namespace Michsky.UI.Reach
 
         void Awake()
         {
-            Debug.Log("HUDManager Awake called.");
-
             if (HUDPanel == null)
                 return;
 
@@ -54,8 +52,6 @@ namespace Michsky.UI.Reach
 
             if (defaultBehaviour == DefaultBehaviour.Visible) { cg.alpha = 1; isOn = true; onSetVisible.Invoke(); }
             else if (defaultBehaviour == DefaultBehaviour.Invisible) { cg.alpha = 0; isOn = false; onSetInvisible.Invoke(); }
-
-            Debug.Log("HUDManager Awake completed.");
         }
 
         void Start()

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// Class to hold all game session data.
@@ -17,6 +18,9 @@ public class GameSessionData
   public float score = 0f;
   [Tooltip("Number of enemies eaten by the player.")]
   public int enemiesEaten = 0;
+  [Tooltip("Enemy eaten for each level.")]
+  public Dictionary<int, int> enemiesEatenPerLevel = new Dictionary<int, int>();
+
   [Tooltip("Total play time in seconds.")]
   public float playTime = 0f;
 
@@ -55,6 +59,7 @@ public class GameSessionData
     lives = 3;
     score = 0f;
     enemiesEaten = 0;
+    enemiesEatenPerLevel.Clear();
     playTime = 0f;
 
     // Reset size and growth stats

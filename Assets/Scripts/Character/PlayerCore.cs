@@ -28,6 +28,9 @@ public class PlayerCore : MonoBehaviour
     public UnityEvent<PlayerCore, EnemyCore> OnPlayerEatEnemy = null;
 
     [Header("Player Animation System")]
+    [Tooltip("Reference to the player body game object for animations.")]
+    [SerializeField] private GameObject playerBody;
+
     [Tooltip("Sprite Library Asset for player animations.")]
     [SerializeField] private SpriteLibraryAsset playerSpriteLibrary;
     [Tooltip("Player animator controller.")]
@@ -41,8 +44,6 @@ public class PlayerCore : MonoBehaviour
     [SerializeField] private string hitAnimationParameter = "hit";
     [SerializeField] private string deathAnimationParameter = "death";
     [SerializeField] private string invincibleAnimationParameter = "invincible";
-    [SerializeField] private string moveXAnimationParameter = "moveX";
-    [SerializeField] private string moveYAnimationParameter = "moveY";
     [SerializeField] private string isMovingAnimationParameter = "isMoving";
     #endregion
 
@@ -190,9 +191,9 @@ public class PlayerCore : MonoBehaviour
          /// Handles the logic when the player is eaten by an enemy.
          /// This method reduces the player's lives, handles respawn, and plays death effects.
          /// </summary>
-    public void OnEaten()
+    public bool OnEaten()
     {
-        if (!IsAlive || IsInvincible) return;
+        if (!IsAlive || IsInvincible) return false;
 
         // Trigger hit animation
         TriggerHit();
@@ -208,10 +209,13 @@ public class PlayerCore : MonoBehaviour
         {
             StartCoroutine(RespawnCoroutine(respawnDelay));
         }
-    }    /// <summary>
-         /// Handles the player's death logic.
-         /// This method disables movement, plays death effects, and fires the death event.
-         /// </summary>
+        return true;
+    }
+
+    /// <summary>
+    /// Handles the player's death logic.
+    /// This method disables movement, plays death effects, and fires the death event.
+    /// </summary>
     private void OnDeath()
     {
         // Trigger death animation
@@ -489,10 +493,10 @@ public class PlayerCore : MonoBehaviour
     private void InitializePlayerSpriteLibrarySystem()
     {
         // Get or add Animator component
-        _animator = GetComponent<Animator>();
+        _animator = playerBody.GetComponent<Animator>();
         if (_animator == null)
         {
-            _animator = gameObject.AddComponent<Animator>();
+            _animator = playerBody.AddComponent<Animator>();
         }
 
         // Set animator controller if specified
@@ -502,10 +506,10 @@ public class PlayerCore : MonoBehaviour
         }
 
         // Get or add SpriteLibrary component
-        _spriteLibrary = GetComponent<SpriteLibrary>();
+        _spriteLibrary = playerBody.GetComponent<SpriteLibrary>();
         if (_spriteLibrary == null)
         {
-            _spriteLibrary = gameObject.AddComponent<SpriteLibrary>();
+            _spriteLibrary = playerBody.AddComponent<SpriteLibrary>();
         }
 
         // Set sprite library asset if specified
@@ -515,10 +519,10 @@ public class PlayerCore : MonoBehaviour
         }
 
         // Get or add SpriteResolver component
-        _spriteResolver = GetComponent<SpriteResolver>();
+        _spriteResolver = playerBody.GetComponent<SpriteResolver>();
         if (_spriteResolver == null)
         {
-            _spriteResolver = gameObject.AddComponent<SpriteResolver>();
+            _spriteResolver = playerBody.AddComponent<SpriteResolver>();
         }
 
         // Set default sprite if specified
@@ -529,8 +533,6 @@ public class PlayerCore : MonoBehaviour
 
         // Cache animation parameters for performance
         CacheAnimationParameters();
-
-        Debug.Log("Player Sprite Library System initialized successfully.");
     }
 
     /// <summary>

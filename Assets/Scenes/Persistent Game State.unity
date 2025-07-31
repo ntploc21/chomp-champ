@@ -96,7 +96,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000002, guid: 2f0cb785b9956ac45ba57e60be25b64e, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -2033,6 +2033,54 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2393741490227731185, guid: a58adb5252f8b5447ace87508e27b7d3, type: 3}
   m_PrefabInstance: {fileID: 34889747}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &35148887
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 35148888}
+  - component: {fileID: 35148890}
+  m_Layer: 0
+  m_Name: Player Save Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &35148888
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35148887}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 556351431}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &35148890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35148887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c569c1e3c142c846a8b7ae074add461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameDataManager: {fileID: 0}
+  playerDataHelper: {fileID: 0}
+  autoSaveEnabled: 0
+  autoSaveInterval: 15
 --- !u!1 &41626025
 GameObject:
   m_ObjectHideFlags: 0
@@ -15388,11 +15436,14 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 551717577}
-  - {fileID: 1309030721}
-  - {fileID: 594739430}
-  - {fileID: 7210979}
   - {fileID: 70196390}
+  - {fileID: 1309030721}
+  - {fileID: 35148888}
+  - {fileID: 594739430}
   - {fileID: 1681289623}
+  - {fileID: 7210979}
+  - {fileID: 1898849436}
+  - {fileID: 918453002}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &563568020
@@ -26225,6 +26276,60 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f22ca2fec02a5de43931538fb8a25698, type: 3}
+--- !u!1 &918453001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 918453002}
+  - component: {fileID: 918453003}
+  m_Layer: 0
+  m_Name: Shop Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &918453002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918453001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 556351431}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &918453003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918453001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae1db6f355a381249afe1487d97d10e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableItems: []
+  OnItemPurchased:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCurrencyChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPurchaseError:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &923400160
 GameObject:
   m_ObjectHideFlags: 0
@@ -38324,7 +38429,7 @@ GameObject:
   - component: {fileID: 1309030721}
   - component: {fileID: 1309030722}
   m_Layer: 0
-  m_Name: UI Manager
+  m_Name: GUI Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47212,27 +47317,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774294875512, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774294875512, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774294875512, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 246.85999
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774294875512, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 31.63
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774294875512, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774294875512, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -15.815
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774321293761, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_FillAmount
@@ -47268,7 +47373,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774512910498, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 31.63
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4046698774512910498, guid: 922a1d93d30932846ba7c1f369a1dcf8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -59585,6 +59690,69 @@ MonoBehaviour:
   colorType: 5
   useCustomColor: 0
   useCustomAlpha: 1
+--- !u!1 &1898849435
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1898849436}
+  - component: {fileID: 1898849437}
+  m_Layer: 0
+  m_Name: Achievement Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1898849436
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898849435}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 556351431}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1898849437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898849435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc1f13ef794909c49b3ebb4750b95882, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelConfigs:
+  - {fileID: 11400000, guid: 145a42a573722bb4d811a5bab6c83ebc, type: 2}
+  - {fileID: 11400000, guid: de7eb669c1c3d35439fbbdd641342c84, type: 2}
+  - {fileID: 11400000, guid: c9b1a83a185227c4db9b19e884e83a79, type: 2}
+  - {fileID: 11400000, guid: f1a7e00e2dea64f48a8fe46fa612568e, type: 2}
+  - {fileID: 11400000, guid: 6478c865de231de4f93e767b303ec6c8, type: 2}
+  - {fileID: 11400000, guid: ffef0896fa2410f4ea3d88acd18b568b, type: 2}
+  - {fileID: 11400000, guid: 885c45648bb11354dbb9391a092c644d, type: 2}
+  enableDebugLogging: 1
+  showAchievementNotifications: 1
+  notificationDuration: 3
+  achievementNotificationPrefab: {fileID: 2035305696}
+  notificationParent: {fileID: 0}
+  OnAchievementUnlocked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAchievementComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1907642350
 GameObject:
   m_ObjectHideFlags: 0
@@ -63114,7 +63282,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2035305697
 RectTransform:
   m_ObjectHideFlags: 0

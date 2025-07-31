@@ -106,7 +106,7 @@ public class EnemyEffect : MonoBehaviour
     // Play spawn sound with cached reference
     if (audioManager != null)
     {
-      audioManager.PlaySFX("SpawnSound");
+      // audioManager.PlaySFX("SpawnSound");
     }
 
     // Play spawn particles

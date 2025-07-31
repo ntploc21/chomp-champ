@@ -15,6 +15,7 @@ namespace Michsky.UI.Reach
         [System.Serializable]
         public class AchievementItem
         {
+            public string id;
             public string title = "New Achievement";
             public Sprite icon;
             [TextArea] public string description;

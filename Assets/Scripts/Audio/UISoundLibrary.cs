@@ -250,15 +250,21 @@ namespace Michsky.UI.Reach
         {
             if (newSound != null && !string.IsNullOrEmpty(newSound.soundName))
             {
-                if (!HasSound(newSound.soundName))
+                if (HasSound(newSound.soundName))
                 {
-                    uiSounds.Add(newSound);
-                    BuildDictionary();
+                    // Add suffix to avoid duplicates
+                    int suffix = 1;
+                    string originalName = newSound.soundName;
+
+                    while (HasSound(newSound.soundName))
+                    {
+                        newSound.soundName = $"{originalName}_{suffix}";
+                        suffix++;
+                    }
                 }
-                else
-                {
-                    Debug.LogWarning($"UI sound '{newSound.soundName}' already exists in library", this);
-                }
+
+                uiSounds.Add(newSound);
+                BuildDictionary();
             }
         }
 
