@@ -2414,10 +2414,10 @@ MonoBehaviour:
   UIManagerAsset: {fileID: 11400000, guid: 98972d851a944df4a9402eac62a896e7, type: 2}
   audioMixer: {fileID: 24100000, guid: fd2e95e311c5b5e4da32b572f6628427, type: 2}
   audioSource: {fileID: 70196392}
-  masterSlider: {fileID: 0}
-  musicSlider: {fileID: 0}
-  SFXSlider: {fileID: 0}
-  UISlider: {fileID: 0}
+  masterSlider: {fileID: 1374219660}
+  musicSlider: {fileID: 1604339784}
+  SFXSlider: {fileID: 529186861}
+  UISlider: {fileID: 2056365041}
   musicSource: {fileID: 874661564}
   sfxSource: {fileID: 14043751}
   uiSource: {fileID: 444441916}
