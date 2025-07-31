@@ -79,7 +79,7 @@ public class SpawnManager : MonoBehaviour
 
   [Header("Enemy Data")]
   [Tooltip("Array of enemy types that can be spawned. Each has different stats and spawn weights.")]
-  [SerializeField] private EnemyData[] enemyTypes;
+  [SerializeField] public EnemyData[] enemyTypes;
   [Tooltip("The prefab to instantiate for enemies. Must have EnemyCore component.")]
   [SerializeField] private GameObject enemyPrefab;
 
@@ -191,7 +191,7 @@ public class SpawnManager : MonoBehaviour
   [Tooltip("Reference to the player's core component. Auto-found if not assigned.")]
   [SerializeField] private PlayerCore playerCore;
   [Tooltip("Reference to the game state manager. Auto-found if not assigned.")]
-  [SerializeField] private GameState gameState;
+  [SerializeField] public GameState gameState;
   [Tooltip("Camera used for off-screen spawning calculations. Uses Camera.main if not assigned.")]
   [SerializeField] private Camera gameCamera;
 
