@@ -159,6 +159,18 @@ public class PlayerMovement : MonoBehaviour
     }
   }
 
+  public float sprintPickupTime = 10f;
+  public float sprintPickupStart = -1000000f;
+  public void StartSprintPickup()
+  {
+    sprintPickupStart = Time.time;
+    Debug.Log("Sprint pickup started.");
+  }
+  public bool IsSprintPickupActive()
+  {
+    return Time.time - sprintPickupStart < sprintPickupTime;
+  }
+
   private void UpdateSizeSpeedModifier()
   {
     if (_playerCore != null)
@@ -279,7 +291,7 @@ public class PlayerMovement : MonoBehaviour
     float currentSpeed = baseSpeed;
 
     // Apply sprint multiplier if sprinting
-    if (isSprinting)
+    if (IsSprintPickupActive()) // || isSprinting
     {
       currentSpeed *= sprintMultiplier;
     }
