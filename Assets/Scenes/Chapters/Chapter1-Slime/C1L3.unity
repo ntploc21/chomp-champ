@@ -150,7 +150,7 @@ Transform:
   m_GameObject: {fileID: 41043482}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 30.3, y: -52.2, z: -10}
+  m_LocalPosition: {x: 35.3, y: -15, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -381,6 +381,15 @@ MonoBehaviour:
   useSpawnBounds: 1
   preferOffScreenSpawning: 0
   offScreenBuffer: 2
+  useLayerValidation: 1
+  useTilemapDirectAccess: 1
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  layerCheckRadius: 0.5
   spawnRateCurve:
     serializedVersion: 2
     m_Curve:
@@ -439,7 +448,6 @@ MonoBehaviour:
   avoidPlayerSpawning: 1
   playerAvoidRadius: 8
   playerDetectionRadius: 20
-  balanceAroundPlayer: 1
   poolInitialSize: 30
   poolMaxSize: 150
   collectionCheck: 0
@@ -602,9 +610,6 @@ MonoBehaviour:
     totalXP: 0
     maximumXP: 0
   levelData: {fileID: 11400000, guid: 73779d804cb31b246ab5fc2eadfcc0f6, type: 2}
-  autoSaveEnabled: 1
-  autoSaveInterval: 60
-  enablePersistence: 0
   OnDataChanged:
     m_PersistentCalls:
       m_Calls:
@@ -632,6 +637,7 @@ MonoBehaviour:
   OnXPChanged:
     m_PersistentCalls:
       m_Calls: []
+  scoreBoost: 1
 --- !u!4 &754789989
 Transform:
   m_ObjectHideFlags: 0
@@ -937,6 +943,7 @@ MonoBehaviour:
   victoryLevel: 4
   victoryScore: -1
   victoryTime: -1
+  loseTime: 300
   OnStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1240,34 +1247,6 @@ MonoBehaviour:
   eatShakeIntensity: 5
   dashShakeDuration: 0.2
   dashShakeIntensity: 5
-  deathShakeDuration: 0.3
-  deathShakeIntensity: 5
-  shakeDecayCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  defaultShakeFrequency: 25
-  useAdvancedShake: 0
   eatFlashColor: {r: 0, g: 1, b: 0, a: 1}
   growthFlashColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   evolutionFlashColor: {r: 0, g: 1, b: 1, a: 1}
@@ -1275,9 +1254,17 @@ MonoBehaviour:
   dashFlashColor: {r: 1, g: 1, b: 1, a: 1}
   flickerRate: 0.1
   enableParticlePooling: 1
-  enableAdvancedEffects: 1
   maxConcurrentEffects: 3
   enableDebugLogs: 0
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  wallLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  enableGroundColorDetection: 1
+  colorDarkeningFactor: 0.4
+  fallbackGroundColor: {r: 0.4, g: 0.3, b: 0.2, a: 1}
 --- !u!114 &1922859820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1347,6 +1334,7 @@ MonoBehaviour:
   OnPlayerEatEnemy:
     m_PersistentCalls:
       m_Calls: []
+  playerBody: {fileID: 0}
   playerSpriteLibrary: {fileID: 7108339969198208228, guid: 2c608c52e06a5434d983c520b1b41de2, type: 3}
   playerAnimatorController: {fileID: 9100000, guid: e3c1d4507170a794a8337129c5d4de0b, type: 2}
   defaultSpriteCategory: Idle
@@ -1354,8 +1342,6 @@ MonoBehaviour:
   hitAnimationParameter: hit
   deathAnimationParameter: death
   invincibleAnimationParameter: invincible
-  moveXAnimationParameter: moveX
-  moveYAnimationParameter: moveY
   isMovingAnimationParameter: isMoving
 --- !u!61 &1922859823
 BoxCollider2D:
