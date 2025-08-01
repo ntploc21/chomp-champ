@@ -23,7 +23,7 @@ MonoBehaviour:
   invincibleAnimationParameter: invincible
   isMovingAnimationParameter: isMoving
   level: 2
-  size: 1.75
+  size: 1.5
   baseSpeed: 3
   detectionRange: 5
   behaviorType: 2
@@ -36,6 +36,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   deathEffectPrefab: {fileID: 0}
   spawnEffectPrefab: {fileID: 0}
-  maxSpawnCount: 10
-  spawnWeight: 0.5
+  maxSpawnCount: 15
+  spawnWeight: 0.25
   canSpawnInWaves: 1
