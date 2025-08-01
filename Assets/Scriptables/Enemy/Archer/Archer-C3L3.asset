@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f5ca5adee6231248aec8f6457b2e3b3, type: 3}
   m_Name: Archer-C3L3
   m_EditorClassIdentifier: 
-  enemyName: Predator
+  enemyName: Archer
   spriteLibrary: {fileID: 7108339969198208228, guid: fbacf118182c00d429815b909e55f69a, type: 3}
   defaultSpriteCategory: Idle
   defaultSpriteLabel: Normal

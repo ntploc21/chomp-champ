@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f5ca5adee6231248aec8f6457b2e3b3, type: 3}
   m_Name: Villager-Tutorial
   m_EditorClassIdentifier: 
-  enemyName: Enemy
+  enemyName: Villager
   spriteLibrary: {fileID: 7108339969198208228, guid: 1c3595fa811957c46ac5a263050d60ec, type: 3}
   defaultSpriteCategory: Idle
   defaultSpriteLabel: Normal

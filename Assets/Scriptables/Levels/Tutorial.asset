@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tutorial
   m_EditorClassIdentifier: 
   levelName: C1L0
-  musicName: 
+  musicName: Music_1
   growthFactor: 1.25
   baseSize: 1
   maxSize: 10

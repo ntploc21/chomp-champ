@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f5ca5adee6231248aec8f6457b2e3b3, type: 3}
   m_Name: Base-L4
   m_EditorClassIdentifier: 
-  enemyName: Predator
+  enemyName: Base
   spriteLibrary: {fileID: 7108339969198208228, guid: 978ddb0a89d80724599222a8c1341f6b, type: 3}
   defaultSpriteCategory: Idle
   defaultSpriteLabel: Normal
@@ -25,17 +25,17 @@ MonoBehaviour:
   level: 4
   size: 2.8125
   baseSpeed: 2.5
-  detectionRange: 5
+  detectionRange: 15
   behaviorType: 1
-  wanderRadius: 3
-  fleeSpeedMultiplier: 1.5
-  chaseSpeedMultiplier: 1.2
+  wanderRadius: 10
+  fleeSpeedMultiplier: 2
+  chaseSpeedMultiplier: 1.5
   hitboxRadius: 0.5
   collisionLayers:
     serializedVersion: 2
     m_Bits: 4294967295
   deathEffectPrefab: {fileID: 0}
   spawnEffectPrefab: {fileID: 0}
-  maxSpawnCount: 2
-  spawnWeight: 0.5
+  maxSpawnCount: 1
+  spawnWeight: 1
   canSpawnInWaves: 0

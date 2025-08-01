@@ -747,6 +747,8 @@ public class SpawnManager : MonoBehaviour
     if (spawnPosition == Vector3.zero) return; // Failed to find valid position
 
     EnemyData enemyData = SelectEnemyType();
+    if (enemyData == null)
+      return;
     int enemyLevel = enemyData.level; // Use the actual level from EnemyData
 
     SpawnEnemyAtPosition(spawnPosition, enemyData, enemyLevel);
@@ -758,8 +760,13 @@ public class SpawnManager : MonoBehaviour
 
     WaveType waveType = SelectWaveType();
     EnemyData enemyData = SelectWaveEnemyType();
+    if (enemyData == null)
+      return;
 
     int waveSize = Random.Range(waveType?.minSize ?? minWaveSize, (waveType?.maxSize ?? maxWaveSize) + 1);
+
+    waveSize = Mathf.Min(waveSize, RemainingSpawnableEnemies(enemyData));
+    
     float radius = waveType?.spawnRadius ?? waveSpawnRadius;
 
     for (int i = 0; i < waveSize && spawnsThisFrame < maxSpawnsPerFrame; i++)
@@ -812,7 +819,8 @@ public class SpawnManager : MonoBehaviour
     if (availableEnemies.Length == 0)
     {
       Debug.LogWarning("SpawnManager: No suitable enemies found, using first available");
-      return enemyTypes[0];
+      return null;
+      // return enemyTypes[0];
     }
 
     // If Feeding Frenzy system is enabled, filter by level appropriateness
@@ -820,13 +828,19 @@ public class SpawnManager : MonoBehaviour
     {
       var levelAppropriateEnemies = availableEnemies.Where(enemy =>
           IsEnemyLevelAppropriate(enemy)).ToArray();
-
+      
       if (levelAppropriateEnemies.Length > 0)
       {
         availableEnemies = levelAppropriateEnemies;
       }
+      else
+      {
+        return null;
+      }
     }
-
+    
+    Debug.Log($"SpawnManager: Found {availableEnemies.Length} available enemies");
+    
     float totalWeight = availableEnemies.Sum(enemy => enemy.spawnWeight);
     float randomValue = Random.Range(0f, totalWeight);
     float currentWeight = 0f;
@@ -871,6 +885,10 @@ public class SpawnManager : MonoBehaviour
       {
         waveEnemies = levelAppropriateEnemies;
       }
+      else
+      {
+        return null;
+      }
     }
 
     return waveEnemies[Random.Range(0, waveEnemies.Length)];
@@ -902,6 +920,26 @@ public class SpawnManager : MonoBehaviour
 
     return true;
   }
+
+  private int RemainingSpawnableEnemies(EnemyData enemyData)
+  {
+    if (CanSpawnEnemyType(enemyData))
+      return 0;
+    
+    if (enemyData.maxSpawnCount > 0)
+    {
+      int currentCount = activeEnemies.Count(enemy =>
+      {
+        var core = enemy.GetComponent<EnemyCore>();
+        return core != null && core.Data == enemyData;
+      });
+
+      return Mathf.Max(0, currentCount - enemyData.maxSpawnCount);
+    }
+
+    return 100;
+  }
+  
   #endregion
 
   #region Spawn Position
@@ -1730,7 +1768,13 @@ public class SpawnManager : MonoBehaviour
     }
 
     if (enemyData == null)
+    {
       enemyData = SelectEnemyType();
+      if (enemyData == null)
+      {
+        return;
+      }
+    }
 
     if (level <= 0)
       level = enemyData.level; // Use the actual level from EnemyData
@@ -1751,7 +1795,11 @@ public class SpawnManager : MonoBehaviour
     }
 
     if (enemyData == null)
+    {
       enemyData = SelectWaveEnemyType();
+      if (enemyData == null)
+        return;
+    }
 
     if (waveSize <= 0)
       waveSize = Random.Range(minWaveSize, maxWaveSize + 1);

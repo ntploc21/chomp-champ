@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f5ca5adee6231248aec8f6457b2e3b3, type: 3}
   m_Name: Merchant_Level_2
   m_EditorClassIdentifier: 
-  enemyName: Enemy
+  enemyName: Merchant
   spriteLibrary: {fileID: 7108339969198208228, guid: 20be37054246a624bb3afc0609740430, type: 3}
   defaultSpriteCategory: Idle
   defaultSpriteLabel: Normal
@@ -36,6 +36,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   deathEffectPrefab: {fileID: 0}
   spawnEffectPrefab: {fileID: 0}
-  maxSpawnCount: 10
+  maxSpawnCount: 3
   spawnWeight: 0.25
   canSpawnInWaves: 1

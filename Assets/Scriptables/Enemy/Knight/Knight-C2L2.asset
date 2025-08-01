@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f5ca5adee6231248aec8f6457b2e3b3, type: 3}
   m_Name: Knight-C2L2
   m_EditorClassIdentifier: 
-  enemyName: Predator
+  enemyName: Knight
   spriteLibrary: {fileID: 7108339969198208228, guid: 826ba6147d841b543b93aae440100fab, type: 3}
   defaultSpriteCategory: Idle
   defaultSpriteLabel: Normal

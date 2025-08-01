@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f5ca5adee6231248aec8f6457b2e3b3, type: 3}
   m_Name: Necromancer-C2L3
   m_EditorClassIdentifier: 
-  enemyName: Predator
+  enemyName: Necromancer
   spriteLibrary: {fileID: 7108339969198208228, guid: 083d9521a7b1fcb4687e7b80b21d0deb, type: 3}
   defaultSpriteCategory: Idle
   defaultSpriteLabel: Normal

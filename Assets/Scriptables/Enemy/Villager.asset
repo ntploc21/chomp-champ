@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f5ca5adee6231248aec8f6457b2e3b3, type: 3}
   m_Name: Villager
   m_EditorClassIdentifier: 
-  enemyName: Enemy
+  enemyName: Villager
   spriteLibrary: {fileID: 7108339969198208228, guid: 1c3595fa811957c46ac5a263050d60ec, type: 3}
   defaultSpriteCategory: Idle
   defaultSpriteLabel: Normal
@@ -36,6 +36,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   deathEffectPrefab: {fileID: 4741133393346867453, guid: 1a2e6c3d734407c489d1acbc9ce19467, type: 3}
   spawnEffectPrefab: {fileID: 4741133393346867453, guid: 05ed04f227ad22346a6161e1b94abf6c, type: 3}
-  maxSpawnCount: 25
+  maxSpawnCount: 10
   spawnWeight: 0.25
   canSpawnInWaves: 1

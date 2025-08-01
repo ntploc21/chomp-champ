@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f5ca5adee6231248aec8f6457b2e3b3, type: 3}
   m_Name: Skeleton-C1L4
   m_EditorClassIdentifier: 
-  enemyName: Predator
+  enemyName: Skeleton
   spriteLibrary: {fileID: 7108339969198208228, guid: 5262a17078d7e644a8e8f758c028afab, type: 3}
   defaultSpriteCategory: Idle
   defaultSpriteLabel: Normal
@@ -24,10 +24,10 @@ MonoBehaviour:
   isMovingAnimationParameter: isMoving
   level: 4
   size: 2
-  baseSpeed: 2.5
-  detectionRange: 5
+  baseSpeed: 3.5
+  detectionRange: 10
   behaviorType: 1
-  wanderRadius: 3
+  wanderRadius: 6
   fleeSpeedMultiplier: 1.5
   chaseSpeedMultiplier: 1.2
   hitboxRadius: 0.5

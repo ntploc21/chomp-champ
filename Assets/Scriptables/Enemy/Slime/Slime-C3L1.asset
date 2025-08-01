@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f5ca5adee6231248aec8f6457b2e3b3, type: 3}
   m_Name: Slime-C3L1
   m_EditorClassIdentifier: 
-  enemyName: Enemy
+  enemyName: Slime
   spriteLibrary: {fileID: 7108339969198208228, guid: 2c608c52e06a5434d983c520b1b41de2, type: 3}
   defaultSpriteCategory: Idle
   defaultSpriteLabel: Normal
@@ -26,7 +26,7 @@ MonoBehaviour:
   size: 1.5
   baseSpeed: 3
   detectionRange: 5
-  behaviorType: 2
+  behaviorType: 0
   wanderRadius: 3
   fleeSpeedMultiplier: 1.5
   chaseSpeedMultiplier: 1.2
