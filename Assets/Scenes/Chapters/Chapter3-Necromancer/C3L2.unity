@@ -157,7 +157,7 @@ MonoBehaviour:
     enemiesEaten: 0
     playTime: 0
     currentSize: 1
-    currentLevel: 1
+    currentLevel: 3
     currentXP: 0
     xpToNextLevel: 100
     resetXPOnDeath: 1
@@ -272,6 +272,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5078653481069724657, guid: d8dd4925026260544b9eff12c0c3d2ac, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -939448719, guid: 3fd2f42dedce5914890fe278e6627ab4, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -554,7 +558,7 @@ MonoBehaviour:
   isSpawning: 0
   baseSpawnRate: 2
   spawnRateVariation: 0.5
-  maxEnemiesOnScreen: 40
+  maxEnemiesOnScreen: 50
   spawnDistance: 15
   enemyTypes:
   - {fileID: 11400000, guid: 98c427cb7989eb6499dc331bb3f15184, type: 2}
@@ -580,7 +584,7 @@ MonoBehaviour:
   useTilemapDirectAccess: 1
   groundLayer:
     serializedVersion: 2
-    m_Bits: 1025
+    m_Bits: 1024
   wallLayer:
     serializedVersion: 2
     m_Bits: 512

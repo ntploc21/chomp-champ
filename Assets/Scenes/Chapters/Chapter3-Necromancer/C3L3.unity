@@ -365,7 +365,7 @@ MonoBehaviour:
   isSpawning: 0
   baseSpawnRate: 2
   spawnRateVariation: 0.5
-  maxEnemiesOnScreen: 20
+  maxEnemiesOnScreen: 50
   spawnDistance: 15
   enemyTypes:
   - {fileID: 11400000, guid: 98c427cb7989eb6499dc331bb3f15184, type: 2}
@@ -378,7 +378,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 905107209197507577, guid: 190d4dce4ceae4a4b9d6674103d85466, type: 3}
   useFeedingFrenzySystem: 1
   levelRange: 3
-  levelRangeBehind: 1
+  levelRangeBehind: 0
   spawnPatterns: []
   enableAdaptiveSpawning: 1
   adaptiveCheckInterval: 5

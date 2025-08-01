@@ -36,6 +36,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   deathEffectPrefab: {fileID: 0}
   spawnEffectPrefab: {fileID: 0}
-  maxSpawnCount: 1
-  spawnWeight: 1
+  maxSpawnCount: 2
+  spawnWeight: 0.5
   canSpawnInWaves: 0
