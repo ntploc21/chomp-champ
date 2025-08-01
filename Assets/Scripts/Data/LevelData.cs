@@ -52,10 +52,10 @@ public class LevelData : ScriptableObject
 
     [Header("Bonus Multipliers")]
     [Tooltip("Multiplier for XP gained from eating enemies in succession.")]
-    public float streakMultiplier = 1.5f;
+    public float streakMultiplier = 1.25f;
 
     [Tooltip("Multiplier for XP gained from quick kills.")]
-    public float speedKillBonus = 2.0f;
+    public float speedKillBonus = 1.5f;
 
     [Header("Debug")]
     public bool showDebugInfo = false;
