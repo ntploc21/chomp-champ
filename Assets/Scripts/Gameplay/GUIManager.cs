@@ -305,6 +305,13 @@ public class GUIManager : MonoBehaviour
         gameDataManager = null;
     }
 
+    private (int, int) NextScene(int chapter, int level)
+    {
+        if (chapter == 1 && level == 4) return (chapter, level);
+        if (level < 3 || (level == 3 && chapter == 3)) return (chapter, level + 1);
+        return (chapter + (level < 4 ? 1 : -1), level < 4 ? 1 : 4);
+    }
+
     /// <summary>
     /// Redirect to the level selection screen with current chapter and level
     /// </summary>
@@ -318,9 +325,14 @@ public class GUIManager : MonoBehaviour
 
         // Set the current level scene to the level selection screen
         // Get the chapter and level from "CxLy" format
-        int chapter = int.Parse(currentLevelScene.Substring(1, 1));
-        int level = int.Parse(currentLevelScene.Substring(3, 1));
-        PlayerPrefs.SetInt("FromGamePlay", 1);
+        int cur_chapter = int.Parse(currentLevelScene.Substring(1, 1));
+        int cur_level = int.Parse(currentLevelScene.Substring(3, 1));
+        (int chapter, int level) = NextScene(cur_chapter, cur_level);
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        PlayerPrefs.SetInt("FromGamePlay", (cur_chapter != 1 || cur_level != 4) ? 1 : 0);
         PlayerPrefs.SetInt("ReturnChapter", chapter);
         PlayerPrefs.SetInt("ReturnLevel", level);
         PlayerPrefs.Save();
