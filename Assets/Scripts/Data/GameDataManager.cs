@@ -153,7 +153,7 @@ public class GameDataManager : MonoBehaviour
     gameSessionData.enemiesEaten++;
 
     // Calculate the XP gained from eating an enemy
-    float baseXP = enemyLevel * 10f; // Example: 10 XP per unit level
+    float baseXP = enemyLevel * 3f; // Example: 10 XP per unit level
     float bonusMul = levelData.CalculateXPBonus(gameSessionData.currentSize, enemyLevel, isStreak);
     float totalXP = baseXP * bonusMul;
 

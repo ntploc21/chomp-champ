@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: C2L3
   m_EditorClassIdentifier: 
   levelName: C2L3
-  musicName: 
+  musicName: Music_3
   growthFactor: 1.25
   baseSize: 1.5
   maxSize: 10
