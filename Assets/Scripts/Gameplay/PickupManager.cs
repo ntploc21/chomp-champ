@@ -40,7 +40,7 @@ public class PickupManager : MonoBehaviour
         }
 
         BoundsInt bounds = tilemap.cellBounds;
-
+        spawnCells.Clear();
         for (int i = bounds.xMin; i < bounds.xMax; i++)
         {
             for (int j = bounds.yMin; j < bounds.yMax; j++)
@@ -73,18 +73,25 @@ public class PickupManager : MonoBehaviour
         }
     }
 
-    private Vector3 GetRandomWalkablePosition()
+    public void FreeCell(Vector3Int cell)
+    {
+        spawnCells.Add(cell);
+        Debug.Log($"Cell {cell} freed for pickup spawning.");
+    }
+
+    private Vector3Int GetRandomSpawnCell()
     {
         if (spawnCells.Count == 0)
         {
             Debug.LogWarning("No valid spawn cells available for pickups.");
-            return Vector3.zero;
+            return Vector3Int.zero;
         }
         int random_index = Random.Range(0, spawnCells.Count);
-        Vector3 pos = GetRandomPositionInCell(spawnCells[Random.Range(0, spawnCells.Count)]);
+        Vector3Int cell = spawnCells[random_index];
         spawnCells[random_index] = spawnCells.Last();
         spawnCells.RemoveAt(spawnCells.Count - 1);
-        return pos;
+        Debug.Log($"Selected spawn cell: {cell}");
+        return cell;
     }
 
     private Vector3 GetRandomPositionInCell(Vector3Int cell)
@@ -101,8 +108,8 @@ public class PickupManager : MonoBehaviour
     private void SpawnPickup()
     {
         // Debug.Log("Spawning pickup...");
-        Vector3 spawnPosition = GetRandomWalkablePosition();
-        if (spawnPosition == Vector3.zero)
+        Vector3Int spawnCell = GetRandomSpawnCell();
+        if (spawnCell == Vector3.zero)
         {
             Debug.LogWarning("Failed to find a valid spawn position for the pickup.");
             return;
@@ -116,7 +123,9 @@ public class PickupManager : MonoBehaviour
         GameObject pickupPrefab = Resources.Load<GameObject>($"Prefabs/Pickups/{pickupType}");
         if (pickupPrefab != null)
         {
-            Instantiate(pickupPrefab, spawnPosition, Quaternion.identity);
+            pickupPrefab.GetComponent<PickupCore>().spawnCell = spawnCell;
+            pickupPrefab.GetComponent<PickupCore>().pickupManager = this;
+            Instantiate(pickupPrefab, GetRandomPositionInCell(spawnCell), Quaternion.identity);
         }
         else
         {
