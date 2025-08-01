@@ -36,6 +36,7 @@ public class PickupManager : MonoBehaviour
         if (tilemap == null)
         {
             Debug.LogWarning("PickupSpawn tilemap not found!");
+            return;
         }
 
         BoundsInt bounds = tilemap.cellBounds;
@@ -74,7 +75,16 @@ public class PickupManager : MonoBehaviour
 
     private Vector3 GetRandomWalkablePosition()
     {
-        return GetRandomPositionInCell(spawnCells[Random.Range(0, spawnCells.Count)]);
+        if (spawnCells.Count == 0)
+        {
+            Debug.LogWarning("No valid spawn cells available for pickups.");
+            return Vector3.zero;
+        }
+        int random_index = Random.Range(0, spawnCells.Count);
+        Vector3 pos = GetRandomPositionInCell(spawnCells[Random.Range(0, spawnCells.Count)]);
+        spawnCells[random_index] = spawnCells.Last();
+        spawnCells.RemoveAt(spawnCells.Count - 1);
+        return pos;
     }
 
     private Vector3 GetRandomPositionInCell(Vector3Int cell)
@@ -82,8 +92,8 @@ public class PickupManager : MonoBehaviour
         Vector3 cellWorldPosition = tilemap.CellToWorld(cell);
         Vector3 cellSize = tilemap.cellSize;
 
-        float randomX = Random.Range(0f, cellSize.x);
-        float randomY = Random.Range(0f, cellSize.y);
+        float randomX = cellSize.x / 2f;
+        float randomY = cellSize.y / 2f;
 
         return cellWorldPosition + new Vector3(randomX, randomY, 0);
     }
