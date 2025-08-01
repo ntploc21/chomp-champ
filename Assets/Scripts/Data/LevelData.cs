@@ -124,11 +124,11 @@ public class LevelData : ScriptableObject
         float bonus = 1.0f;
 
         // Size reduction: if player is larger than enemy, reduce XP gain
-        if (playerSize > enemySize)
-        {
-            float sizeDifference = playerSize - enemySize;
-            bonus = Mathf.Max(0.1f, 1.0f - (sizeDifference / playerSize));
-        }
+        // if (playerSize > enemySize)
+        // {
+        //     float sizeDifference = playerSize - enemySize;
+        //     bonus = Mathf.Max(0.1f, 1.0f - (sizeDifference / playerSize));
+        // }
 
         // Streak bonus
         if (isStreak)

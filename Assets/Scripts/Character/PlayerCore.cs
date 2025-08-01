@@ -1,3 +1,4 @@
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.U2D.Animation;
@@ -19,7 +20,8 @@ public class PlayerCore : MonoBehaviour
 
     [Header("Gameplay Settings")]
     [Tooltip("Duration of invincibility after respawn or eaten by an enemy.")]
-    [SerializeField] private float invincibilityDuration = 2f; [Tooltip("Delay before respawning after death.")]
+    [SerializeField] private float invincibilityDuration = 2f;
+    [Tooltip("Delay before respawning after death.")]
     [SerializeField] private float respawnDelay = 2f;
 
     [Header("Events")]
@@ -77,7 +79,12 @@ public class PlayerCore : MonoBehaviour
     private int hitHash;
     private int deathHash;
     private int invincibleHash;
-    private int isMovingHash;
+
+    // Eating related data
+    private int streakCount = 0; // Count of enemies eaten in a streak
+    private float lastEatenTime = 0f; // Time when the last enemy was eaten
+    private float streakDuration = 5f; // Duration for streak bonus
+    private int minimumStreakCount = 3; // Minimum streak count for bonus
     #endregion
 
     #region Unity Events
@@ -166,6 +173,38 @@ public class PlayerCore : MonoBehaviour
     #endregion
 
     #region Core Gameplay
+    public bool CheckStreakBonus()
+    {
+        // Get the current time
+        float currentTime = Time.time;
+
+        // If this is the first enemy or we're starting a new streak
+        if (streakCount == 0)
+        {
+            streakCount = 1;
+            lastEatenTime = currentTime;
+            return false; // First kill doesn't count as streak bonus
+        }
+
+        // Check if the current kill is within the streak window
+        if (currentTime - lastEatenTime <= streakDuration)
+        {
+            // Increment streak count and update the timer
+            streakCount++;
+            lastEatenTime = currentTime; // This extends the streak window
+
+            // Check if we've reached the minimum streak requirement
+            return streakCount >= minimumStreakCount;
+        }
+        else
+        {
+            // Streak broken - start new streak with this kill
+            streakCount = 1;
+            lastEatenTime = currentTime;
+            return false;
+        }
+    }
+
     /// <summary>
     /// Handles the logic when the player eats an enemy.
     /// This method updates the player's data, plays effects, and fires events.
@@ -176,7 +215,7 @@ public class PlayerCore : MonoBehaviour
         if (!IsAlive || enemy == null) return;
 
         // Determine if this is a streak or speed kill
-        bool isStreak = false; // Logic for streak detection could be added
+        bool isStreak = CheckStreakBonus();
 
         // Handle data changes through data manager
         dataManager.EatEnemy(enemy.Data.level, isStreak);
@@ -187,10 +226,12 @@ public class PlayerCore : MonoBehaviour
 
         // Fire events
         OnPlayerEatEnemy?.Invoke(this, enemy);
-    }    /// <summary>
-         /// Handles the logic when the player is eaten by an enemy.
-         /// This method reduces the player's lives, handles respawn, and plays death effects.
-         /// </summary>
+    }
+
+    /// <summary>
+    /// Handles the logic when the player is eaten by an enemy.
+    /// This method reduces the player's lives, handles respawn, and plays death effects.
+    /// </summary>
     public bool OnEaten()
     {
         if (!IsAlive || IsInvincible) return false;
@@ -568,7 +609,6 @@ public class PlayerCore : MonoBehaviour
         hitHash = Animator.StringToHash(hitAnimationParameter);
         deathHash = Animator.StringToHash(deathAnimationParameter);
         invincibleHash = Animator.StringToHash(invincibleAnimationParameter);
-        isMovingHash = Animator.StringToHash(isMovingAnimationParameter);
     }
     #endregion
 }
