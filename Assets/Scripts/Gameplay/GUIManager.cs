@@ -303,6 +303,48 @@ public class GUIManager : MonoBehaviour
         // Reset the game data manager reference after replay
         gameDataManager = null;
     }
+
+    /// <summary>
+    /// Redirect to the level selection screen with current chapter and level
+    /// </summary>
+    public void RedirectToLevelSelection()
+    {
+        // Hide all canvases first
+        HideAllCanvases();
+
+        // Reset time scale before scene transition
+        Time.timeScale = 1f;
+
+        // Set the current level scene to the level selection screen
+        // Get the chapter and level from "CxLy" format
+        int chapter = int.Parse(currentLevelScene.Substring(1, 1));
+        int level = int.Parse(currentLevelScene.Substring(3, 1));
+        PlayerPrefs.SetInt("FromGamePlay", 1);
+        PlayerPrefs.SetInt("ReturnChapter", chapter);
+        PlayerPrefs.SetInt("ReturnLevel", level);
+        PlayerPrefs.Save();
+
+        // Back to level selection screen
+        currentLevelScene = "Story Mode";
+        Debug.Log($"Redirecting to Level Selection: {currentLevelScene}");
+
+        // Try to use Reach UI Scene Manager first
+        if (TryReplayWithReachUISceneManager())
+        {
+            Debug.Log("Redirecting to Level Selection using Reach UI Scene Manager");
+        }
+        // If Reach UI Scene Manager is not available, try Loading Screen Studio Manager
+        else if (TryReplayWithLSSManager())
+        {
+            Debug.Log("Redirecting to Level Selection using Loading Screen Studio Manager");
+        }
+        // Fallback to Unity's SceneManager directly
+        else
+        {
+            Debug.Log("Redirecting to Level Selection using Unity Scene Manager fallback");
+            SceneManager.LoadScene("Story Mode", LoadSceneMode.Single);
+        }
+    }
     #endregion
 
     #region Canvas Discovery
