@@ -325,17 +325,8 @@ public class GUIManager : MonoBehaviour
         PlayerPrefs.SetInt("ReturnLevel", level);
         PlayerPrefs.Save();
 
-        // Back to level selection screen
-        currentLevelScene = "Story Mode";
-        Debug.Log($"Redirecting to Level Selection: {currentLevelScene}");
-
-        // Try to use Reach UI Scene Manager first
-        if (TryReplayWithReachUISceneManager())
-        {
-            Debug.Log("Redirecting to Level Selection using Reach UI Scene Manager");
-        }
         // If Reach UI Scene Manager is not available, try Loading Screen Studio Manager
-        else if (TryReplayWithLSSManager())
+        if (TryLoadSceneWithLSSManager("Story Mode"))
         {
             Debug.Log("Redirecting to Level Selection using Loading Screen Studio Manager");
         }
@@ -549,7 +540,7 @@ public class GUIManager : MonoBehaviour
     /// <summary>
     /// Try to replay using Loading Screen Studio Manager
     /// </summary>
-    private bool TryReplayWithLSSManager()
+    private bool TryReplayWithLSSManager(string forcedName = "")
     {
         // Look for LSS Manager
         Michsky.LSS.LSS_Manager lssManager = FindObjectOfType<Michsky.LSS.LSS_Manager>();
@@ -560,7 +551,7 @@ public class GUIManager : MonoBehaviour
 
             // For additive loading (maintaining Persistent Game Scene)
             // First unload the current level, then load it again
-            StartCoroutine(ReplayWithLSSCoroutine(lssManager));
+            StartCoroutine(ReplayWithLSSCoroutine(lssManager, forcedName));
             return true;
         }
 
@@ -570,7 +561,7 @@ public class GUIManager : MonoBehaviour
     /// <summary>
     /// Coroutine to handle LSS replay with proper scene unloading/loading
     /// </summary>
-    private System.Collections.IEnumerator ReplayWithLSSCoroutine(Michsky.LSS.LSS_Manager lssManager)
+    private System.Collections.IEnumerator ReplayWithLSSCoroutine(Michsky.LSS.LSS_Manager lssManager, string forcedName = "")
     {
         // Unload current level scene
         AsyncOperation unloadOp = SceneManager.UnloadSceneAsync(currentLevelScene);
@@ -633,6 +624,19 @@ public class GUIManager : MonoBehaviour
     {
         currentLevelScene = sceneName;
         Debug.Log($"Manually set current level scene: {currentLevelScene}");
+    }
+
+    private bool TryLoadSceneWithLSSManager(string sceneName)
+    {
+        // Try to find LSS Manager
+        Michsky.LSS.LSS_Manager lssManager = FindObjectOfType<Michsky.LSS.LSS_Manager>();
+        if (lssManager != null)
+        {
+            lssManager.LoadScene(sceneName);
+            return true;
+        }
+
+        return false;
     }
     #endregion
 

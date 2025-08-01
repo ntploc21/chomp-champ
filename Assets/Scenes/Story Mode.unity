@@ -3236,7 +3236,7 @@ MonoBehaviour:
   nextButton: {fileID: 1455127960}
   progressFill: {fileID: 1443110378}
   showLockedChapters: 1
-  setPanelAuto: 1
+  setPanelAuto: 0
   checkChapterData: 1
   useLocalization: 1
   barCurveSpeed: 2
@@ -3848,7 +3848,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Tutorial
+            m_StringArgument: C1L0
             m_BoolArgument: 0
           m_CallState: 2
     onReplay:
@@ -3875,7 +3875,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Tutorial
+            m_StringArgument: C1L0
             m_BoolArgument: 0
           m_CallState: 2
   - chapterID: Chapter 1
@@ -4917,95 +4917,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 497704399143211203, guid: 8e7ab39c84e95d3438c81ff962a10f40, type: 3}
   m_PrefabInstance: {fileID: 428881127}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &431665848
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 431665849}
-  - component: {fileID: 431665850}
-  m_Layer: 0
-  m_Name: Scene Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &431665849
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 431665848}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1801452120}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &431665850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 431665848}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4fc9ff4a43c9b848a7389c8f98fa25f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scenes:
-  - sceneName: Main Menu
-    sceneToLoad: Main Menu
-    sceneButton: {fileID: 0}
-    altSceneButton: {fileID: 0}
-    customLoadingScreen: {fileID: 0}
-    sceneData:
-      additionalData: 
-      resetProgress: 0
-      customTransitionDuration: 0
-    latestSelected: {fileID: 0}
-    hotkeys: []
-  - sceneName: Story Mode
-    sceneToLoad: Story Mode
-    sceneButton: {fileID: 0}
-    altSceneButton: {fileID: 0}
-    customLoadingScreen: {fileID: 0}
-    sceneData:
-      additionalData: 
-      resetProgress: 0
-      customTransitionDuration: -1
-    latestSelected: {fileID: 0}
-    hotkeys: []
-  currentSceneIndex: 0
-  useLoadingScreen: 0
-  initializeButtons: 1
-  bypassLoadingOnEnable: 0
-  updateMode: 1
-  sceneMode: 0
-  transitionSpeed: 1
-  loadingScreenPrefab: {fileID: 0}
-  loadingAnimationIn: LoadingScreen_In
-  loadingAnimationOut: LoadingScreen_Out
-  onSceneChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onSceneLoadStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onSceneLoadComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  cachedStateLength: 1
-  managerIndex: 0
-  isTransitioning: 0
 --- !u!1001 &475553993
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6008,7 +5919,7 @@ MonoBehaviour:
   nextButton: {fileID: 1774930567}
   progressFill: {fileID: 942160916}
   showLockedChapters: 1
-  setPanelAuto: 1
+  setPanelAuto: 0
   checkChapterData: 1
   useLocalization: 1
   barCurveSpeed: 2
@@ -7368,6 +7279,55 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &824092614
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 824092615}
+  - component: {fileID: 824092616}
+  m_Layer: 0
+  m_Name: Story Mode Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &824092615
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824092614}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1801452120}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &824092616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824092614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e09e357eed592449e772bddaeea7a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelManager: {fileID: 1075754064}
+  chapterManagers:
+  - {fileID: 244928050}
+  - {fileID: 1286021112}
+  - {fileID: 533614630}
 --- !u!1 &836814638
 GameObject:
   m_ObjectHideFlags: 0
@@ -13254,7 +13214,7 @@ MonoBehaviour:
   nextButton: {fileID: 1190049399}
   progressFill: {fileID: 865289130}
   showLockedChapters: 1
-  setPanelAuto: 1
+  setPanelAuto: 0
   checkChapterData: 1
   useLocalization: 1
   barCurveSpeed: 2
@@ -14288,7 +14248,7 @@ MonoBehaviour:
   nextButton: {fileID: 428881128}
   progressFill: {fileID: 1594314998}
   showLockedChapters: 1
-  setPanelAuto: 1
+  setPanelAuto: 0
   checkChapterData: 1
   useLocalization: 1
   barCurveSpeed: 2
@@ -20420,13 +20380,13 @@ Transform:
   m_Children:
   - {fileID: 228597315}
   - {fileID: 270298393}
-  - {fileID: 431665849}
   - {fileID: 996650027}
   - {fileID: 1214256357}
   - {fileID: 805154546}
   - {fileID: 530106286}
   - {fileID: 1591274546}
   - {fileID: 2010926484}
+  - {fileID: 824092615}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1807591228
