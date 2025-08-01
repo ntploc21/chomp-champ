@@ -62,6 +62,7 @@ public class ProgressionData
   public List<LevelDistribution> levelDistribution = new List<LevelDistribution>();
 }
 
+[DefaultExecutionOrder(-20)]
 public class SpawnManager : MonoBehaviour
 {
   #region Editor Data

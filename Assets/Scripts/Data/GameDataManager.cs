@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+[DefaultExecutionOrder(-30)]
 public class GameDataManager : MonoBehaviour
 {
   #region Editor Data

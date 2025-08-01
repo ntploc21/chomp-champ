@@ -6,6 +6,7 @@ using TMPro;
 /// Singleton UI Manager that handles canvas references across multiple scenes
 /// Follows Single Responsibility Principle by focusing only on UI management
 /// </summary>
+[DefaultExecutionOrder(-50)]
 public class GUIManager : MonoBehaviour
 {
     #region Singleton

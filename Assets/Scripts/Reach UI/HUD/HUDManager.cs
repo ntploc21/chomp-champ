@@ -8,6 +8,7 @@ using System.Collections.Generic;
 
 namespace Michsky.UI.Reach
 {
+    [DefaultExecutionOrder(-15)]
     public class HUDManager : MonoBehaviour
     {
         // Resources

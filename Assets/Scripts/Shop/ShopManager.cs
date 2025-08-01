@@ -23,6 +23,7 @@ public enum ShopItemType
   // Add more item types as needed
 }
 
+[DefaultExecutionOrder(-35)]
 public class ShopManager : MonoBehaviour
 {
   public static ShopManager Instance { get; private set; }
