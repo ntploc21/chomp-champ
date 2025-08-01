@@ -521,6 +521,8 @@ public class SpawnManager : MonoBehaviour
         }
         break;
     }
+    
+    Debug.Log($"UpdateProgression: Level Up: {leveledUp}");
 
     if (leveledUp)
     {
@@ -582,6 +584,8 @@ public class SpawnManager : MonoBehaviour
       float weight = levelWeightCurve.Evaluate(normalizedPosition);
       levelWeights[level] = weight;
     }
+    
+    Debug.Log($"UpdateLevelWeights: {levelWeights.Count}");
 
     // Ensure current level and below have higher weights (Feeding Frenzy style)
     for (int level = minLevel; level <= progressionData.currentPlayerLevel; level++)

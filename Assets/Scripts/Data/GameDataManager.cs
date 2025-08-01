@@ -42,6 +42,28 @@ public class GameDataManager : MonoBehaviour
     GUIManager.Instance.FindGameDataManagerInScenes();
   }
 
+  public float doubleScoreTime = 10f;
+  public float doubleScoreStart = -1000000f;
+
+  public void StartDoubleScore()
+  {
+    doubleScoreStart = Time.time;
+    Debug.Log("Double score started.");
+  }
+
+  public float ScoreMultiplier()
+  {
+    float elapsed = Time.time - doubleScoreStart;
+    if (elapsed < doubleScoreTime)
+    {
+      return 2f; 
+    }
+    else
+    {
+      return 1f; 
+    }
+  }
+
   private void Update()
   {
     // Update play time
@@ -73,7 +95,7 @@ public class GameDataManager : MonoBehaviour
   public void AddScore(float amount)
   {
     float oldScore = gameSessionData.score;
-    gameSessionData.score += amount;
+    gameSessionData.score += amount * ScoreMultiplier();
 
     OnScoreChanged?.Invoke(gameSessionData.score);
     OnDataChanged?.Invoke(gameSessionData);
@@ -131,7 +153,7 @@ public class GameDataManager : MonoBehaviour
     gameSessionData.enemiesEaten++;
 
     // Calculate the XP gained from eating an enemy
-    float baseXP = enemyLevel * 10f; // Example: 10 XP per unit level
+    float baseXP = enemyLevel * 3f; // Example: 10 XP per unit level
     float bonusMul = levelData.CalculateXPBonus(gameSessionData.currentSize, enemyLevel, isStreak);
     float totalXP = baseXP * bonusMul;
 
