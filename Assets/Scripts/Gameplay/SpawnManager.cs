@@ -91,20 +91,6 @@ public class SpawnManager : MonoBehaviour
   [SerializeField] private int levelRange = 3; // Levels above player
   [Tooltip("How many levels below the player level can spawn (lower level enemies).")]
   [SerializeField] private int levelRangeBehind = 1; // Levels below player
-  [Tooltip("Curve controlling spawn weight distribution across enemy levels. X = normalized level position, Y = weight multiplier.")]
-  [SerializeField] private AnimationCurve levelWeightCurve = AnimationCurve.EaseInOut(0, 10, 3, 1);
-  [Tooltip("Number of enemies that must be defeated to level up (when using EnemiesDefeated progression).")]
-  [SerializeField] private float levelUpThreshold = 10f; // Enemies to defeat for level up
-  [Tooltip("Use experience points instead of enemy count for progression (requires ExperienceGained progression type).")]
-  [SerializeField] private bool useExperienceProgression = false;
-  [Tooltip("Amount of experience needed per level (when using ExperienceGained progression).")]
-  [SerializeField] private float experiencePerLevel = 100f;
-  [Tooltip("How the player progresses through levels: EnemiesDefeated, ExperienceGained, TimeBased, or Hybrid.")]
-  [SerializeField] private ProgressionType progressionType = ProgressionType.EnemiesDefeated;
-  [Tooltip("Time in seconds required per level (when using TimeBased or Hybrid progression).")]
-  [SerializeField] private float timePerLevel = 30f;
-  [Tooltip("Show debug information about level progression and distribution in console.")]
-  [SerializeField] private bool showProgressionDebug = true;
 
   [Header("Advanced Spawn Patterns")]
   [Tooltip("Custom spawn patterns with different timing and enemy counts (not fully implemented).")]
@@ -217,7 +203,6 @@ public class SpawnManager : MonoBehaviour
   private int spawnsThisFrame = 0;
 
   // Feeding Frenzy System
-  private ProgressionData progressionData = new ProgressionData();
   private Dictionary<int, float> levelWeights = new Dictionary<int, float>();
   private Queue<int> recentSpawnLevels = new Queue<int>();
 
@@ -230,6 +215,8 @@ public class SpawnManager : MonoBehaviour
   private Transform playerTransform;
   private Transform cameraTransform;
   private Bounds cameraBounds;
+  private GameDataManager gameDataManager;
+
   // Scene management for proper enemy assignment
   private Scene levelScene;
   private bool levelSceneFound = false;
@@ -258,9 +245,6 @@ public class SpawnManager : MonoBehaviour
   public int ActiveEnemyCount => activeEnemies.Count;
   public int PooledEnemyCount => enemyPool?.CountInactive ?? 0;
   public float CurrentDifficulty => currentDifficulty;
-  public int CurrentPlayerLevel => progressionData.currentPlayerLevel;
-  public float CurrentProgress => progressionData.currentProgress;
-  public ProgressionData Progression => progressionData;
   #endregion
 
   #region Unity Lifecycle
@@ -268,7 +252,6 @@ public class SpawnManager : MonoBehaviour
   {
     InitializeReferences();
     InitializeObjectPool();
-    InitializeFeedingFrenzySystem();
 
     GUIManager.Instance.FindSpawnManagerInScenes();
   }
@@ -287,7 +270,6 @@ public class SpawnManager : MonoBehaviour
     if (isSpawning)
     {
       spawnsThisFrame = 0;
-      UpdateProgression();
       UpdateDifficulty();
       UpdatePlayerStress();
 
@@ -320,6 +302,14 @@ public class SpawnManager : MonoBehaviour
 
     if (spawnBounds == null && useSpawnBounds)
       spawnBounds = GetComponent<BoxCollider2D>();
+
+    if (gameDataManager == null)
+      gameDataManager = FindObjectOfType<GameDataManager>();
+    
+    if (gameDataManager == null)
+    {
+      gameDataManager = playerCore.DataManager;
+    }
 
     // Cache transforms for performance
     if (playerCore != null)
@@ -389,20 +379,6 @@ public class SpawnManager : MonoBehaviour
 
     if (enableDebugLogs)
       Debug.Log($"SpawnManager: Object pool initialized with capacity {poolInitialSize}/{poolMaxSize}");
-  }
-
-  private void InitializeFeedingFrenzySystem()
-  {
-    if (!useFeedingFrenzySystem) return;
-
-    progressionData.currentPlayerLevel = 1;
-    progressionData.currentProgress = 0f;
-    progressionData.levelDistribution.Clear();
-
-    UpdateLevelWeights();
-
-    if (enableDebugLogs)
-      Debug.Log("SpawnManager: Feeding Frenzy system initialized");
   }
 
   private void InitializeSpawning()
@@ -480,169 +456,6 @@ public class SpawnManager : MonoBehaviour
   }
   #endregion
 
-  #region Feeding Frenzy Progression System
-  private void UpdateProgression()
-  {
-    if (!useFeedingFrenzySystem) return;
-
-    progressionData.gameTime += Time.deltaTime;
-
-    float progressNeeded = GetProgressNeeded();
-    bool leveledUp = false;
-
-    switch (progressionType)
-    {
-      case ProgressionType.EnemiesDefeated:
-        if (progressionData.enemiesDefeated >= progressNeeded)
-        {
-          leveledUp = true;
-        }
-        break;
-
-      case ProgressionType.ExperienceGained:
-        if (progressionData.experienceGained >= progressNeeded)
-        {
-          leveledUp = true;
-        }
-        break;
-
-      case ProgressionType.TimeBased:
-        if (progressionData.gameTime >= progressNeeded)
-        {
-          leveledUp = true;
-        }
-        break;
-
-      case ProgressionType.Hybrid:
-        float timeProgress = progressionData.gameTime / timePerLevel;
-        float combatProgress = progressionData.enemiesDefeated / levelUpThreshold;
-        if ((timeProgress + combatProgress) / 2f >= 1f)
-        {
-          leveledUp = true;
-        }
-        break;
-    }
-    
-    Debug.Log($"UpdateProgression: Level Up: {leveledUp}");
-
-    if (leveledUp)
-    {
-      LevelUp();
-    }
-
-    UpdateProgressDisplay();
-  }
-
-  private float GetProgressNeeded()
-  {
-    switch (progressionType)
-    {
-      case ProgressionType.EnemiesDefeated:
-        return levelUpThreshold * progressionData.currentPlayerLevel;
-
-      case ProgressionType.ExperienceGained:
-        return experiencePerLevel * progressionData.currentPlayerLevel;
-
-      case ProgressionType.TimeBased:
-        return timePerLevel * progressionData.currentPlayerLevel;
-
-      case ProgressionType.Hybrid:
-        return 1f; // Normalized progress for hybrid
-
-      default:
-        return levelUpThreshold;
-    }
-  }
-
-  private void LevelUp()
-  {
-    progressionData.currentPlayerLevel++;
-
-    // Reset progress counters
-    progressionData.enemiesDefeated = 0;
-    progressionData.experienceGained = 0f;
-    progressionData.gameTime = 0f;
-
-    UpdateLevelWeights();
-
-    if (enableDebugLogs)
-      Debug.Log($"SpawnManager: Player leveled up to {progressionData.currentPlayerLevel}!");
-
-    if (showProgressionDebug)
-      DebugPrintLevelDistribution();
-  }
-
-  private void UpdateLevelWeights()
-  {
-    levelWeights.Clear();
-
-    int minLevel = Mathf.Max(1, progressionData.currentPlayerLevel - levelRangeBehind);
-    int maxLevel = progressionData.currentPlayerLevel + levelRange;
-
-    for (int level = minLevel; level <= maxLevel; level++)
-    {
-      float normalizedPosition = (float)(level - minLevel) / (maxLevel - minLevel);
-      float weight = levelWeightCurve.Evaluate(normalizedPosition);
-      levelWeights[level] = weight;
-    }
-    
-    Debug.Log($"UpdateLevelWeights: {levelWeights.Count}");
-
-    // Ensure current level and below have higher weights (Feeding Frenzy style)
-    for (int level = minLevel; level <= progressionData.currentPlayerLevel; level++)
-    {
-      if (levelWeights.ContainsKey(level))
-      {
-        levelWeights[level] *= 2f; // Double weight for current and below levels
-      }
-    }
-  }
-
-  private void UpdateProgressDisplay()
-  {
-    float currentValue = 0f;
-    float targetValue = GetProgressNeeded();
-
-    switch (progressionType)
-    {
-      case ProgressionType.EnemiesDefeated:
-        currentValue = progressionData.enemiesDefeated;
-        break;
-      case ProgressionType.ExperienceGained:
-        currentValue = progressionData.experienceGained;
-        break;
-      case ProgressionType.TimeBased:
-        currentValue = progressionData.gameTime;
-        break;
-      case ProgressionType.Hybrid:
-        float timeProgress = progressionData.gameTime / timePerLevel;
-        float combatProgress = progressionData.enemiesDefeated / levelUpThreshold;
-        currentValue = (timeProgress + combatProgress) / 2f;
-        targetValue = 1f;
-        break;
-    }
-
-    progressionData.currentProgress = Mathf.Clamp01(currentValue / targetValue);
-  }
-
-  public void OnEnemyDefeated(int enemyLevel, float experienceReward)
-  {
-    if (!useFeedingFrenzySystem) return;
-
-    progressionData.enemiesDefeated++;
-    progressionData.experienceGained += experienceReward;
-
-    // Track level distribution
-    var levelDist = progressionData.levelDistribution.Find(x => x.level == enemyLevel);
-    if (levelDist == null)
-    {
-      levelDist = new LevelDistribution { level = enemyLevel, weight = 0f, spawnCount = 0 };
-      progressionData.levelDistribution.Add(levelDist);
-    }
-    levelDist.spawnCount++;
-  }
-  #endregion
-
   #region Adaptive Spawning System
   private void UpdatePlayerStress()
   {
@@ -681,7 +494,8 @@ public class SpawnManager : MonoBehaviour
     }
 
     // Calculate stress level
-    float levelStress = Mathf.Max(0f, (averageEnemyLevel - progressionData.currentPlayerLevel) / levelRange);
+    int currentPlayerLevel = gameDataManager?.SessionData.currentLevel ?? 1;
+    float levelStress = Mathf.Max(0f, (averageEnemyLevel - currentPlayerLevel) / levelRange);
     float densityStress = enemyDensity;
 
     playerStressLevel = (levelStress + densityStress) / 2f;
@@ -1033,8 +847,9 @@ public class SpawnManager : MonoBehaviour
   {
     if (!useFeedingFrenzySystem) return true;
 
-    int minLevel = Mathf.Max(1, progressionData.currentPlayerLevel - levelRangeBehind);
-    int maxLevel = progressionData.currentPlayerLevel + levelRange;
+    int currentPlayerLevel = gameDataManager?.SessionData.currentLevel ?? 1;
+    int minLevel = Mathf.Max(1, currentPlayerLevel - levelRangeBehind);
+    int maxLevel = currentPlayerLevel + levelRange;
 
     return enemyData.level >= minLevel && enemyData.level <= maxLevel;
   }
@@ -1297,7 +1112,7 @@ public class SpawnManager : MonoBehaviour
         return cellPos;
       }
     }
-    
+
     if (enableDebugLogs)
       Debug.Log("SpawnManager: Failed to find valid tilemap-based position after all attempts");
 
@@ -1330,7 +1145,7 @@ public class SpawnManager : MonoBehaviour
 
     return false; // No wall tiles found
   }
-  
+
   /// <summary>
   /// Optimized tilemap cache refresh with change detection and coroutine-based processing
   /// </summary>
@@ -1659,7 +1474,7 @@ public class SpawnManager : MonoBehaviour
       if (distanceToPlayer < playerAvoidRadius)
         return false;
     }
-    
+
     if (IsPositionOnWallTile(position))
     {
       return false;
@@ -1702,7 +1517,7 @@ public class SpawnManager : MonoBehaviour
     }
     return true;
   }
-  
+
   /// <summary>
   /// Check if the position is on a valid layer for spawning (Ground Layer but not Wall Layer)
   /// </summary>
@@ -1773,7 +1588,7 @@ public class SpawnManager : MonoBehaviour
     {
       if (!hasGroundTile)
         Debug.Log($"SpawnManager: Position {position} rejected - no ground tile");
-        
+
       if (hasWallTile)
         Debug.Log($"SpawnManager: Position {position} rejected - overlaps wall tile");
     }
@@ -1798,8 +1613,9 @@ public class SpawnManager : MonoBehaviour
   {
     if (gameState != null)
     {
+      int currentPlayerLevel = gameDataManager?.SessionData.currentLevel ?? 1;
       float timeDifficulty = gameState.GameTimer / difficultyScaleTime;
-      float progressionDifficulty = (progressionData.currentPlayerLevel - 1) * 0.1f;
+      float progressionDifficulty = (currentPlayerLevel - 1) * 0.1f;
 
       currentDifficulty = Mathf.Clamp01(timeDifficulty + progressionDifficulty);
     }
@@ -1875,14 +1691,7 @@ public class SpawnManager : MonoBehaviour
   {
     maxEnemiesOnScreen = Mathf.Max(1, maxEnemies);
   }
-  public void SetPlayerLevel(int level)
-  {
-    if (useFeedingFrenzySystem)
-    {
-      progressionData.currentPlayerLevel = Mathf.Max(1, level);
-      UpdateLevelWeights();
-    }
-  }
+
   public void SetLayerValidation(bool useValidation, LayerMask ground = default, LayerMask wall = default)
   {
     useLayerValidation = useValidation;
@@ -1912,18 +1721,6 @@ public class SpawnManager : MonoBehaviour
     }
   }
 
-  public void AddProgress(float amount)
-  {
-    switch (progressionType)
-    {
-      case ProgressionType.EnemiesDefeated:
-        progressionData.enemiesDefeated += Mathf.RoundToInt(amount);
-        break;
-      case ProgressionType.ExperienceGained:
-        progressionData.experienceGained += amount;
-        break;
-    }
-  }
   public void ForceSpawnEnemy(EnemyData enemyData = null, int level = -1)
   {
     // Re-check level scene before forced spawning
@@ -2081,28 +1878,28 @@ public class SpawnManager : MonoBehaviour
     }
 
     // Draw all ground cells for comparison
-      if (groundTilemaps != null)
+    if (groundTilemaps != null)
+    {
+      Gizmos.color = Color.blue;
+      foreach (var tilemap in groundTilemaps)
       {
-        Gizmos.color = Color.blue;
-        foreach (var tilemap in groundTilemaps)
-        {
-          if (tilemap == null || !tilemap.gameObject.activeInHierarchy) continue;
+        if (tilemap == null || !tilemap.gameObject.activeInHierarchy) continue;
 
-          BoundsInt bounds = tilemap.cellBounds;
-          for (int x = bounds.xMin; x < bounds.xMax; x++)
+        BoundsInt bounds = tilemap.cellBounds;
+        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        {
+          for (int y = bounds.yMin; y < bounds.yMax; y++)
           {
-            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            Vector3Int cellPos = new Vector3Int(x, y, 0);
+            if (tilemap.GetTile(cellPos) != null)
             {
-              Vector3Int cellPos = new Vector3Int(x, y, 0);
-              if (tilemap.GetTile(cellPos) != null)
-              {
-                Vector3 worldPos = tilemap.CellToWorld(cellPos);
-                Gizmos.DrawWireCube(worldPos, Vector3.one * 0.8f);
-              }
+              Vector3 worldPos = tilemap.CellToWorld(cellPos);
+              Gizmos.DrawWireCube(worldPos, Vector3.one * 0.8f);
             }
           }
         }
       }
+    }
   }
 
   [System.Diagnostics.Conditional("UNITY_EDITOR")]
@@ -2113,8 +1910,6 @@ public class SpawnManager : MonoBehaviour
               $"\nActive Enemies: {ActiveEnemyCount}/{maxEnemiesOnScreen}" +
               $"\nPooled Enemies: {PooledEnemyCount}" +
               $"\nCurrent Difficulty: {currentDifficulty:F2}" +
-              $"\nPlayer Level: {progressionData.currentPlayerLevel}" +
-              $"\nPlayer Progress: {progressionData.currentProgress:F2}" +
               $"\nPlayer Stress: {playerStressLevel:F2}" +
               $"\nSpawn Rate: {baseSpawnRate:F2}s" +
               $"\nLast Spawn: {Time.time - lastSpawnTime:F2}s ago" +
