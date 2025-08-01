@@ -32,10 +32,16 @@ namespace Michsky.UI.Reach
       {
         chapterManagers.AddRange(GetComponentsInChildren<ChapterManager>());
       }
+
+      Cursor.visible = true;
+      Cursor.lockState = CursorLockMode.None;
     }
 
     private void Start()
     {
+      Cursor.visible = true;
+      Cursor.lockState = CursorLockMode.None;
+
       // Get the current chapter and level from PlayerPrefs
       // PlayerPrefs.SetInt("FromGamePlay", 1);
       // PlayerPrefs.SetInt("ReturnChapter", chapter);
@@ -57,18 +63,22 @@ namespace Michsky.UI.Reach
 
       // Initialize the chapter managers
       panelManager.currentPanelIndex = currentChapterIndex;
-      foreach (var chapterManager in chapterManagers)
+
+      if (currentLevelIndex > 0)
       {
-        // Get the chapter index from the chapter manager via getting a gameObject name
-        int chapterIndex = int.Parse(chapterManager.gameObject.name.Replace("Chapter", ""));
-        if (chapterIndex == currentChapterIndex)
+        foreach (var chapterManager in chapterManagers)
         {
-          chapterManager.currentChapterIndex = currentLevelIndex - 1; // Adjust for zero-based index
+          // Get the chapter index from the chapter manager via getting a gameObject name
+          int chapterIndex = int.Parse(chapterManager.gameObject.name.Replace("Chapter", ""));
+          if (chapterIndex == currentChapterIndex)
+          {
+            chapterManager.currentChapterIndex = currentLevelIndex - 1; // Adjust for zero-based index
+          }
         }
       }
 
       // Open the chapter panel
-      if (currentChapterIndex >= 0)
+      if (currentChapterIndex >= 0 && currentLevelIndex > 0)
       {
         panelManager.OpenPanel($"Chapter {currentChapterIndex}");
       }
