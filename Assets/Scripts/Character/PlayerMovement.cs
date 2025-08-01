@@ -295,6 +295,11 @@ public class PlayerMovement : MonoBehaviour
     {
       currentSpeed *= sprintMultiplier;
     }
+    
+    if (isSprinting)
+    {
+      currentSpeed *= sprintMultiplier;
+    }
 
     // Apply cached size-based speed modifications
     currentSpeed *= cachedSizeSpeedModifier;

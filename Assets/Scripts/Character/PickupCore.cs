@@ -12,9 +12,12 @@ public enum PickupType
 public class PickupCore : MonoBehaviour, IPickup
 {
     public PickupType pickupType;
+    public Vector3Int spawnCell;
+    public PickupManager pickupManager;
     public void OnPickedUp(PlayerCore player)
     {
-        Debug.Log($"Pickup {pickupType}");
+        // Debug.Log($"Pickup {pickupType}");
+        pickupManager?.FreeCell(spawnCell);
     }
     public void GetPickupType(out PickupType type)
     {
