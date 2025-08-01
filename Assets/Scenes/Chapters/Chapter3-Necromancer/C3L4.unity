@@ -195,6 +195,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   scoreBoost: 1
+  doubleScoreTime: 10
+  doubleScoreStart: -1000000
 --- !u!4 &67538286
 Transform:
   m_ObjectHideFlags: 0
@@ -367,46 +369,16 @@ MonoBehaviour:
   spawnDistance: 15
   enemyTypes:
   - {fileID: 11400000, guid: 98c427cb7989eb6499dc331bb3f15184, type: 2}
-  - {fileID: 11400000, guid: 909d24d0bc9534bba9f40b243df42cfa, type: 2}
+  - {fileID: 11400000, guid: 81f7e5696a1153749859e153c9678fe9, type: 2}
   - {fileID: 11400000, guid: 1f956710ea16de6419d25948f36d9132, type: 2}
   - {fileID: 11400000, guid: 8bfbc1c4ded7ed24ab4d23e45d4eb43d, type: 2}
   - {fileID: 11400000, guid: e5407184d170545419196106b6f2e1cb, type: 2}
-  - {fileID: 11400000, guid: a1f4cebb7456048b784c55ceeaced013, type: 2}
-  - {fileID: 11400000, guid: 8166a2c3d01a0410a90054e96aebff5f, type: 2}
+  - {fileID: 11400000, guid: 5c27c5c827654ff4d9a532195279ade9, type: 2}
+  - {fileID: 11400000, guid: e89a4d8dd18da9a43b179d3b0349992a, type: 2}
   enemyPrefab: {fileID: 905107209197507577, guid: 190d4dce4ceae4a4b9d6674103d85466, type: 3}
   useFeedingFrenzySystem: 1
   levelRange: 3
   levelRangeBehind: 1
-  levelWeightCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 10
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 3
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  levelUpThreshold: 10
-  useExperienceProgression: 0
-  experiencePerLevel: 100
-  progressionType: 0
-  timePerLevel: 30
-  showProgressionDebug: 1
   spawnPatterns: []
   enableAdaptiveSpawning: 1
   adaptiveCheckInterval: 5

@@ -38,4 +38,4 @@ MonoBehaviour:
   spawnEffectPrefab: {fileID: 0}
   maxSpawnCount: 5
   spawnWeight: 0.5
-  canSpawnInWaves: 1
+  canSpawnInWaves: 0
