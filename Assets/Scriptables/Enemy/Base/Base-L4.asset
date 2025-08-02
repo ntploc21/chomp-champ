@@ -24,7 +24,7 @@ MonoBehaviour:
   isMovingAnimationParameter: isMoving
   level: 4
   size: 2.8125
-  baseSpeed: 2.5
+  baseSpeed: 4.5
   detectionRange: 15
   behaviorType: 1
   wanderRadius: 10
@@ -36,6 +36,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   deathEffectPrefab: {fileID: 0}
   spawnEffectPrefab: {fileID: 0}
-  maxSpawnCount: 1
+  maxSpawnCount: 3
   spawnWeight: 1
   canSpawnInWaves: 0
