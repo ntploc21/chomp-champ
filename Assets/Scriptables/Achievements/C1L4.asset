@@ -23,16 +23,16 @@ MonoBehaviour:
     achievementIcon: {fileID: 0}
     isHidden: 0
     condition:
-      rid: 5775825457244536833
+      rid: 1653669969665458178
     currencyReward: 0
     xpReward: 0
   references:
     version: 2
     RefIds:
-    - rid: 5775825457244536833
-      type: {class: EnemiesEatenCondition, ns: , asm: Assembly-CSharp}
+    - rid: 1653669969665458178
+      type: {class: TimeCondition, ns: , asm: Assembly-CSharp}
       data:
         conditionName: New Condition
         description: Condition description
-        minimumEnemies: 70
-        level: 1
+        maxTimeSeconds: 300
+        useGameTime: 1
