@@ -157,7 +157,7 @@ MonoBehaviour:
     enemiesEaten: 0
     playTime: 0
     currentSize: 1
-    currentLevel: 3
+    currentLevel: 1
     currentXP: 0
     xpToNextLevel: 100
     resetXPOnDeath: 1
@@ -558,18 +558,18 @@ MonoBehaviour:
   isSpawning: 0
   baseSpawnRate: 2
   spawnRateVariation: 0.5
-  maxEnemiesOnScreen: 50
+  maxEnemiesOnScreen: 35
   spawnDistance: 15
   enemyTypes:
-  - {fileID: 11400000, guid: 98c427cb7989eb6499dc331bb3f15184, type: 2}
-  - {fileID: 11400000, guid: 46cdea87b2ac5554aa26d84b5c490233, type: 2}
+  - {fileID: 11400000, guid: 83156e06740d84be9a2a657a84b6a7c7, type: 2}
+  - {fileID: 11400000, guid: 5e18cf0bf4cce467689499073eeadaaf, type: 2}
   - {fileID: 11400000, guid: c8fb64ea95fe2a14c83059dc06e119c7, type: 2}
   - {fileID: 11400000, guid: 8bfbc1c4ded7ed24ab4d23e45d4eb43d, type: 2}
   - {fileID: 11400000, guid: 37796119789dad9459bd0936e3d73e76, type: 2}
   - {fileID: 11400000, guid: 6349c19c62fd3674ea33b3689d2153dd, type: 2}
   enemyPrefab: {fileID: 905107209197507577, guid: 190d4dce4ceae4a4b9d6674103d85466, type: 3}
   useFeedingFrenzySystem: 1
-  levelRange: 3
+  levelRange: 2
   levelRangeBehind: 1
   spawnPatterns: []
   enableAdaptiveSpawning: 1
@@ -768,7 +768,7 @@ MonoBehaviour:
   m_Follow: {fileID: 542150289}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 7
+    OrthographicSize: 9
     NearClipPlane: 0.3
     FarClipPlane: 100
     Dutch: 0
@@ -995,7 +995,7 @@ Camera:
   far clip plane: 100
   field of view: 60
   orthographic: 1
-  orthographic size: 7
+  orthographic size: 9
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

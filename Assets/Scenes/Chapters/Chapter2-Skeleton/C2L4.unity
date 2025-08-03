@@ -528,8 +528,8 @@ MonoBehaviour:
   isSpawning: 0
   baseSpawnRate: 2
   spawnRateVariation: 0.5
-  maxEnemiesOnScreen: 50
-  spawnDistance: 15
+  maxEnemiesOnScreen: 35
+  spawnDistance: 25
   enemyTypes:
   - {fileID: 11400000, guid: 28875ae945e075746a9fcdde661d102b, type: 2}
   - {fileID: 11400000, guid: a965ea66bb295d74cae4dadb98bed2af, type: 2}

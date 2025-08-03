@@ -377,7 +377,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e89a4d8dd18da9a43b179d3b0349992a, type: 2}
   enemyPrefab: {fileID: 905107209197507577, guid: 190d4dce4ceae4a4b9d6674103d85466, type: 3}
   useFeedingFrenzySystem: 1
-  levelRange: 3
+  levelRange: 2
   levelRangeBehind: 0
   spawnPatterns: []
   enableAdaptiveSpawning: 1
@@ -641,7 +641,7 @@ MonoBehaviour:
   m_Follow: {fileID: 2076210763}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 10
+    OrthographicSize: 9
     NearClipPlane: 0.3
     FarClipPlane: 100
     Dutch: 0
@@ -915,7 +915,7 @@ Camera:
   far clip plane: 100
   field of view: 60
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 9
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
