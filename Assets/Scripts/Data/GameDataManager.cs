@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+[DefaultExecutionOrder(-30)]
 public class GameDataManager : MonoBehaviour
 {
   #region Editor Data
@@ -24,7 +25,7 @@ public class GameDataManager : MonoBehaviour
   public GameSessionData SessionData => gameSessionData;
   public LevelData LevelConfig => levelData;
   #endregion
-  
+
   #region Unity Events
   private void Awake()
   {
@@ -84,7 +85,28 @@ public class GameDataManager : MonoBehaviour
   {
 
   }
+
+#if UNITY_EDITOR
+  /// <summary>
+  /// Called when Inspector values change - triggers UI updates automatically
+  /// Only works in Play mode
+  /// </summary>
+  private void OnValidate()
+  {
+    // Only trigger events in Play mode to avoid issues in Edit mode
+    if (Application.isPlaying && gameSessionData != null)
+    {
+      // Invoke all relevant events to update the HUD
+      OnDataChanged?.Invoke(gameSessionData);
+      OnScoreChanged?.Invoke(gameSessionData.score);
+      OnLivesChanged?.Invoke(gameSessionData.lives);
+      OnXPChanged?.Invoke(gameSessionData.currentXP, gameSessionData.xpToNextLevel);
+    }
+  }
+#endif
   #endregion
+
+  
   #region Data Management
   public void ResetPlayerData()
   {
@@ -237,8 +259,41 @@ public class GameDataManager : MonoBehaviour
     Debug.Log($"Player Stats - Level: {gameSessionData.currentLevel}, XP: {gameSessionData.currentXP}/{gameSessionData.xpToNextLevel}, " +
              $"Score: {gameSessionData.score}, Lives: {gameSessionData.lives}, Size: {gameSessionData.currentSize:F2}");
   }
-  #endregion
 
+  /// <summary>
+  /// Manually trigger all UI update events - useful for Inspector testing
+  /// </summary>
+  [ContextMenu("Update All UI")]
+  public void UpdateAllUI()
+  {
+    if (gameSessionData != null)
+    {
+      OnDataChanged?.Invoke(gameSessionData);
+      OnScoreChanged?.Invoke(gameSessionData.score);
+      OnLivesChanged?.Invoke(gameSessionData.lives);
+      OnXPChanged?.Invoke(gameSessionData.currentXP, gameSessionData.xpToNextLevel);
+      Debug.Log("All UI events triggered manually");
+    }
+  }
+
+  /// <summary>
+  /// Test method to add score and trigger events
+  /// </summary>
+  [ContextMenu("Test Add 100 Score")]
+  public void TestAddScore()
+  {
+    AddScore(100f);
+  }
+
+  /// <summary>
+  /// Test method to add XP and trigger events
+  /// </summary>
+  [ContextMenu("Test Add 50 XP")]
+  public void TestAddXP()
+  {
+    AddXP(50f);
+  }
+  #endregion
   #region Initialization
   /// <summary>
   /// Initialize GameSessionData from LevelData configuration

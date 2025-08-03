@@ -1,6 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using System.Collections;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Michsky.UI.Reach;
 
@@ -18,6 +20,7 @@ public enum GameStateType
 /// Manages the in-game state for individual scenes (Playing/Paused only)
 /// Coordinates with PauseMenuManager from persistent scene and controls spawning
 /// </summary>
+[DefaultExecutionOrder(-10)]
 public class GameState : MonoBehaviour
 {
     #region Editor Data

@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameSessionData:
-    lives: 3
+    lives: 1
     score: 0
     enemiesEaten: 0
     playTime: 0
@@ -195,6 +195,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   scoreBoost: 1
+  doubleScoreTime: 10
+  doubleScoreStart: -1000000
 --- !u!4 &67538286
 Transform:
   m_ObjectHideFlags: 0
@@ -363,50 +365,20 @@ MonoBehaviour:
   isSpawning: 0
   baseSpawnRate: 2
   spawnRateVariation: 0.5
-  maxEnemiesOnScreen: 40
+  maxEnemiesOnScreen: 30
   spawnDistance: 15
   enemyTypes:
-  - {fileID: 11400000, guid: 98c427cb7989eb6499dc331bb3f15184, type: 2}
-  - {fileID: 11400000, guid: 909d24d0bc9534bba9f40b243df42cfa, type: 2}
+  - {fileID: 11400000, guid: 313569e734bf74060812fa6e7f362801, type: 2}
+  - {fileID: 11400000, guid: 81f7e5696a1153749859e153c9678fe9, type: 2}
   - {fileID: 11400000, guid: 1f956710ea16de6419d25948f36d9132, type: 2}
-  - {fileID: 11400000, guid: 8bfbc1c4ded7ed24ab4d23e45d4eb43d, type: 2}
+  - {fileID: 11400000, guid: 3497d8a1c07ab447799bcecaa526437c, type: 2}
   - {fileID: 11400000, guid: e5407184d170545419196106b6f2e1cb, type: 2}
-  - {fileID: 11400000, guid: a1f4cebb7456048b784c55ceeaced013, type: 2}
-  - {fileID: 11400000, guid: 8166a2c3d01a0410a90054e96aebff5f, type: 2}
+  - {fileID: 11400000, guid: 5c27c5c827654ff4d9a532195279ade9, type: 2}
+  - {fileID: 11400000, guid: e89a4d8dd18da9a43b179d3b0349992a, type: 2}
   enemyPrefab: {fileID: 905107209197507577, guid: 190d4dce4ceae4a4b9d6674103d85466, type: 3}
   useFeedingFrenzySystem: 1
-  levelRange: 3
-  levelRangeBehind: 1
-  levelWeightCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 10
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 3
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  levelUpThreshold: 10
-  useExperienceProgression: 0
-  experiencePerLevel: 100
-  progressionType: 0
-  timePerLevel: 30
-  showProgressionDebug: 1
+  levelRange: 2
+  levelRangeBehind: 0
   spawnPatterns: []
   enableAdaptiveSpawning: 1
   adaptiveCheckInterval: 5
@@ -494,7 +466,7 @@ MonoBehaviour:
   playerCore: {fileID: 2076210762}
   gameState: {fileID: 1861134921}
   gameCamera: {fileID: 1979495871}
-  enableDebugLogs: 0
+  enableDebugLogs: 1
   showSpawnGizmos: 0
   showLevelDistribution: 0
 --- !u!1001 &1101876725
@@ -549,6 +521,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8407902715562051094, guid: 5eb0ee4ca1ed09743b4335962f4d521c, type: 3}
+      propertyPath: m_AnimatedTiles.Array.data[1].second.m_AnimationSpeed
+      value: 3.0000002
+      objectReference: {fileID: 0}
+    - target: {fileID: 8407902715562051094, guid: 5eb0ee4ca1ed09743b4335962f4d521c, type: 3}
+      propertyPath: m_AnimatedTiles.Array.data[3].second.m_AnimationSpeed
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -586,6 +566,7 @@ Transform:
   - {fileID: 67538286}
   - {fileID: 1861134922}
   - {fileID: 777236347}
+  - {fileID: 1882278786}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1192839812
@@ -654,13 +635,13 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 10
+  m_Priority: 9
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 2076210763}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 7
+    OrthographicSize: 9
     NearClipPlane: 0.3
     FarClipPlane: 100
     Dutch: 0
@@ -776,6 +757,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1155504908}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1882278785
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1882278786}
+  - component: {fileID: 1882278787}
+  m_Layer: 0
+  m_Name: Pickup Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1882278786
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882278785}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1155504908}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1882278787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882278785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bbd8f45920b51142a04dcd43b192e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lastSpawnTime: 0
+  pickupSpawnInterval: 10
+  pickupSpawnRatio: 1
 --- !u!1 &1979495867
 GameObject:
   m_ObjectHideFlags: 0
@@ -887,7 +915,7 @@ Camera:
   far clip plane: 100
   field of view: 60
   orthographic: 1
-  orthographic size: 7
+  orthographic size: 9
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

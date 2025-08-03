@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f5ca5adee6231248aec8f6457b2e3b3, type: 3}
   m_Name: King-Tutorial
   m_EditorClassIdentifier: 
-  enemyName: Predator
+  enemyName: King
   spriteLibrary: {fileID: 7108339969198208228, guid: e9000c0a49b88a144abcf3a44d408506, type: 3}
   defaultSpriteCategory: Idle
   defaultSpriteLabel: Normal

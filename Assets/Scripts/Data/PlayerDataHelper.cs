@@ -6,6 +6,7 @@ using UnityEngine.Events;
 /// Provides Unity Events and inspector-friendly methods for designers.
 /// This class can be placed on GameObjects to easily integrate with the static PlayerDataManager.
 /// </summary>
+[DefaultExecutionOrder(-30)]
 public class PlayerDataHelper : MonoBehaviour
 {
   #region Inspector Events

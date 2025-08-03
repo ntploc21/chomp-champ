@@ -8,6 +8,7 @@ using System.Collections.Generic;
 
 namespace Michsky.UI.Reach
 {
+    [DefaultExecutionOrder(-15)]
     public class HUDManager : MonoBehaviour
     {
         // Resources
@@ -43,6 +44,7 @@ namespace Michsky.UI.Reach
                 return;
             }
 
+            GameDataManager gameDataManager = GUIManager.Instance.GameDataManager;
             SpawnManager spawnManager = FindObjectOfType<SpawnManager>();
 
             if (spawnManager != null)
@@ -205,6 +207,17 @@ namespace Michsky.UI.Reach
                 gameDataManager.OnDataChanged.AddListener(OnDataChanged);
                 // gameDataManager.OnScoreChanged.AddListener(OnScoreChanged);
                 // gameDataManager.OnLivesChanged.AddListener(OnLivesChanged);
+
+                // Set the initial state of the HUD
+                if (livesText != null)
+                {
+                    Debug.Log($"HUDManager: Setting initial lives text to {gameDataManager.SessionData.lives}");
+                    livesText.text = $"{gameDataManager.SessionData.lives}";
+                }
+                if (scoreText != null)
+                {
+                    scoreText.text = $"Score: {(int)gameDataManager.SessionData.score}";
+                }
             }
         }
 

@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 /// Main Achievement Manager for Feeding Frenzy game
 /// Integrates level-specific achievements with the existing Reach.UI achievement system
 /// </summary>
+[DefaultExecutionOrder(-35)]
 public class FFAchievementManager : MonoBehaviour
 {
     [Header("Achievement Configuration")]
@@ -364,7 +365,7 @@ public class FFAchievementManager : MonoBehaviour
         {
             sceneName = GUIManager.Instance.CurrentLevelScene;
         }
-
+        
         // Look for a scene that is not the Persistent Game Scene and is a level
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {

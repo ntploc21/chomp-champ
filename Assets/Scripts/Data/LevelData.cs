@@ -52,10 +52,10 @@ public class LevelData : ScriptableObject
 
     [Header("Bonus Multipliers")]
     [Tooltip("Multiplier for XP gained from eating enemies in succession.")]
-    public float streakMultiplier = 1.5f;
+    public float streakMultiplier = 1.25f;
 
     [Tooltip("Multiplier for XP gained from quick kills.")]
-    public float speedKillBonus = 2.0f;
+    public float speedKillBonus = 1.5f;
 
     [Header("Debug")]
     public bool showDebugInfo = false;
@@ -124,11 +124,11 @@ public class LevelData : ScriptableObject
         float bonus = 1.0f;
 
         // Size reduction: if player is larger than enemy, reduce XP gain
-        if (playerSize > enemySize)
-        {
-            float sizeDifference = playerSize - enemySize;
-            bonus = Mathf.Max(0.1f, 1.0f - (sizeDifference / playerSize));
-        }
+        // if (playerSize > enemySize)
+        // {
+        //     float sizeDifference = playerSize - enemySize;
+        //     bonus = Mathf.Max(0.1f, 1.0f - (sizeDifference / playerSize));
+        // }
 
         // Streak bonus
         if (isStreak)

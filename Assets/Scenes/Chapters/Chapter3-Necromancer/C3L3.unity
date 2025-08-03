@@ -195,6 +195,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   scoreBoost: 1
+  doubleScoreTime: 10
+  doubleScoreStart: -1000000
 --- !u!4 &67538286
 Transform:
   m_ObjectHideFlags: 0
@@ -363,7 +365,7 @@ MonoBehaviour:
   isSpawning: 0
   baseSpawnRate: 2
   spawnRateVariation: 0.5
-  maxEnemiesOnScreen: 20
+  maxEnemiesOnScreen: 30
   spawnDistance: 15
   enemyTypes:
   - {fileID: 11400000, guid: 98c427cb7989eb6499dc331bb3f15184, type: 2}
@@ -375,38 +377,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4697d1c42c4872c4b9ee2710796e9098, type: 2}
   enemyPrefab: {fileID: 905107209197507577, guid: 190d4dce4ceae4a4b9d6674103d85466, type: 3}
   useFeedingFrenzySystem: 1
-  levelRange: 3
-  levelRangeBehind: 1
-  levelWeightCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 10
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 3
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  levelUpThreshold: 10
-  useExperienceProgression: 0
-  experiencePerLevel: 100
-  progressionType: 0
-  timePerLevel: 30
-  showProgressionDebug: 1
+  levelRange: 2
+  levelRangeBehind: 0
   spawnPatterns: []
   enableAdaptiveSpawning: 1
   adaptiveCheckInterval: 5
@@ -497,6 +469,53 @@ MonoBehaviour:
   enableDebugLogs: 0
   showSpawnGizmos: 0
   showLevelDistribution: 0
+--- !u!1 &815047951
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 815047952}
+  - component: {fileID: 815047953}
+  m_Layer: 0
+  m_Name: Pickup Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &815047952
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 815047951}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1155504908}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &815047953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 815047951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bbd8f45920b51142a04dcd43b192e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lastSpawnTime: 0
+  pickupSpawnInterval: 10
+  pickupSpawnRatio: 1
 --- !u!1 &1155504907
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,6 +548,7 @@ Transform:
   - {fileID: 67538286}
   - {fileID: 1861134922}
   - {fileID: 777236347}
+  - {fileID: 815047952}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1192839812
@@ -603,7 +623,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1544392558}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 7
+    OrthographicSize: 9
     NearClipPlane: 0.3
     FarClipPlane: 100
     Dutch: 0
@@ -968,7 +988,7 @@ Camera:
   far clip plane: 100
   field of view: 60
   orthographic: 1
-  orthographic size: 7
+  orthographic size: 9
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

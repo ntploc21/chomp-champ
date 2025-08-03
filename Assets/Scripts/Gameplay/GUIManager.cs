@@ -6,6 +6,7 @@ using TMPro;
 /// Singleton UI Manager that handles canvas references across multiple scenes
 /// Follows Single Responsibility Principle by focusing only on UI management
 /// </summary>
+[DefaultExecutionOrder(-50)]
 public class GUIManager : MonoBehaviour
 {
     #region Singleton
@@ -303,6 +304,39 @@ public class GUIManager : MonoBehaviour
         // Reset the game data manager reference after replay
         gameDataManager = null;
     }
+
+    /// <summary>
+    /// Redirect to the level selection screen with current chapter and level
+    /// </summary>
+    public void RedirectToLevelSelection()
+    {
+        // Hide all canvases first
+        HideAllCanvases();
+
+        // Reset time scale before scene transition
+        Time.timeScale = 1f;
+
+        // Set the current level scene to the level selection screen
+        // Get the chapter and level from "CxLy" format
+        int chapter = int.Parse(currentLevelScene.Substring(1, 1));
+        int level = int.Parse(currentLevelScene.Substring(3, 1));
+        PlayerPrefs.SetInt("FromGamePlay", 1);
+        PlayerPrefs.SetInt("ReturnChapter", chapter);
+        PlayerPrefs.SetInt("ReturnLevel", level);
+        PlayerPrefs.Save();
+
+        // If Reach UI Scene Manager is not available, try Loading Screen Studio Manager
+        if (TryLoadSceneWithLSSManager("Story Mode"))
+        {
+            Debug.Log("Redirecting to Level Selection using Loading Screen Studio Manager");
+        }
+        // Fallback to Unity's SceneManager directly
+        else
+        {
+            Debug.Log("Redirecting to Level Selection using Unity Scene Manager fallback");
+            SceneManager.LoadScene("Story Mode", LoadSceneMode.Single);
+        }
+    }
     #endregion
 
     #region Canvas Discovery
@@ -506,7 +540,7 @@ public class GUIManager : MonoBehaviour
     /// <summary>
     /// Try to replay using Loading Screen Studio Manager
     /// </summary>
-    private bool TryReplayWithLSSManager()
+    private bool TryReplayWithLSSManager(string forcedName = "")
     {
         // Look for LSS Manager
         Michsky.LSS.LSS_Manager lssManager = FindObjectOfType<Michsky.LSS.LSS_Manager>();
@@ -517,7 +551,7 @@ public class GUIManager : MonoBehaviour
 
             // For additive loading (maintaining Persistent Game Scene)
             // First unload the current level, then load it again
-            StartCoroutine(ReplayWithLSSCoroutine(lssManager));
+            StartCoroutine(ReplayWithLSSCoroutine(lssManager, forcedName));
             return true;
         }
 
@@ -527,7 +561,7 @@ public class GUIManager : MonoBehaviour
     /// <summary>
     /// Coroutine to handle LSS replay with proper scene unloading/loading
     /// </summary>
-    private System.Collections.IEnumerator ReplayWithLSSCoroutine(Michsky.LSS.LSS_Manager lssManager)
+    private System.Collections.IEnumerator ReplayWithLSSCoroutine(Michsky.LSS.LSS_Manager lssManager, string forcedName = "")
     {
         // Unload current level scene
         AsyncOperation unloadOp = SceneManager.UnloadSceneAsync(currentLevelScene);
@@ -590,6 +624,19 @@ public class GUIManager : MonoBehaviour
     {
         currentLevelScene = sceneName;
         Debug.Log($"Manually set current level scene: {currentLevelScene}");
+    }
+
+    private bool TryLoadSceneWithLSSManager(string sceneName)
+    {
+        // Try to find LSS Manager
+        Michsky.LSS.LSS_Manager lssManager = FindObjectOfType<Michsky.LSS.LSS_Manager>();
+        if (lssManager != null)
+        {
+            lssManager.LoadScene(sceneName);
+            return true;
+        }
+
+        return false;
     }
     #endregion
 

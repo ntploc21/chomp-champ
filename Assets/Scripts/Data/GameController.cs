@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 /// <summary>
 /// Example game controller showing how to integrate the PlayerData save/load system
 /// with your Feeding Frenzy game flow. This demonstrates the typical usage patterns.
 /// </summary>
+[DefaultExecutionOrder(-40)]
 public class GameController : MonoBehaviour
 {
   #region Inspector Fields
