@@ -7,6 +7,7 @@ public interface IPickup
 {
   void OnPickedUp(PlayerCore player);
   void GetPickupType(out PickupType type);
+  void Destroy();
 }
 
 public class CollisionHandler : MonoBehaviour
@@ -128,6 +129,7 @@ public class CollisionHandler : MonoBehaviour
 
     // Disable pickup
     pickup.SetActive(false);
+    pickupComponent?.Destroy();
 
     Debug.Log($"Player collected {pickup.name}!");
   }

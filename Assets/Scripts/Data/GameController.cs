@@ -141,6 +141,11 @@ public class GameController : MonoBehaviour
 
     // Update player data with session results
     UpdateFinalPlayerData(sessionDuration, levelCompleted);
+    
+    foreach (var pickup in FindObjectsOfType<PickupCore>())
+    {
+        pickup.OnGameEnd();
+    }
 
     Debug.Log($"Game ended. Duration: {sessionDuration:F1}s, Level completed: {levelCompleted}");
   }

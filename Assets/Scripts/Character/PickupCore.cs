@@ -23,4 +23,14 @@ public class PickupCore : MonoBehaviour, IPickup
     {
         type = pickupType;
     }
+
+    public void OnGameEnd()
+    {
+        Destroy(gameObject);
+    }
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
+    }
 }
