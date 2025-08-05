@@ -325,6 +325,10 @@ public class GUIManager : MonoBehaviour
 
     private (int, int) NextScene(int chapter, int level)
     {
+        if (!gameDataManager.IsWinning())
+        {
+            return (chapter, level);
+        }
         string sceneLabel = $"C{chapter}L{level}";
         int nextIndex = scenesOrder.IndexOf(sceneLabel) + 1;
         if (nextIndex >= scenesOrder.Count)
@@ -361,7 +365,7 @@ public class GUIManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
 
         Debug.Log($"Redirecting to Level Selection - Chapter: {chapter}, Level: {level}, isLastScene: {IsLastScene(cur_chapter, cur_level)}");
-        PlayerPrefs.SetInt("FromGamePlay", IsLastScene(cur_chapter, cur_level) ? 0 : 1);
+        PlayerPrefs.SetInt("FromGamePlay", (IsLastScene(cur_chapter, cur_level) && gameDataManager.IsWinning()) ? 0 : 1);
         PlayerPrefs.SetInt("ReturnChapter", chapter);
         PlayerPrefs.SetInt("ReturnLevel", level);
         PlayerPrefs.Save();
