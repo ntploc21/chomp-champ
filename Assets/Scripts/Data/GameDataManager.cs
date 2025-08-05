@@ -57,11 +57,11 @@ public class GameDataManager : MonoBehaviour
     float elapsed = Time.time - doubleScoreStart;
     if (elapsed < doubleScoreTime)
     {
-      return 2f; 
+      return 2f;
     }
     else
     {
-      return 1f; 
+      return 1f;
     }
   }
 
@@ -106,7 +106,7 @@ public class GameDataManager : MonoBehaviour
 #endif
   #endregion
 
-  
+
   #region Data Management
   public void ResetPlayerData()
   {
@@ -328,4 +328,9 @@ public class GameDataManager : MonoBehaviour
     NotifyAllChanges();
   }
   #endregion
+  
+  public bool IsWinning()
+  {
+    return gameSessionData.currentLevel >= levelData.maxLevel;
+  }
 }

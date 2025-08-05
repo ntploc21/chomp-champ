@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System.Collections.Generic;
 
 /// <summary>
 /// Singleton UI Manager that handles canvas references across multiple scenes
@@ -35,6 +36,17 @@ public class GUIManager : MonoBehaviour
     public GameDataManager GameDataManager => gameDataManager;
     public SpawnManager SpawnManager => spawnManager;
     public string CurrentLevelScene => currentLevelScene;
+    #endregion
+
+    #region Level direction
+    [SerializeField]
+    public List<string> scenesOrder = new List<string>
+    {
+        "C1L1", "C1L2", "C1L3",
+        "C2L1", "C2L2", "C2L3",
+        "C3L1", "C3L2", "C3L3", "C3L4", "C2L4", "C1L4"
+    };
+    public int returnChapter = 1;
     #endregion
 
     #region Unity Lifecycle
@@ -305,6 +317,33 @@ public class GUIManager : MonoBehaviour
         gameDataManager = null;
     }
 
+    private bool IsLastScene(int chapter, int level)
+    {
+        string sceneLabel = $"C{chapter}L{level}";
+        return scenesOrder.IndexOf(sceneLabel) == scenesOrder.Count - 1;
+    }
+
+    private (int, int) NextScene(int chapter, int level)
+    {
+        if (!gameDataManager.IsWinning())
+        {
+            return (chapter, level);
+        }
+        string sceneLabel = $"C{chapter}L{level}";
+        int nextIndex = scenesOrder.IndexOf(sceneLabel) + 1;
+        if (nextIndex >= scenesOrder.Count)
+        {
+            return (returnChapter, 1);
+        }
+        else
+        {
+            string nextScene = scenesOrder[nextIndex];
+            int nextChapter = int.Parse(nextScene.Substring(1, 1));
+            int nextLevel = int.Parse(nextScene.Substring(3, 1));
+            return (nextChapter, nextLevel);
+        }
+    }
+
     /// <summary>
     /// Redirect to the level selection screen with current chapter and level
     /// </summary>
@@ -318,9 +357,15 @@ public class GUIManager : MonoBehaviour
 
         // Set the current level scene to the level selection screen
         // Get the chapter and level from "CxLy" format
-        int chapter = int.Parse(currentLevelScene.Substring(1, 1));
-        int level = int.Parse(currentLevelScene.Substring(3, 1));
-        PlayerPrefs.SetInt("FromGamePlay", 1);
+        int cur_chapter = int.Parse(currentLevelScene.Substring(1, 1));
+        int cur_level = int.Parse(currentLevelScene.Substring(3, 1));
+        (int chapter, int level) = NextScene(cur_chapter, cur_level);
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        Debug.Log($"Redirecting to Level Selection - Chapter: {chapter}, Level: {level}, isLastScene: {IsLastScene(cur_chapter, cur_level)}");
+        PlayerPrefs.SetInt("FromGamePlay", (IsLastScene(cur_chapter, cur_level) && gameDataManager.IsWinning()) ? 0 : 1);
         PlayerPrefs.SetInt("ReturnChapter", chapter);
         PlayerPrefs.SetInt("ReturnLevel", level);
         PlayerPrefs.Save();
