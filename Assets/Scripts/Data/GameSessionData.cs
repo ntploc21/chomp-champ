@@ -59,7 +59,11 @@ public class GameSessionData
     lives = 3;
     score = 0f;
     enemiesEaten = 0;
-    enemiesEatenPerLevel.Clear();
+    enemiesEatenPerLevel.Clear(); // Clear any previous level data
+    enemiesEatenPerLevel[0] = 0; // Initialize first level data
+    enemiesEatenPerLevel[1] = 0; // Initialize second level data
+    enemiesEatenPerLevel[2] = 0; // Initialize third level data
+    enemiesEatenPerLevel[3] = 0; // Initialize fourth level data
     playTime = 0f;
 
     // Reset size and growth stats
