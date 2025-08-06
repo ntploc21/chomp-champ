@@ -511,6 +511,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5eb0ee4ca1ed09743b4335962f4d521c, type: 3}
+--- !u!60 &730586158 stripped
+PolygonCollider2D:
+  m_CorrespondingSourceObject: {fileID: 6153537457023737658, guid: 5eb0ee4ca1ed09743b4335962f4d521c, type: 3}
+  m_PrefabInstance: {fileID: 730586157}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &777236346
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,6 +744,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1255232903}
   - component: {fileID: 1255232902}
+  - component: {fileID: 1255232904}
   m_Layer: 0
   m_Name: Virtual Camera
   m_TagString: Untagged
@@ -801,6 +807,22 @@ Transform:
   - {fileID: 575735244}
   m_Father: {fileID: 1192839813}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1255232904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255232901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f453f694addf4275988fac205bc91968, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BoundingShape2D: {fileID: 730586158}
+  m_Damping: 0.5
+  m_MaxWindowSize: -1
+  m_Padding: 0
 --- !u!1 &1861134920
 GameObject:
   m_ObjectHideFlags: 0

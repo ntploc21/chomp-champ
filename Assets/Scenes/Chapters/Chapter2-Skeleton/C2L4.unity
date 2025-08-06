@@ -769,6 +769,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1263808137}
   - component: {fileID: 1263808138}
+  - component: {fileID: 1263808139}
   m_Layer: 0
   m_Name: Virtual Camera
   m_TagString: Untagged
@@ -831,6 +832,22 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 723783979}
+--- !u!114 &1263808139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263808136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f453f694addf4275988fac205bc91968, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BoundingShape2D: {fileID: 2500743643327123312}
+  m_Damping: 0.5
+  m_MaxWindowSize: -1
+  m_Padding: 0
 --- !u!1 &1504623425
 GameObject:
   m_ObjectHideFlags: 0
@@ -13771,6 +13788,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5eb0ee4ca1ed09743b4335962f4d521c, type: 3}
+--- !u!60 &2500743643327123312 stripped
+PolygonCollider2D:
+  m_CorrespondingSourceObject: {fileID: 6153537457023737658, guid: 5eb0ee4ca1ed09743b4335962f4d521c, type: 3}
+  m_PrefabInstance: {fileID: 2500743643327123311}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
