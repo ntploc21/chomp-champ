@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 namespace Michsky.UI.Reach
 {
@@ -151,7 +152,14 @@ namespace Michsky.UI.Reach
         /// </summary>
         public void ResetPlayerData()
         {
+            // Reset the player data
             PlayerDataManager.DeletePlayerData();
+
+            // Reset the achievements
+            AchievementManager.ResetAchievements();
+
+            // Load the Main Menu scene as Refreshing the player data
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
         }
         #endregion
     }
