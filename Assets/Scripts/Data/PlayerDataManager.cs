@@ -201,6 +201,9 @@ public static class PlayerDataManager
   {
     _cachedPlayerData = new PlayerData();
     OnPlayerDataLoaded?.Invoke(_cachedPlayerData);
+
+    // Save the new player data immediately
+    SavePlayerData();
     Debug.Log("Created new player data with default values.");
   }
 
@@ -227,6 +230,7 @@ public static class PlayerDataManager
 
       // Reset cached data
       CreateNewPlayerData();
+      
 
       OnPlayerDataDeleted?.Invoke();
       Debug.Log("Player data deleted successfully.");
@@ -407,6 +411,14 @@ public static class PlayerDataManager
 
     int completedCount = _cachedPlayerData.completedLevels?.Length ?? 0;
     return (float)completedCount / _cachedPlayerData.unlockedLevels.Length;
+  }
+
+  /// <summary>
+  /// Gets the list of unlocked levels.
+  /// </summary>
+  public static List<string> GetUnlockedLevels()
+  {
+    return _cachedPlayerData?.unlockedLevels?.ToList() ?? new List<string>();
   }
 
   /// <summary>

@@ -122,7 +122,7 @@ public class PlayerData
     totalDeaths = 0;
 
     // Reset level progression
-    unlockedLevels = new string[] { "C0L1", "C1L1", "C2L1", "C3L1" }; // Start with first levels of each chapter unlocked
+    unlockedLevels = new string[] { "C0L1", "C1L1" }; // Start with first levels of each chapter unlocked
     completedLevels = new string[0];
 
     // Reset Achievements

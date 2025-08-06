@@ -25,6 +25,7 @@ public class GUIManager : MonoBehaviour
     #endregion
 
     #region Internal Data
+    private GameState gameState; // Reference to GameState for managing game state transitions
     private GameDataManager gameDataManager;
     private SpawnManager spawnManager;
     #endregion
@@ -135,6 +136,15 @@ public class GUIManager : MonoBehaviour
         {
             Debug.LogWarning("SpawnManager not found in any loaded scene");
         }
+    }
+
+    /// <summary>
+    /// Initialize the GameState reference
+    /// This should be called after GameDataManager and SpawnManager are initialized
+    /// </summary>
+    public void InitializeGameState()
+    {
+        gameState = FindObjectOfType<GameState>();
     }
     #endregion
 
@@ -325,10 +335,11 @@ public class GUIManager : MonoBehaviour
 
     private (int, int) NextScene(int chapter, int level)
     {
-        if (!gameDataManager.IsWinning())
+        if (gameState.CurrentState == GameStateType.GameOver)
         {
-            return (chapter, level);
+            return (chapter, level); // No next scene if game is over
         }
+
         string sceneLabel = $"C{chapter}L{level}";
         int nextIndex = scenesOrder.IndexOf(sceneLabel) + 1;
         if (nextIndex >= scenesOrder.Count)
@@ -364,8 +375,12 @@ public class GUIManager : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
-        Debug.Log($"Redirecting to Level Selection - Chapter: {chapter}, Level: {level}, isLastScene: {IsLastScene(cur_chapter, cur_level)}");
-        PlayerPrefs.SetInt("FromGamePlay", (IsLastScene(cur_chapter, cur_level) && gameDataManager.IsWinning()) ? 0 : 1);
+        Debug.Log($"Old Chapter - Level - Chapter: {cur_chapter}, Level: {cur_level}");
+        Debug.Log($"Redirecting to Level Selection - Chapter: {chapter}, Level: {level}");
+        Debug.Log($"IsLastScene: {IsLastScene(cur_chapter, cur_level)}");
+
+        // Only set return data if not the last scene and not in victory state
+        PlayerPrefs.SetInt("FromGamePlay", (IsLastScene(cur_chapter, cur_level) && gameState.CurrentState == GameStateType.Victory) ? 0 : 1);
         PlayerPrefs.SetInt("ReturnChapter", chapter);
         PlayerPrefs.SetInt("ReturnLevel", level);
         PlayerPrefs.Save();

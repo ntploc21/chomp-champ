@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using Michsky.UI.Reach;
 
 public enum GameStateType
@@ -110,11 +107,6 @@ public class GameState : MonoBehaviour
         InitializeGameReferences_();
         InitializeGameState();
         SubscribeToEvents();
-
-        // Initialize GUIManager when GameState starts
-        if (GUIManager.Instance != null)
-        {
-        }
 
         if (UIManagerAudio.instance != null)
         {
@@ -227,6 +219,16 @@ public class GameState : MonoBehaviour
         if (gameController == null)
         {
             Debug.LogError("GameState: GameController not found in the scene!");
+        }
+
+        // Initialize GUIManager for GameState reference
+        if (GUIManager.Instance != null)
+        {
+            GUIManager.Instance.InitializeGameState();
+        }
+        else
+        {
+            Debug.LogWarning("GUIManager not found in the scene. GameState will not be able to control UI.");
         }
     }
 
@@ -675,6 +677,15 @@ public class GameState : MonoBehaviour
     #endregion
 
     #region Debug
+    /// <summary>
+    /// Test method to add score and trigger events
+    /// </summary>
+    [ContextMenu("Win current level")]
+    public void TestWinLevel()
+    {
+        Victory();
+    }
+
     [System.Diagnostics.Conditional("UNITY_EDITOR")]
     public void DebugPrintState()
     {

@@ -5096,7 +5096,7 @@ MonoBehaviour:
   pakCountdownLabel: {fileID: 5666105301607451770}
   pakCountdownSlider: {fileID: 3954564447280517562}
   useSpecificKey: 0
-  useCountdown: 1
+  useCountdown: 0
   waitForPlayerInput: 0
   pakCountdownTimer: 5
   keyCode: 32

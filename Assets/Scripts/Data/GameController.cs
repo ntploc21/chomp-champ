@@ -157,13 +157,15 @@ public class GameController : MonoBehaviour
     // Mark level as completed
     PlayerDataManager.CompleteLevel(CurrentLevelName);
 
-    // Unlock next level
-    string nextLevelName = GetNextLevelName(CurrentLevelName);
-    if (!string.IsNullOrEmpty(nextLevelName))
-    {
-      PlayerDataManager.UnlockLevel(nextLevelName);
-      Debug.Log($"Level {nextLevelName} unlocked!");
-    }
+    // Unlock next level using scene order
+    GUIManager guiManager = GUIManager.Instance;
+    int nextLevelIndex = guiManager.scenesOrder.IndexOf(CurrentLevelName) + 1;
+    string nextLevelName = nextLevelIndex < guiManager.scenesOrder.Count
+    ? guiManager.scenesOrder[nextLevelIndex] : "C0L1"; // Default to first level if no next level
+
+    Debug.Log($"Completing level: {CurrentLevelName}, Next Level: {nextLevelName}");
+    PlayerDataManager.UnlockLevel(nextLevelName);
+
 
     // Check achievements if achievement manager is available
     var achievementManager = FindObjectOfType<FFAchievementManager>();
@@ -358,7 +360,7 @@ public class GameController : MonoBehaviour
   {
     // Extract level number and increment
     // Level format: "C0L1", "C1L1", etc., each chapter has its own sequence
-    int[] levelPerChapter = { 3, 3, 3, 3, 3, 3 }; // Example: C0 has 1 level, C1 has 2 levels, etc.
+    int[] levelPerChapter = { 3, 4, 3, 3, 3, 3 }; // Example: C0 has 1 level, C1 has 2 levels, etc.
 
     if (currentLevel.StartsWith("C") && currentLevel.Length > 3)
     {

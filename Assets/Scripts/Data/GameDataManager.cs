@@ -328,9 +328,4 @@ public class GameDataManager : MonoBehaviour
     NotifyAllChanges();
   }
   #endregion
-  
-  public bool IsWinning()
-  {
-    return gameSessionData.currentLevel >= levelData.maxLevel;
-  }
 }

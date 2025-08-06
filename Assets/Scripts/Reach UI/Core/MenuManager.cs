@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 namespace Michsky.UI.Reach
 {
@@ -30,7 +31,7 @@ namespace Michsky.UI.Reach
             StartCoroutine("StartInitialize");
         }
 
-        public void DisableSplashScreen() 
+        public void DisableSplashScreen()
         {
             StopCoroutine("DisableSplashScreenAnimator");
             StartCoroutine("FinalizeSplashScreen");
@@ -41,6 +42,9 @@ namespace Michsky.UI.Reach
 
         void Initialize()
         {
+            // Initialize the Player Save Data
+            PlayerDataManager.Initialize();
+
             if (UIManagerAsset == null || mainContent == null)
             {
                 Debug.LogError("<b>[Reach UI]</b> Cannot initialize the resources due to missing resources.", this);
@@ -116,8 +120,8 @@ namespace Michsky.UI.Reach
         IEnumerator FinalizeSplashScreen()
         {
             yield return new WaitForSeconds(splashOutTime + 0.1f);
-           
-            if (UIManagerAsset != null && UIManagerAsset.enableSplashScreen) 
+
+            if (UIManagerAsset != null && UIManagerAsset.enableSplashScreen)
             {
                 // If splash screen is enabled, we will disable it after the animation
                 if (splashScreen == null || splashScreen.gameObject == null)
@@ -140,5 +144,23 @@ namespace Michsky.UI.Reach
                 EventSystem.current.SetSelectedGameObject(ControllerManager.instance.firstSelected);
             }
         }
+
+        #region Public Methods
+        /// <summary>
+        /// Reset the player data to default values.
+        /// This method is called when starting a new game or resetting the player data.
+        /// </summary>
+        public void ResetPlayerData()
+        {
+            // Reset the player data
+            PlayerDataManager.DeletePlayerData();
+
+            // Reset the achievements
+            AchievementManager.ResetAchievements();
+
+            // Load the Main Menu scene as Refreshing the player data
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
+        }
+        #endregion
     }
 }
