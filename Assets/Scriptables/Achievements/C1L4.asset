@@ -19,7 +19,7 @@ MonoBehaviour:
   - achievementId: C1L4_Enemy
     achievementTitle: Extinction Event
     achievementDescription: Complete this task to unlock the achievement
-    achievementType: 0
+    achievementType: 2
     achievementIcon: {fileID: 0}
     isHidden: 0
     condition:

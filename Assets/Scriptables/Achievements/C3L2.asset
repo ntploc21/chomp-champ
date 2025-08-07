@@ -20,7 +20,7 @@ MonoBehaviour:
     achievementTitle: Cannibal Caster
     achievementDescription: "Your old minions make the best meal\u2014bone marrow
       is rich in mana\nEat more than 20 skeletons\r in Chapter 3 - Level 2"
-    achievementType: 1
+    achievementType: 0
     achievementIcon: {fileID: 0}
     isHidden: 0
     condition:
