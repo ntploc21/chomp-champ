@@ -20,7 +20,7 @@ MonoBehaviour:
     achievementTitle: Wizard Devourer
     achievementDescription: "Feasting on the learned grants you ancient knowledge\u2014and
       indigestion\nEat more than 15 wizards in Chapter 3 - Level 3"
-    achievementType: 2
+    achievementType: 0
     achievementIcon: {fileID: 0}
     isHidden: 0
     condition:

@@ -19,7 +19,7 @@ MonoBehaviour:
   - achievementId: C2L4_Enemy
     achievementTitle: Graveyard Shift
     achievementDescription: 
-    achievementType: 0
+    achievementType: 1
     achievementIcon: {fileID: 0}
     isHidden: 0
     condition:

@@ -19,7 +19,7 @@ MonoBehaviour:
   - achievementId: C1L3_Enemy
     achievementTitle: Bone Appetit
     achievementDescription: 
-    achievementType: 0
+    achievementType: 1
     achievementIcon: {fileID: 0}
     isHidden: 0
     condition:
