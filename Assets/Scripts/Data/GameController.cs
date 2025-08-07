@@ -46,10 +46,6 @@ public class GameController : MonoBehaviour
   
   private void Start()
   {
-    // Find components if not assigned again
-    if (gameDataManager == null)
-      gameDataManager = FindObjectOfType<GameDataManager>();
-
     if (playerDataHelper == null)
       playerDataHelper = FindObjectOfType<PlayerDataHelper>();
 
@@ -214,7 +210,7 @@ public class GameController : MonoBehaviour
   /// <param name="newScore">The new score.</param>
   public void OnScoreChanged(float newScore)
   {
-    var levelName = gameDataManager?.LevelConfig?.levelName ?? "";
+    var levelName = gameDataManager?.LevelConfig?.levelName ?? GUIManager.Instance?.CurrentLevelScene ?? "";
     if (levelName == "")
     {
       Debug.LogWarning("Level name is empty, cannot update player data.");
@@ -240,6 +236,7 @@ public class GameController : MonoBehaviour
   /// </summary>
   private void UpdateProgressivePlayerData()
   {
+    gameDataManager = gameDataManager ?? GUIManager.Instance?.GameDataManager ?? FindObjectOfType<GameDataManager>();
     if (gameDataManager?.SessionData == null) return;
 
     var sessionData = gameDataManager.SessionData;
@@ -278,7 +275,11 @@ public class GameController : MonoBehaviour
   /// </summary>
   private void UpdateFinalPlayerData(float sessionDuration, bool levelCompleted)
   {
+    gameDataManager = gameDataManager ?? GUIManager.Instance?.GameDataManager ?? FindObjectOfType<GameDataManager>();
     if (gameDataManager?.SessionData == null) return;
+
+    Debug.Log($"Updating final player data for level: {CurrentLevelName}, Duration: {sessionDuration:F1}s, " +
+              $"Level Completed: {levelCompleted}");
 
     var sessionData = gameDataManager.SessionData;
 
