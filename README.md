@@ -109,7 +109,24 @@ This project is for academic purposes only (CS427 Midterm). Assets are sourced o
 
 ### Game Win
 
-<img width="754" height="412" alt="image" src="https://github.com/user-attachments/assets/bbedcc13-7b17-4cfc-8061-9c548e491658" />
+<img width="1886" height="1043" alt="Screenshot 2025-08-08 213202" src="https://github.com/user-attachments/assets/ae21b5ca-9ba8-4782-a8d3-6fcaa93cdd30" />
+
+### Chapters
+
+<img width="1889" height="1046" alt="Screenshot 2025-08-08 213335" src="https://github.com/user-attachments/assets/3ee8897e-2ed9-4ef0-baa6-dcd87ce505b3" />
+
+### Levels
+
+<img width="1886" height="1053" alt="Screenshot 2025-08-08 213250" src="https://github.com/user-attachments/assets/131b0c36-d7ba-4ef5-85df-ebc9a4309cc4" />
+
+### Shop
+
+<img width="2246" height="1054" alt="Screenshot 2025-08-08 211051" src="https://github.com/user-attachments/assets/3bb2653d-bd26-4326-80c4-4df2fb944550" />
+
+### Achievements
+
+<img width="2248" height="1058" alt="Screenshot 2025-08-08 211008" src="https://github.com/user-attachments/assets/acf7b257-8013-4d27-a2e8-9d2c37e431fb" />
+
 
 ---
 
