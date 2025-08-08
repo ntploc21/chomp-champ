@@ -83,7 +83,33 @@ This project is for academic purposes only (CS427 Midterm). Assets are sourced o
 
 ## 📷 Screenshots
 
-To be added: *Include images of gameplay, menus, and level scenes here if available*
+### Tutorial
+
+<img width="763" height="385" alt="image" src="https://github.com/user-attachments/assets/227a034e-a60d-450f-91a1-ec16a8baf26c" />
+
+<img width="760" height="308" alt="image" src="https://github.com/user-attachments/assets/92b406df-be62-43e4-9db1-ed5d62c8d0d5" />
+
+<img width="755" height="419" alt="image" src="https://github.com/user-attachments/assets/4f721da7-c273-4330-a26a-e2f3f3552be9" />
+
+
+### Normal Gameplay
+
+<img width="1600" height="795" alt="image" src="https://github.com/user-attachments/assets/b1466541-462b-43be-8691-43d3b7113d92" />
+
+
+<img width="1600" height="791" alt="image" src="https://github.com/user-attachments/assets/0b1eb1b8-ff64-4595-a5f3-b1e68656997a" />
+
+<img width="1053" height="599" alt="image" src="https://github.com/user-attachments/assets/e9ee32a1-459c-4510-986b-3109c7ed5046" />
+
+<img width="1600" height="791" alt="image" src="https://github.com/user-attachments/assets/5c7e4fc7-2f3e-4e26-b571-63dc14f13295" />
+
+### Game Over
+
+<img width="1600" height="788" alt="image" src="https://github.com/user-attachments/assets/7db2395c-6006-459a-91ed-fa7121f4d39c" />
+
+### Game Win
+
+<img width="754" height="412" alt="image" src="https://github.com/user-attachments/assets/bbedcc13-7b17-4cfc-8061-9c548e491658" />
 
 ---
 
