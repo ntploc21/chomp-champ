@@ -129,6 +129,13 @@ This project is for academic purposes only (CS427 Midterm). Assets are sourced o
 
 <img width="2248" height="1058" alt="Screenshot 2025-08-08 211008" src="https://github.com/user-attachments/assets/acf7b257-8013-4d27-a2e8-9d2c37e431fb" />
 
+## References
+1. [2D RPG topdown tilesets - pixelart assets FULL BUNDLE](https://assetstore.unity.com/packages/2d/environments/2d-rpg-topdown-tilesets-pixelart-assets-full-bundle-212921)
+2. [2D Action RPG Engine: Mythril2D](https://assetstore.unity.com/packages/templates/systems/2d-action-rpg-engine-mythril2d-249375?srsltid=AfmBOoqbzj2baeFuuT_cjqaO1Jrui510QgJdcpc3qmHf7YQxuVUnxw0h)
+3. [Ruccho](https://ruccho.com/)
+4. [Reach - Complete Sci-Fi UI](https://assetstore.unity.com/packages/2d/gui/reach-complete-sci-fi-ui-227547?srsltid=AfmBOopVBLXWHzHuKayhdCvLADR-T9AV4vsqtRtdMDk7_3MIQCaQDOiU)
+5. [Loading Screen Studio](https://assetstore.unity.com/packages/2d/gui/loading-screen-studio-250428)
+
 
 ---
 
