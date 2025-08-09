@@ -5,6 +5,8 @@
 
 **Chomp Champs** is a 2D top-down action-survival game inspired by *Feeding Frenzy*, where you play as a hungry aquatic creature aiming to eat smaller prey, avoid larger predators, and grow into the apex of the food chain. With simple controls and pixel-style visuals, the game delivers a fun, arcade-like experience while showcasing core Unity development techniques.
 
+Release: [click-me](https://drive.google.com/drive/folders/1k947HaGnCqqAIT6I-Rj4UytAM704xVMS?usp=sharing)
+
 ---
 
 ## 🧠 Core Features
